@@ -70,16 +70,21 @@ header {
 .cards {
   display: flex;
   flex-wrap: wrap;
-  justify-content: center; /* чтобы они были по центру */
-  gap: 40px; /* больше воздуха */
-  max-width: 1200px; /* ограничим ширину блока */
-  margin: 0 auto 80px; /* авто по бокам + снизу отступ */
+  justify-content: space-between;
+  gap: 25px;
+  margin-bottom: 60px;
 }
 
 .card {
-  flex: 1 1 250px;   /* базовая ширина */
-  max-width: 300px;  /* разрешаем карточке быть шире */
-  padding: 30px 25px; /* чуть больше воздуха внутри */
+  flex: 1 1 22%;
+  max-width: 260px;
+  background: #fff;
+  border-radius: 16px;
+  border: 1px solid #e0e0e0;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  text-align: center;
+  padding: 25px 20px;
+  transition: all 0.3s ease;
 }
 
 
