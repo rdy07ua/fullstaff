@@ -76,14 +76,14 @@ header {
 }
 
 .card {
-  flex: 1 1 22%;
-  max-width: 260px;
+  flex: 1 1 300px;  /* каждая карточка минимум 300px */
+  max-width: 400px; /* потолок ширины, как на старом сайте */
   background: #fff;
   border-radius: 16px;
   border: 1px solid #e0e0e0;
   box-shadow: 0 4px 12px rgba(0,0,0,0.08);
   text-align: center;
-  padding: 25px 20px;
+  padding: 30px 20px; /* как было в старом */
   transition: all 0.3s ease;
 }
 
