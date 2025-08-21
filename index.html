@@ -4,9 +4,82 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>FullStaff</title>
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600&display=swap" rel="stylesheet">
+
+  <!-- Font Awesome -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 30px;
+      background-color: #fff;
+      border-bottom: 1px solid #ddd;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .logo {
+      font-family: 'Oswald', sans-serif;
+      font-size: 28px;
+      font-weight: 600;
+      color: #000;
+    }
+
+    .social-icons {
+      display: flex;
+      gap: 20px;
+    }
+
+    .social-icons a {
+      color: #000;
+      font-size: 24px;
+      text-decoration: none;
+      transition: transform 0.2s ease, color 0.2s ease;
+    }
+
+    .social-icons a:hover {
+      transform: scale(1.2);
+      color: #555;
+    }
+
+    /* Скрываем хедер на мобильных устройствах */
+    @media (max-width: 600px) {
+      header {
+        display: none !important;
+      }
+    }
+  </style>
 </head>
 <body>
-  <h1>🚀 FullStaff & Partners</h1>
-  <p>Добро пожаловать на наш новый сайт!</p>
+  <!-- Header -->
+  <header>
+    <div class="logo">&lt;/vacancy&gt;</div>
+    <div class="social-icons">
+      <a href="https://t.me/Serhii_Riabovol" target="_blank"><i class="fab fa-telegram"></i></a>
+      <a href="mailto:serhii.riabovol@fullstaff.net"><i class="fas fa-envelope"></i></a>
+      <a href="https://linkedin.com/in/serhii-riabovol-245b11298" target="_blank"><i class="fab fa-linkedin"></i></a>
+      <a href="https://wa.me/48793379163" target="_blank"><i class="fab fa-whatsapp"></i></a>
+    </div>
+  </header>
+
+  <!-- Здесь будут остальные секции сайта -->
+  <main>
+    <section style="padding: 80px; text-align: center;">
+      <h1>Добро пожаловать в FullStaff</h1>
+      <p>Здесь будет основной контент сайта.</p>
+    </section>
+  </main>
+
 </body>
 </html>
