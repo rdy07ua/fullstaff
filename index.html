@@ -5,27 +5,19 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>FullStaff & Partners</title>
 
-  <!-- Шрифты -->
+  <!-- Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600&family=Roboto:wght@300;400&display=swap" rel="stylesheet">
-
-  <!-- Иконки -->
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
 
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
     body {
+      margin: 0;
       font-family: 'Roboto', sans-serif;
       background: #fff;
       color: #000;
-      line-height: 1.4;
     }
 
-    /* Контейнер по ширине карточек */
+    /* Container с ограничением ширины */
     .container {
       max-width: 1200px;
       margin: 0 auto;
@@ -52,8 +44,8 @@
     }
 
     .social-icons a {
-      color: #000;
       font-size: 24px;
+      color: #000;
       text-decoration: none;
       transition: transform 0.2s ease, color 0.2s ease;
     }
@@ -64,76 +56,75 @@
     }
 
     .main-title {
-      text-align: center;
       font-family: 'Oswald', sans-serif;
       font-size: 48px;
       font-weight: 700;
-      margin: 40px 0 20px;
+      text-align: center;
+      margin: 60px 0 20px; /* добавил воздух сверху */
     }
 
     .thin-text {
-      text-align: center;
       font-weight: 300;
       font-size: 1.2rem;
-      margin-bottom: 40px;
+      text-align: center;
+      margin-bottom: 50px; /* увеличил отступ вниз */
       color: #000;
-      text-shadow: 0 0 1px rgba(0,0,0,0.4);
     }
 
+    /* Cards */
     .cards {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 30px;
-      margin-bottom: 60px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 25px;
+      margin-bottom: 60px; /* воздух перед футером */
     }
 
     .card {
+      flex: 1 1 calc(25% - 20px);
+      max-width: 260px;
       background: #fff;
-      border-radius: 20px;
+      border-radius: 16px;
       border: 1px solid #e0e0e0;
-      box-shadow: 0px 4px 12px rgba(0,0,0,0.08);
-      padding: 30px 20px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
       text-align: center;
+      padding: 25px 20px;
       transition: all 0.3s ease;
     }
 
     .card:hover {
-      transform: translateY(-8px);
+      transform: translateY(-6px);
       box-shadow: 0 12px 24px rgba(0,0,0,0.15);
     }
 
     .card h1 {
       font-family: 'Oswald', sans-serif;
-      font-size: 2rem;
-      margin-bottom: 10px;
+      font-size: 1.5rem;
+      margin-bottom: 8px;
     }
 
     .card p {
+      font-size: 1rem;
       font-weight: 300;
-      font-size: 1.1rem;
       margin-bottom: 20px;
+      color: #000;
     }
 
     .button-group {
       display: flex;
-      gap: 15px;
+      gap: 10px;
       justify-content: center;
     }
 
     .card-btn {
-      padding: 12px 20px;
-      border-radius: 10px;
-      font-size: 1rem;
+      padding: 10px 18px;
+      border-radius: 8px;
+      font-size: 0.9rem;
       font-weight: 600;
       text-decoration: none;
       color: white;
       transition: all 0.3s ease;
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.12);
-    }
-
-    .card-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 14px rgba(0, 0, 0, 0.2);
     }
 
     .upload-btn {
@@ -155,14 +146,13 @@
       color: #fff;
       font-size: 0.85rem;
       text-align: center;
-      padding: 15px 0;
+      padding: 12px 0;
       border-top: 1px solid #333;
     }
 
     footer p {
       margin: 0;
       font-weight: 300;
-      letter-spacing: 0.5px;
     }
 
     footer a {
@@ -173,28 +163,38 @@
     footer a:hover {
       text-decoration: underline;
     }
+
+    /* Mobile */
+    @media (max-width: 768px) {
+      .card {
+        flex: 1 1 100%;
+        max-width: 90%;
+      }
+      .main-title {
+        font-size: 36px;
+        margin: 40px 0 15px;
+      }
+    }
   </style>
 </head>
 <body>
   <div class="container">
-    <!-- Хедер -->
+    <!-- Header -->
     <header>
       <div class="logo">&lt;/vacancy&gt;</div>
       <div class="social-icons">
         <a href="https://t.me/Serhii_Riabovol" target="_blank"><i class="fab fa-telegram"></i></a>
-        <a href="https://mail.google.com/mail/?view=cm&fs=1&to=serhii.riabovol@fullstaff.net" target="_blank"><i class="fas fa-envelope"></i></a>
+        <a href="mailto:serhii.riabovol@fullstaff.net"><i class="fas fa-envelope"></i></a>
         <a href="https://linkedin.com/in/serhii-riabovol-245b11298" target="_blank"><i class="fab fa-linkedin"></i></a>
         <a href="https://wa.me/48793379163" target="_blank"><i class="fab fa-whatsapp"></i></a>
       </div>
     </header>
 
-    <!-- Заголовок -->
+    <!-- Title -->
     <h1 class="main-title">&lt;FULLSTAFF & PARTNERS&gt;</h1>
-
-    <!-- Инструкция -->
     <p class="thin-text">Please select your company below and upload your CV</p>
 
-    <!-- Карточки -->
+    <!-- Cards -->
     <div class="cards">
       <div class="card">
         <h1>FullStaff</h1>
@@ -234,7 +234,7 @@
     </div>
   </div>
 
-  <!-- Футер -->
+  <!-- Footer -->
   <footer>
     <p>© 2025 FullStaff · 
       <a href="mailto:serhii.nahov@fullstaff.net">serhii.nahov@fullstaff.net</a> · 
