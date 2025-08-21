@@ -1,186 +1,80 @@
-* {
+/* Общие настройки */
+body {
   margin: 0;
-  padding: 0;
+  font-family: Arial, sans-serif;
+}
+
+/* Блоки */
+.block {
+  width: 100%;          /* ширина по умолчанию */
+  padding: 40px 20px;   /* внутренние отступы */
   box-sizing: border-box;
 }
 
-body {
-  font-family: 'Roboto', sans-serif;
-  background: #fff;
-  color: #000;
+/* 1. Пустой блок сверху */
+.empty-top {
+  height: 60px; /* можно менять высоту */
 }
 
-.container {
-  max-width: 1300px;
-  margin: 0 auto;
-  padding: 0 20px;
-}
-
-/* Header */
-header {
+/* 2. Хедер */
+.header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 15px 0;
-  border-bottom: 1px solid #ddd;
+  background: #f2f2f2;
+  padding: 20px 40px;
 }
-
-.logo {
-  font-family: 'Oswald', sans-serif;
-  font-size: 28px;
-  font-weight: 600;
+.header .logo {
+  font-weight: bold;
+  font-size: 20px;
 }
-
-.social-icons {
-  display: flex;
-  gap: 18px;
-}
-
-.social-icons a {
-  color: #000;
-  font-size: 24px;
+.header .menu a {
+  margin-left: 20px;
   text-decoration: none;
-  transition: transform 0.2s ease, color 0.2s ease;
-}
-
-.social-icons a:hover {
-  transform: scale(1.2);
-  color: #555;
-}
-
-/* Title */
-.main-title {
-  font-family: 'Oswald', sans-serif;
-  font-size: 48px;
-  font-weight: 600;
-  text-align: center;
-  margin: 40px 0 15px 0;
-}
-
-.thin-text {
-  font-weight: 300;
-  font-size: 1.2rem;
-  text-align: center;
-  margin-bottom: 40px;
   color: #000;
-  text-shadow: 0 0 1px rgba(0,0,0,0.3);
 }
 
-/* Cards */
+/* 3. Заглавная надпись */
+.title {
+  text-align: center;
+  background: #e0e0e0;
+}
+.title h1 {
+  margin: 0;
+  font-size: 36px;
+}
+
+/* 4. Текст */
+.text {
+  max-width: 800px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+/* 5. Карточки */
 .cards {
   display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  gap: 25px;
-  margin-bottom: 60px;
-}
-
-.card {
-  flex: 1 1 300px;  /* каждая карточка минимум 300px */
-  max-width: 400px; /* потолок ширины, как на старом сайте */
-  background: #fff;
-  border-radius: 16px;
-  border: 1px solid #e0e0e0;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-  text-align: center;
-  padding: 30px 20px; /* как было в старом */
-  transition: all 0.3s ease;
-}
-
-
-.card:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 12px 24px rgba(0,0,0,0.15);
-}
-
-.card h1 {
-  font-family: 'Oswald', sans-serif;
-  font-size: 1.6rem;
-  margin-bottom: 10px;
-}
-
-.card p {
-  font-weight: 300;
-  font-size: 1rem;
-  margin-bottom: 20px;
-  color: #000;
-}
-
-.button-group {
-  display: flex;
-  gap: 12px;
   justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
 }
-
-.card-btn {
-  padding: 10px 16px;
+.card {
+  background: #fff;
+  border: 1px solid #ccc;
+  padding: 20px 40px;
   border-radius: 8px;
-  font-size: 0.95rem;
-  font-weight: 600;
-  text-decoration: none;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* 6. Пустой блок снизу */
+.empty-bottom {
+  height: 80px; /* можно менять высоту */
+}
+
+/* 7. Футер */
+.footer {
+  background: #333;
   color: #fff;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.12);
-}
-
-.card-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 14px rgba(0,0,0,0.2);
-}
-
-.upload-btn {
-  background-color: #28a745;
-}
-.upload-btn:hover {
-  background-color: #218838;
-}
-
-.pipeline-btn {
-  background-color: #1e6c93;
-}
-.pipeline-btn:hover {
-  background-color: #15516d;
-}
-
-/* Footer */
-footer {
-  background: #000;
-  color: #fff;
-  font-size: 0.85rem;
-  padding: 12px 0;
-  border-top: 1px solid #333;
-  margin-top: 50px;
-}
-
-footer .container {
-  max-width: 1100px;
-  margin: 0 auto;
-  padding: 0 20px;
-}
-
-footer p {
-  margin: 0;
-  font-weight: 300;
-  letter-spacing: 0.5px;
-}
-
-footer a {
-  color: #fff;
-  text-decoration: none;
-}
-
-footer a:hover {
-  text-decoration: underline;
-}
-
-@media (max-width: 900px) {
-  .card {
-    flex: 1 1 calc(50% - 20px);
-  }
-}
-
-@media (max-width: 600px) {
-  .card {
-    flex: 1 1 100%;
-  }
+  text-align: center;
+  padding: 20px;
 }
