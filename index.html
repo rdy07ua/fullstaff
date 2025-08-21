@@ -3,28 +3,40 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>FullStaff – Partners</title>
+  <title>FullStaff & Partners</title>
 
   <!-- Шрифты -->
   <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600&family=Roboto:wght@300;400&display=swap" rel="stylesheet">
+
   <!-- Иконки -->
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
 
   <style>
-    body {
+    * {
       margin: 0;
-      font-family: 'Roboto', sans-serif;
-      background: #f9f9f9;
-      color: #000;
+      padding: 0;
+      box-sizing: border-box;
     }
 
-    /* Хедер */
+    body {
+      font-family: 'Roboto', sans-serif;
+      background: #fff;
+      color: #000;
+      line-height: 1.4;
+    }
+
+    /* Контейнер по ширине карточек */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
     header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 15px 30px;
-      background-color: #fff;
+      padding: 20px 0;
       border-bottom: 1px solid #ddd;
     }
 
@@ -32,7 +44,6 @@
       font-family: 'Oswald', sans-serif;
       font-size: 28px;
       font-weight: 600;
-      color: #000;
     }
 
     .social-icons {
@@ -42,7 +53,7 @@
 
     .social-icons a {
       color: #000;
-      font-size: 28px;
+      font-size: 24px;
       text-decoration: none;
       transition: transform 0.2s ease, color 0.2s ease;
     }
@@ -52,47 +63,43 @@
       color: #555;
     }
 
-    /* Большой заголовок */
     .main-title {
+      text-align: center;
       font-family: 'Oswald', sans-serif;
       font-size: 48px;
-      font-weight: 600;
-      text-align: center;
-      margin: 40px 20px 20px;
+      font-weight: 700;
+      margin: 40px 0 20px;
     }
 
-    /* Инструкция */
     .thin-text {
+      text-align: center;
       font-weight: 300;
       font-size: 1.2rem;
-      text-align: center;
-      margin: 10px 0 30px;
+      margin-bottom: 40px;
+      color: #000;
       text-shadow: 0 0 1px rgba(0,0,0,0.4);
     }
 
-    /* Контейнер карточек */
-    .cards-container {
+    .cards {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 25px;
-      padding: 20px;
-      max-width: 1200px;
-      margin: 0 auto 60px;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 30px;
+      margin-bottom: 60px;
     }
 
     .card {
-      padding: 30px 20px;
-      text-align: center;
       background: #fff;
       border-radius: 20px;
       border: 1px solid #e0e0e0;
-      box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.08);
+      box-shadow: 0px 4px 12px rgba(0,0,0,0.08);
+      padding: 30px 20px;
+      text-align: center;
       transition: all 0.3s ease;
     }
 
     .card:hover {
-      transform: translateY(-6px);
-      box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+      transform: translateY(-8px);
+      box-shadow: 0 12px 24px rgba(0,0,0,0.15);
     }
 
     .card h1 {
@@ -105,7 +112,6 @@
       font-weight: 300;
       font-size: 1.1rem;
       margin-bottom: 20px;
-      text-shadow: 0 0 1px rgba(0,0,0,0.3);
     }
 
     .button-group {
@@ -115,15 +121,12 @@
     }
 
     .card-btn {
-      display: flex;
-      align-items: center;
-      justify-content: center;
       padding: 12px 20px;
       border-radius: 10px;
       font-size: 1rem;
       font-weight: 600;
       text-decoration: none;
-      color: #fff;
+      color: white;
       transition: all 0.3s ease;
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.12);
     }
@@ -133,19 +136,26 @@
       box-shadow: 0 6px 14px rgba(0, 0, 0, 0.2);
     }
 
-    .upload-btn { background-color: #28a745; }
-    .upload-btn:hover { background-color: #218838; }
+    .upload-btn {
+      background-color: #28a745;
+    }
+    .upload-btn:hover {
+      background-color: #218838;
+    }
 
-    .pipeline-btn { background-color: #1e6c93; }
-    .pipeline-btn:hover { background-color: #15516d; }
+    .pipeline-btn {
+      background-color: #1e6c93;
+    }
+    .pipeline-btn:hover {
+      background-color: #15516d;
+    }
 
-    /* Футер */
     footer {
       background: #000;
       color: #fff;
       font-size: 0.85rem;
       text-align: center;
-      padding: 8px 0;
+      padding: 15px 0;
       border-top: 1px solid #333;
     }
 
@@ -166,75 +176,70 @@
   </style>
 </head>
 <body>
+  <div class="container">
+    <!-- Хедер -->
+    <header>
+      <div class="logo">&lt;/vacancy&gt;</div>
+      <div class="social-icons">
+        <a href="https://t.me/Serhii_Riabovol" target="_blank"><i class="fab fa-telegram"></i></a>
+        <a href="https://mail.google.com/mail/?view=cm&fs=1&to=serhii.riabovol@fullstaff.net" target="_blank"><i class="fas fa-envelope"></i></a>
+        <a href="https://linkedin.com/in/serhii-riabovol-245b11298" target="_blank"><i class="fab fa-linkedin"></i></a>
+        <a href="https://wa.me/48793379163" target="_blank"><i class="fab fa-whatsapp"></i></a>
+      </div>
+    </header>
 
-  <!-- Хедер -->
-  <header>
-    <div class="logo">&lt;/vacancy&gt;</div>
-    <div class="social-icons">
-      <a href="https://t.me/Serhii_Riabovol" target="_blank"><i class="fab fa-telegram"></i></a>
-      <a href="https://mail.google.com/mail/?view=cm&fs=1&to=serhii.riabovol@fullstaff.net" target="_blank"><i class="fas fa-envelope"></i></a>
-      <a href="https://linkedin.com/in/serhii-riabovol-245b11298" target="_blank"><i class="fab fa-linkedin"></i></a>
-      <a href="https://wa.me/48793379163" target="_blank"><i class="fab fa-whatsapp"></i></a>
-    </div>
-  </header>
+    <!-- Заголовок -->
+    <h1 class="main-title">&lt;FULLSTAFF & PARTNERS&gt;</h1>
 
-  <!-- Большой заголовок -->
-  <h1 class="main-title">FullStaff &amp; PartnerS</h1>
+    <!-- Инструкция -->
+    <p class="thin-text">Please select your company below and upload your CV</p>
 
-  <!-- Инструкция -->
-  <p class="thin-text">Please select your company below and upload your CV</p>
+    <!-- Карточки -->
+    <div class="cards">
+      <div class="card">
+        <h1>FullStaff</h1>
+        <p>Recruiting</p>
+        <div class="button-group">
+          <a href="https://forms.gle/9Tr4mGqxKJT4yPqX6" target="_blank" class="card-btn upload-btn">Upload CV</a>
+          <a href="https://docs.google.com/spreadsheets/d/17DtPOnVAw45DO-SoH3GFMYan_QOHhvjlTsn2S8SMYN8/edit?usp=sharing" target="_blank" class="card-btn pipeline-btn">Pipeline</a>
+        </div>
+      </div>
 
-  <!-- Карточки -->
-  <div class="cards-container">
+      <div class="card">
+        <h1>B&B</h1>
+        <p>Partner</p>
+        <div class="button-group">
+          <a href="https://forms.gle/G2yLgvA3EmQCqQwb9" target="_blank" class="card-btn upload-btn">Upload CV</a>
+          <a href="https://docs.google.com/spreadsheets/d/1S8EWp3y6GI9fK_dMzMu22dKWTaHPSqhEKzwoAmeXq4A/edit?usp=sharing" target="_blank" class="card-btn pipeline-btn">Pipeline</a>
+        </div>
+      </div>
 
-    <div class="card">
-      <h1>FullStaff</h1>
-      <p>Recruiting</p>
-      <div class="button-group">
-        <a href="https://forms.gle/9Tr4mGqxKJT4yPqX6" target="_blank" class="card-btn upload-btn">Upload CV</a>
-        <a href="https://docs.google.com/spreadsheets/d/17DtPOnVAw45DO-SoH3GFMYan_QOHhvjlTsn2S8SMYN8/edit?usp=sharing" target="_blank" class="card-btn pipeline-btn">Pipeline</a>
+      <div class="card">
+        <h1>Evgeneum</h1>
+        <p>Partner</p>
+        <div class="button-group">
+          <a href="https://forms.gle/rTLoDyDA9tsot5Fr6" target="_blank" class="card-btn upload-btn">Upload CV</a>
+          <a href="https://docs.google.com/spreadsheets/d/15ZQH3WQke3DbImu63Rp55BGm79MtS07uXw28kwSDgCQ/edit?usp=sharing" target="_blank" class="card-btn pipeline-btn">Pipeline</a>
+        </div>
+      </div>
+
+      <div class="card">
+        <h1>Freelance</h1>
+        <p>Partners</p>
+        <div class="button-group">
+          <a href="https://forms.gle/Y3kAd1Y8sJkMynkYA" target="_blank" class="card-btn upload-btn">Upload CV</a>
+          <a href="https://docs.google.com/spreadsheets/d/1LaBlD5HqUfxf1XTvHvDLSMrpPARFQdvWoHmNaC252uE/edit?usp=sharing" target="_blank" class="card-btn pipeline-btn">Pipeline</a>
+        </div>
       </div>
     </div>
-
-    <div class="card">
-      <h1>B&amp;B</h1>
-      <p>Partner</p>
-      <div class="button-group">
-        <a href="https://forms.gle/G2yLgvA3EmQCqQwb9" target="_blank" class="card-btn upload-btn">Upload CV</a>
-        <a href="https://docs.google.com/spreadsheets/d/1S8EWp3y6GI9fK_dMzMu22dKWTaHPSqhEKzwoAmeXq4A/edit?usp=sharing" target="_blank" class="card-btn pipeline-btn">Pipeline</a>
-      </div>
-    </div>
-
-    <div class="card">
-      <h1>Evgeneum</h1>
-      <p>Partner</p>
-      <div class="button-group">
-        <a href="https://forms.gle/rTLoDyDA9tsot5Fr6" target="_blank" class="card-btn upload-btn">Upload CV</a>
-        <a href="https://docs.google.com/spreadsheets/d/15ZQH3WQke3DbImu63Rp55BGm79MtS07uXw28kwSDgCQ/edit?usp=sharing" target="_blank" class="card-btn pipeline-btn">Pipeline</a>
-      </div>
-    </div>
-
-    <div class="card">
-      <h1>Freelance</h1>
-      <p>Partners</p>
-      <div class="button-group">
-        <a href="https://forms.gle/Y3kAd1Y8sJkMynkYA" target="_blank" class="card-btn upload-btn">Upload CV</a>
-        <a href="https://docs.google.com/spreadsheets/d/1LaBlD5HqUfxf1XTvHvDLSMrpPARFQdvWoHmNaC252uE/edit?usp=sharing" target="_blank" class="card-btn pipeline-btn">Pipeline</a>
-      </div>
-    </div>
-
   </div>
 
   <!-- Футер -->
   <footer>
-    <p>
-      © 2025 FullStaff · 
-      <a href="https://mail.google.com/mail/?view=cm&fs=1&to=serhii.nahov@fullstaff.net" target="_blank">
-        serhii.nahov@fullstaff.net
-      </a> · 
+    <p>© 2025 FullStaff · 
+      <a href="mailto:serhii.nahov@fullstaff.net">serhii.nahov@fullstaff.net</a> · 
       <a href="tel:+48793379163">+48 793 379 163</a>
     </p>
   </footer>
-
 </body>
 </html>
