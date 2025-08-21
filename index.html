@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>FullStaff & Partners</title>
 
   <!-- Fonts -->
@@ -10,25 +10,30 @@
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
 
   <style>
-    body {
+    * {
       margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
       font-family: 'Roboto', sans-serif;
       background: #fff;
       color: #000;
     }
 
-    /* Container с ограничением ширины */
     .container {
-      max-width: 1200px;
+      max-width: 1100px;
       margin: 0 auto;
       padding: 0 20px;
     }
 
+    /* Header */
     header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 20px 0;
+      padding: 15px 0;
       border-bottom: 1px solid #ddd;
     }
 
@@ -40,12 +45,12 @@
 
     .social-icons {
       display: flex;
-      gap: 20px;
+      gap: 18px;
     }
 
     .social-icons a {
-      font-size: 24px;
       color: #000;
+      font-size: 24px;
       text-decoration: none;
       transition: transform 0.2s ease, color 0.2s ease;
     }
@@ -55,33 +60,35 @@
       color: #555;
     }
 
+    /* Title */
     .main-title {
       font-family: 'Oswald', sans-serif;
       font-size: 48px;
-      font-weight: 700;
+      font-weight: 600;
       text-align: center;
-      margin: 60px 0 20px; /* добавил воздух сверху */
+      margin: 40px 0 15px 0;
     }
 
     .thin-text {
       font-weight: 300;
       font-size: 1.2rem;
       text-align: center;
-      margin-bottom: 50px; /* увеличил отступ вниз */
+      margin-bottom: 40px;
       color: #000;
+      text-shadow: 0 0 1px rgba(0,0,0,0.3);
     }
 
     /* Cards */
     .cards {
       display: flex;
       flex-wrap: wrap;
-      justify-content: center;
+      justify-content: space-between;
       gap: 25px;
-      margin-bottom: 60px; /* воздух перед футером */
+      margin-bottom: 60px;
     }
 
     .card {
-      flex: 1 1 calc(25% - 20px);
+      flex: 1 1 22%;
       max-width: 260px;
       background: #fff;
       border-radius: 16px;
@@ -99,32 +106,37 @@
 
     .card h1 {
       font-family: 'Oswald', sans-serif;
-      font-size: 1.5rem;
-      margin-bottom: 8px;
+      font-size: 1.6rem;
+      margin-bottom: 10px;
     }
 
     .card p {
-      font-size: 1rem;
       font-weight: 300;
+      font-size: 1rem;
       margin-bottom: 20px;
       color: #000;
     }
 
     .button-group {
       display: flex;
-      gap: 10px;
+      gap: 12px;
       justify-content: center;
     }
 
     .card-btn {
-      padding: 10px 18px;
+      padding: 10px 16px;
       border-radius: 8px;
-      font-size: 0.9rem;
+      font-size: 0.95rem;
       font-weight: 600;
       text-decoration: none;
-      color: white;
+      color: #fff;
       transition: all 0.3s ease;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.12);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.12);
+    }
+
+    .card-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 14px rgba(0,0,0,0.2);
     }
 
     .upload-btn {
@@ -141,18 +153,20 @@
       background-color: #15516d;
     }
 
+    /* Footer */
     footer {
       background: #000;
       color: #fff;
       font-size: 0.85rem;
-      text-align: center;
       padding: 12px 0;
       border-top: 1px solid #333;
+      margin-top: 50px;
     }
 
     footer p {
       margin: 0;
       font-weight: 300;
+      letter-spacing: 0.5px;
     }
 
     footer a {
@@ -164,22 +178,21 @@
       text-decoration: underline;
     }
 
-    /* Mobile */
-    @media (max-width: 768px) {
+    @media (max-width: 900px) {
+      .card {
+        flex: 1 1 calc(50% - 20px);
+      }
+    }
+
+    @media (max-width: 600px) {
       .card {
         flex: 1 1 100%;
-        max-width: 90%;
-      }
-      .main-title {
-        font-size: 36px;
-        margin: 40px 0 15px;
       }
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <!-- Header -->
     <header>
       <div class="logo">&lt;/vacancy&gt;</div>
       <div class="social-icons">
@@ -190,11 +203,9 @@
       </div>
     </header>
 
-    <!-- Title -->
     <h1 class="main-title">&lt;FULLSTAFF & PARTNERS&gt;</h1>
     <p class="thin-text">Please select your company below and upload your CV</p>
 
-    <!-- Cards -->
     <div class="cards">
       <div class="card">
         <h1>FullStaff</h1>
@@ -234,12 +245,13 @@
     </div>
   </div>
 
-  <!-- Footer -->
   <footer>
-    <p>© 2025 FullStaff · 
-      <a href="mailto:serhii.nahov@fullstaff.net">serhii.nahov@fullstaff.net</a> · 
-      <a href="tel:+48793379163">+48 793 379 163</a>
-    </p>
+    <div class="container">
+      <p>© 2025 FullStaff · 
+        <a href="mailto:serhii.nahov@fullstaff.net">serhii.nahov@fullstaff.net</a> · 
+        <a href="tel:+48793379163">+48 793 379 163</a>
+      </p>
+    </div>
   </footer>
 </body>
 </html>
