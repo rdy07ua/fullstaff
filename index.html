@@ -1,100 +1,50 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-  <meta charset="UTF-8">
-  <title>Pipeline</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #f9f9f9;
-      margin: 0;
-      padding: 20px;
-    }
-    h1 { text-align: center; }
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-      gap: 20px;
-      margin-top: 20px;
-    }
-    .card {
-      background: white;
-      border-radius: 12px;
-      padding: 15px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-      transition: 0.2s;
-    }
-    .card:hover { transform: translateY(-4px); }
-    .title { font-weight: bold; font-size: 18px; margin-bottom: 8px; }
-    .status {
-      display: inline-block;
-      padding: 4px 10px;
-      border-radius: 8px;
-      font-size: 12px;
-      margin-top: 8px;
-    }
-    .status.new { background: #28a745; color: white; }
-    .status.reject { background: #dc3545; color: white; }
-    .status.sent { background: #007bff; color: white; }
-    .meta { font-size: 14px; color: #555; margin: 4px 0; }
-    a { color: #007bff; text-decoration: none; }
-  </style>
-</head>
-<body>
-  <h1>Pipeline кандидатов</h1>
-  <div class="grid" id="content"></div>
+<script>
+  async function loadData() {
+    const res = await fetch("https://docs.google.com/spreadsheets/d/1ZISfkRoQPYzlPkIXkWdyNtueJTRq3_edQtQQuPDDasw/gviz/tq?tqx=out:json");
+    const text = await res.text();
+    const json = JSON.parse(text.substr(47).slice(0, -2));
 
-  <script>
-    async function loadData() {
-      const res = await fetch("https://docs.google.com/spreadsheets/d/1ZISfkRoQPYzlPkIXkWdyNtueJTRq3_edQtQQuPDDasw/gviz/tq?tqx=out:json");
-      const text = await res.text();
-      const json = JSON.parse(text.substr(47).slice(0, -2));
+    const rows = json.table.rows;
+    let html = "";
 
-      const rows = json.table.rows;
-      let html = "";
+    // начинаем с i=1 чтобы пропустить заголовки
+    for (let i = 1; i < rows.length; i++) {
+      const r = rows[i].c;
+      if (!r[4]) continue; // если нет кандидата - пропускаем пустую строку
 
-      // начинаем с i=1 (чтобы пропустить заголовки)
-      for (let i = 1; i < rows.length; i++) {
-        const r = rows[i].c;
-        const agency = r[1]?.v || "";
-        const recruiter = r[2]?.v || "";
-        const vacancy = r[3]?.v || "";
-        const candidate = r[4]?.v || "";
-        const email = r[5]?.v || "";
-        const position = r[6]?.v || "";
-        const salary = r[7]?.v || "";
-        const location = r[8]?.v || "";
-        const linkedin = r[9]?.v || "";
-        const cv = r[10]?.v || "";
-        const status = r[11]?.v || "";
-        const comment = r[12]?.v || "";
+      const date = r[0]?.v || "";
+      const agency = r[1]?.v || "";
+      const recruiter = r[2]?.v || "";
+      const vacancy = r[3]?.v || "";
+      const candidate = r[4]?.v || "";
+      const email = r[5]?.v || "";
+      const position = r[6]?.v || "";
+      const salary = r[7]?.v || "";
+      const location = r[8]?.v || "";
+      const linkedin = r[9]?.v || "";
+      const cv = r[10]?.v || "";
+      const status = r[11]?.v || "";
+      const comment = r[12]?.v || "";
 
-        // статус = цветной бейджик
-        let statusClass = "";
-        if (status.includes("Новый")) statusClass = "new";
-        if (status.includes("Отказ")) statusClass = "reject";
-        if (status.includes("Передан")) statusClass = "sent";
-
-        html += `
-          <div class="card">
-            <div class="title">${candidate} (${position})</div>
-            <div class="meta">Агентство: ${agency}</div>
-            <div class="meta">Рекрутер: ${recruiter}</div>
-            <div class="meta">Локация: ${location}</div>
-            <div class="meta">Зарплата: ${salary}</div>
-            <div class="meta">Вакансия: ${vacancy}</div>
-            <div class="meta">Email: <a href="mailto:${email}">${email}</a></div>
-            <div class="meta"><a href="${linkedin}" target="_blank">LinkedIn</a> | <a href="${cv}" target="_blank">CV</a></div>
-            <div class="status ${statusClass}">${status}</div>
-            <div class="meta">Комментарий: ${comment}</div>
-          </div>
-        `;
-      }
-
-      document.getElementById("content").innerHTML = html;
+      html += `
+        <div class="card">
+          <h3>${candidate} (${position})</h3>
+          <p><b>Агентство:</b> ${agency}</p>
+          <p><b>Рекрутер:</b> ${recruiter}</p>
+          <p><b>Вакансия:</b> ${vacancy}</p>
+          <p><b>Дата:</b> ${date}</p>
+          <p><b>Зарплата:</b> ${salary}</p>
+          <p><b>Локация:</b> ${location}</p>
+          <p><b>Email:</b> <a href="mailto:${email}">${email}</a></p>
+          <p><a href="${linkedin}" target="_blank">LinkedIn</a> | <a href="${cv}" target="_blank">CV</a></p>
+          <p><b>Статус:</b> ${status}</p>
+          <p><b>Комментарий:</b> ${comment}</p>
+        </div>
+      `;
     }
 
-    loadData();
-  </script>
-</body>
-</html>
+    document.getElementById("content").innerHTML = html;
+  }
+
+  loadData();
+</script>
