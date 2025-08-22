@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <title>Pipeline кандидатов</title>
   <!-- Подключаем шрифты -->
- <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500&family=Roboto:wght@400;500&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500&family=Roboto:wght@400;500&family=Inter:wght@400;500&display=swap" rel="stylesheet">
 
   <style>
     body {
@@ -160,7 +160,7 @@
           if (status.includes("Отказ")) statusClass = "reject";
 
           html += `
-            <div class="card ${statusClass}" onclick="this.classList.toggle('expanded')">
+            <div class="card ${statusClass}" onclick="toggleCard(this)">
               <div class="card-preview">
                 <p><b>Кандидат:</b> ${candidate}</p>
                 <p><b>Вакансия:</b> ${vacancy}</p>
@@ -187,6 +187,10 @@
         console.error("Ошибка загрузки данных:", e);
         document.getElementById("content").innerHTML = "<p>Не удалось загрузить данные</p>";
       }
+    }
+
+    function toggleCard(card) {
+      card.classList.toggle('expanded');
     }
 
     loadData();
