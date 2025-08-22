@@ -1,10 +1,25 @@
-/* Общие настройки */
+/* =======================
+   Шрифты
+   ======================= */
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@400;600&family=Roboto:wght@100;300;400&display=swap');
+
+/* =======================
+   Общие настройки
+   ======================= */
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
 body {
   margin: 0;
   font-family: Arial, sans-serif;
 }
 
-/* Блоки */
+/* =======================
+   Блоки
+   ======================= */
 .block {
   width: 100%;
   box-sizing: border-box;
@@ -16,7 +31,9 @@ body {
   height: 20px;
 }
 
-/* 2. Хедер */
+/* =======================
+   2. Хедер
+   ======================= */
 .header {
   width: 1000px;
   margin: 0 auto;
@@ -59,23 +76,25 @@ body {
   }
 }
 
-/* 3. Заглавная надпись */
+/* =======================
+   3. Заглавная надпись
+   ======================= */
 .title {
   text-align: center;
   background: #fff;
-
-  font-size: 32px;           /* размер шрифта */
-  font-family: 'Oswald', sans-serif; /* шрифт */
-  font-weight: bold;         /* жирный текст */
+  font-size: 32px;
+  font-family: 'Oswald', sans-serif;
+  font-weight: bold;
 }
+
 .title h1 {
   margin: 0;
   font-size: 36px;
 }
 
-/* 4. Текст */
-@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;300&display=swap');
-
+/* =======================
+   4. Текст
+   ======================= */
 .thin-text {
   font-family: 'Roboto', sans-serif;
   font-weight: 300;
@@ -93,139 +112,138 @@ body {
   }
 }
 
-/* 5. Карточки */
- @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@400;600&family=Roboto:wght@300;400&display=swap');
+/* =======================
+   5. Карточки
+   ======================= */
+.card-wrapper {
+  display: flex;            
+  justify-content: center;  
+  gap: 20px;
+  background: transparent !important;
+  flex-wrap: wrap; /* чтобы переносились на новую строку при нехватке места */
+}
 
-  * {
-    padding: 0;
-    margin: 0;
-    box-sizing: border-box;
-  }
+.card {
+  flex: 0 0 200px;
+  position: relative;
+  background: transparent !important;
+  box-shadow: none;
+}
 
-   .card-wrapper {
-    display: flex;            /* включаем flex-контейнер */
-    justify-content: center;  /* центрируем карточки по горизонтали */
-    gap: 20px;
-    background: transparent !important;
-  }
+.front-card {
+  padding: 30px 20px;
+  text-align: center;
+  background: transparent !important;
+  border-radius: 20px;
+  border: 1px solid #e0e0e0;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+}
 
-  .card {
-    flex: 0 0 200px;
-    position: relative;
-    background: transparent !important;
-    box-shadow: none;
-  }
+.front-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 24px rgba(0,0,0,0.15);
+}
 
-  .front-card {
-    padding: 30px 20px;
-    text-align: center;
-    background: transparent !important;
-    border-radius: 20px;
-    border: 1px solid #e0e0e0;
-    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.08);
-    transition: all 0.3s ease;
-  }
+.front-card h1 {
+  font-family: 'Oswald', sans-serif;
+  font-size: 2rem;
+  margin-bottom: 10px;
+}
 
-  .front-card:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 12px 24px rgba(0,0,0,0.15);
-  }
+.front-card p {
+  font-family: 'Roboto', sans-serif;
+  font-weight: 300;
+  font-size: 1.2rem;
+  margin-bottom: 20px;
+  color: #000;
+  text-shadow: 0 0 1px rgba(0,0,0,0.3);
+}
 
-  .front-card h1 {
-    font-family: 'Oswald', sans-serif;
-    font-size: 2rem;
-    margin-bottom: 10px;
-  }
+.button-group {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+}
 
-  .front-card p {
-    font-family: 'Roboto', sans-serif;
-    font-weight: 300; /* тонкий Roboto */
-    font-size: 1.2rem;
-    margin-bottom: 20px;
-    color: #000; /* черный */
-    text-shadow: 0 0 1px rgba(0,0,0,0.3); /* легкая тень для насыщенности */
-  }
+.card-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 20px;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: 600;
+  text-decoration: none;
+  color: white;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.12);
+}
 
-  .button-group {
-    display: flex;
-    gap: 15px;
-    justify-content: center;
-  }
+.card-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.2);
+}
 
-  .card-btn {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 12px 20px;
-    border-radius: 10px;
-    font-size: 1rem;
-    font-weight: 600;
-    text-decoration: none;
-    color: white;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.12);
-  }
+.upload-btn {
+  background-color: #28a745;
+}
 
-  .card-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.2);
-  }
+.upload-btn:hover {
+  background-color: #218838;
+}
 
-  .upload-btn {
-    background-color: #28a745;
-  }
-  .upload-btn:hover {
-    background-color: #218838;
-  }
+.pipeline-btn {
+  background-color: #1e6c93;
+}
 
-  .pipeline-btn {
-    background-color: #1e6c93;
-  }
-  .pipeline-btn:hover {
-    background-color: #15516d;
-  }
+.pipeline-btn:hover {
+  background-color: #15516d;
+}
 
-  @media only screen and (max-width: 700px) {
-    .card-wrapper {
-      max-width: 90%;
-    }
+@media only screen and (max-width: 700px) {
+  .card-wrapper {
+    max-width: 90%;
   }
+}
 
-/* 6. Пустой блок снизу */
+/* =======================
+   6. Пустой блок снизу
+   ======================= */
 .empty-bottom {
   height: 80px;
 }
 
-/* 7. Футер */
-
+/* =======================
+   7. Футер
+   ======================= */
 .footer {
-    background: #000;
-    color: #fff;
-    font-size: 0.85rem;
-    text-align: center;
-    padding: 8px 0;
-    border-top: 1px solid #333;
-  }
+  background: #000;
+  color: #fff;
+  font-size: 0.85rem;
+  text-align: center;
+  padding: 8px 0;
+  border-top: 1px solid #333;
+}
 
-  footer p {
-    margin: 0;
-    font-weight: 300;
-    letter-spacing: 0.5px;
-  }
+footer p {
+  margin: 0;
+  font-weight: 300;
+  letter-spacing: 0.5px;
+}
 
-  footer a {
-    color: #fff;
-    text-decoration: none;
-  }
+footer a {
+  color: #fff;
+  text-decoration: none;
+}
 
-  footer a:hover {
-    text-decoration: underline;
-  }
+footer a:hover {
+  text-decoration: underline;
+}
 
-  /* Скрыть футер на мобилках */
-  @media (max-width: 600px) {
-    footer {
-      display: none;
-    }
+/* Скрыть футер на мобилках */
+@media (max-width: 600px) {
+  footer {
+    display: none;
   }
 }
