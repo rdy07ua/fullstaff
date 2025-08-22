@@ -55,7 +55,7 @@
     }
       .email-link {
         color: #fff;
-          text-decoration: none; /* убираем подчёркивание */
+        text-decoration: none; /* убираем подчёркивание */
     }
       .email-link:hover {
         text-decoration: underline; /* подчёркивание при наведении */
@@ -75,6 +75,20 @@
       background: #1e7e34;
       box-shadow: 0 0 8px rgba(40,167,69,0.7);
     }
+    .status {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 600;
+      color: #fff;
+}
+.status.new { background: #f39c12; }
+.status.sent { background: #007bff; }
+.status.interview { background: #9b59b6; }
+.status.offer { background: #28a745; }
+.status.reject { background: #dc3545; }
+
 
     /* Неоновые границы по статусу */
     .new {
@@ -151,7 +165,7 @@
                 ${linkedin ? `<a href="${linkedin}" target="_blank" class="btn btn-linkedin">LinkedIn</a>` : ""}
                 ${cv ? `<a href="${cv}" target="_blank" class="btn btn-cv">CV</a>` : ""}
               </p>
-              <p><b>Статус:</b> ${status}</p>
+              <p><b>Статус:</b> <span class="status ${statusClass}">${status}</span></p>
               <p><b>Комментарий:</b> ${comment}</p>
             </div>
           `;
