@@ -10,12 +10,10 @@
       margin: 0;
       padding: 20px;
     }
-    h1 {
-      text-align: center;
-    }
+    h1 { text-align: center; }
     .grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
       gap: 20px;
       margin-top: 20px;
     }
@@ -26,9 +24,7 @@
       box-shadow: 0 4px 10px rgba(0,0,0,0.1);
       transition: 0.2s;
     }
-    .card:hover {
-      transform: translateY(-4px);
-    }
+    .card:hover { transform: translateY(-4px); }
     .status {
       display: inline-block;
       padding: 6px 12px;
@@ -37,9 +33,9 @@
       font-weight: bold;
       margin-top: 10px;
     }
-    .new { background: #28a745; color: white; }       /* Новый */
-    .sent { background: #007bff; color: white; }      /* Передан заказчику */
-    .reject { background: #dc3545; color: white; }    /* Отказ */
+    .new { background: #28a745; color: white; }
+    .sent { background: #007bff; color: white; }
+    .reject { background: #dc3545; color: white; }
   </style>
 </head>
 <body>
@@ -58,15 +54,13 @@
 
         for (let i = 1; i < rows.length; i++) {
           const r = rows[i].c;
-          if (!r[4]) continue;
+          if (!r[4]) continue; // если нет кандидата — пропускаем
 
-          const date = r[0]?.v || "";
           const agency = r[1]?.v || "";
           const recruiter = r[2]?.v || "";
           const vacancy = r[3]?.v || "";
           const candidate = r[4]?.v || "";
           const email = r[5]?.v || "";
-          const position = r[6]?.v || "";
           const salary = r[7]?.v || "";
           const location = r[8]?.v || "";
           const linkedin = r[9]?.v || "";
@@ -74,7 +68,6 @@
           const status = r[11]?.v || "";
           const comment = r[12]?.v || "";
 
-          // Определяем класс по статусу
           let statusClass = "";
           if (status.includes("Новый")) statusClass = "new";
           if (status.includes("Отказ")) statusClass = "reject";
@@ -82,15 +75,15 @@
 
           html += `
             <div class="card">
-              <h3>${candidate} (${position})</h3>
               <p><b>Агентство:</b> ${agency}</p>
               <p><b>Рекрутер:</b> ${recruiter}</p>
               <p><b>Вакансия:</b> ${vacancy}</p>
-              <p><b>Дата:</b> ${date}</p>
-              <p><b>Зарплата:</b> ${salary}</p>
-              <p><b>Локация:</b> ${location}</p>
+              <p><b>Кандидат:</b> ${candidate}</p>
               <p><b>Email:</b> <a href="mailto:${email}">${email}</a></p>
-              <p><a href="${linkedin}" target="_blank">LinkedIn</a> | <a href="${cv}" target="_blank">CV</a></p>
+              <p><b>З/П:</b> ${salary}</p>
+              <p><b>Локация:</b> ${location}</p>
+              <p><b>LinkedIn:</b> <a href="${linkedin}" target="_blank">Профиль</a></p>
+              <p><b>CV:</b> <a href="${cv}" target="_blank">Скачать</a></p>
               <div class="status ${statusClass}">${status}</div>
               <p><b>Комментарий:</b> ${comment}</p>
             </div>
