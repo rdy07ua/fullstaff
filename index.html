@@ -21,58 +21,32 @@
       font-size: 36px;
       margin-bottom: 30px;
     }
-
-    .login-container {
-      max-width: 400px;
-      margin: 80px auto;
+    .login-box {
+      max-width: 320px;
+      margin: 100px auto;
+      padding: 20px;
       background: #fff;
-      padding: 30px;
-      border-radius: 12px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+      border-radius: 8px;
+      box-shadow: 0 0 8px rgba(0,0,0,0.15);
       text-align: center;
-      font-family: 'Inter', sans-serif;
     }
-    .login-container h2 {
-      margin-bottom: 20px;
-    }
-    .login-container input {
-      display: block;
+    .login-box input {
       width: 90%;
-      margin: 10px auto;
       padding: 10px;
-      font-size: 16px;
+      margin: 8px 0;
       border: 1px solid #ccc;
       border-radius: 6px;
+      font-size: 14px;
     }
-    .login-container button {
-      padding: 10px 20px;
-      margin-top: 15px;
+    .login-box button {
+      padding: 10px 18px;
       border: none;
-      background: #007bff;
-      color: white;
-      font-size: 16px;
       border-radius: 6px;
-      cursor: pointer;
-      transition: 0.3s;
-    }
-    .login-container button:hover {
-      background: #0056b3;
-    }
-    #logoutBtn {
-      display: block;
-      margin: 0 auto 30px auto;
-      padding: 8px 18px;
       background: #dc3545;
-      color: white;
-      border: none;
-      border-radius: 6px;
+      color: #fff;
       cursor: pointer;
-      transition: 0.3s;
+      font-size: 14px;
     }
-    #logoutBtn:hover {
-      background: #a71d2a;
-    }
-
     .grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
@@ -91,9 +65,7 @@
       overflow: hidden;
     }
     .card p { margin: 6px 0; }
-    .card:hover {
-      transform: translateY(-4px);
-    }
+    .card:hover { transform: translateY(-4px); }
 
     .card-details {
       max-height: 0;
@@ -126,19 +98,11 @@
       color: #fff;
       text-decoration: none;
     }
-    .email-link:hover {
-      text-decoration: underline;
-    }
+    .email-link:hover { text-decoration: underline; }
     .btn-linkedin { background: #0077b5; }
-    .btn-linkedin:hover {
-      background: #005582;
-      box-shadow: 0 0 8px rgba(0,119,181,0.7);
-    }
+    .btn-linkedin:hover { background: #005582; box-shadow: 0 0 8px rgba(0,119,181,0.7); }
     .btn-cv { background: #28a745; }
-    .btn-cv:hover {
-      background: #1e7e34;
-      box-shadow: 0 0 8px rgba(40,167,69,0.7);
-    }
+    .btn-cv:hover { background: #1e7e34; box-shadow: 0 0 8px rgba(40,167,69,0.7); }
 
     .status {
       display: inline-block;
@@ -154,11 +118,11 @@
     .status.offer { background: #28a745; }
     .status.reject { background: #dc3545; }
 
-    .new { border: 2px solid #f39c12; box-shadow: 0 0 6px #f39c12; }
-    .sent { border: 2px solid #007bff; box-shadow: 0 0 6px #007bff; }
-    .interview { border: 2px solid #9b59b6; box-shadow: 0 0 6px #9b59b6; }
-    .offer { border: 2px solid #28a745; box-shadow: 0 0 6px #28a745; }
-    .reject { border: 2px solid #dc3545; box-shadow: 0 0 6px #dc3545; }
+    .new { border: 2px solid #f39c12; box-shadow: 0 0 6px #f39c12, 0 0 12px #f39c12, 0 0 18px #f39c12; }
+    .sent { border: 2px solid #007bff; box-shadow: 0 0 6px #007bff, 0 0 12px #007bff, 0 0 18px #007bff; }
+    .interview { border: 2px solid #9b59b6; box-shadow: 0 0 6px #9b59b6, 0 0 12px #9b59b6, 0 0 18px #9b59b6; }
+    .offer { border: 2px solid #28a745; box-shadow: 0 0 6px #28a745, 0 0 12px #28a745, 0 0 18px #28a745; }
+    .reject { border: 2px solid #dc3545; box-shadow: 0 0 6px #dc3545, 0 0 12px #dc3545, 0 0 18px #dc3545; }
 
     @media (max-width: 600px) {
       h1 { font-size: 28px; }
@@ -169,67 +133,52 @@
   </style>
 </head>
 <body>
-  <div id="loginSection" class="login-container" style="display:none;">
-    <h2>Вход</h2>
-    <input type="text" id="username" placeholder="Логин">
-    <input type="password" id="password" placeholder="Пароль">
+  <h1>Pipeline кандидатов</h1>
+
+  <div id="login" class="login-box">
+    <h3>Вход</h3>
+    <input type="text" id="username" placeholder="Логин"><br>
+    <input type="password" id="password" placeholder="Пароль"><br>
     <button onclick="login()">Войти</button>
   </div>
 
-  <div id="mainContent" style="display:none;">
-    <h1>Pipeline кандидатов</h1>
-    <button id="logoutBtn" onclick="logout()">Выйти</button>
+  <div id="app" style="display:none;">
+    <button onclick="logout()" style="margin-bottom:20px;">Выйти</button>
     <div class="grid" id="content"></div>
   </div>
 
   <script>
-    // список пользователей
+    // 🔑 Пользователи
     const users = {
-      "admin": { password: "1234", role: "admin", recruiterName: null }, // видит всех
-      "Serhii Riabovol": { password: "pass1", name: "Serhii Riabovol" },
-      "Anna Ivanova": { password: "pass2", name: "Anna Ivanova" },
-      "Oleg Petrov": { password: "pass3", name: "Oleg Petrov" },
-      "Marina Kozlova": { password: "pass4", name: "Marina Kozlova" },
-      "Dmitry Sokolov": { password: "pass5", name: "Dmitry Sokolov" }
-};
+      "rdy07": { password: "1234", role: "admin", name: null },  // видит всех
+      "Serhii Riabovol": { password: "pass1", role: "user", name: "Serhii Riabovol" },
+      "Anna Ivanova": { password: "pass2", role: "user", name: "Anna Ivanova" },
+      "Oleg Petrov": { password: "pass3", role: "user", name: "Oleg Petrov" },
+      "Marina Kozlova": { password: "pass4", role: "user", name: "Marina Kozlova" },
+      "Dmitry Sokolov": { password: "pass5", role: "user", name: "Dmitry Sokolov" }
+    };
 
     let currentUser = null;
-
-    // проверка сохранённого логина
-    window.onload = () => {
-      const savedUser = localStorage.getItem("currentUser");
-      if (savedUser && users[savedUser]) {
-        currentUser = savedUser;
-        showMainContent();
-      } else {
-        document.getElementById("loginSection").style.display = "block";
-      }
-    };
 
     function login() {
       const username = document.getElementById("username").value.trim();
       const password = document.getElementById("password").value.trim();
 
       if (users[username] && users[username].password === password) {
-        currentUser = username;
-        localStorage.setItem("currentUser", username); // сохраняем логин
-        showMainContent();
+        currentUser = users[username];
+        document.getElementById("login").style.display = "none";
+        document.getElementById("app").style.display = "block";
+        loadData();
       } else {
-        alert("Неверный логин или пароль!");
+        alert("Неверный логин или пароль");
       }
     }
 
     function logout() {
-      localStorage.removeItem("currentUser");
       currentUser = null;
-      document.getElementById("mainContent").style.display = "none";
-      document.getElementById("loginSection").style.display = "block";
-    }
-
-    function showMainContent() {
-      document.getElementById("loginSection").style.display = "none";
-      document.getElementById("mainContent").style.display = "block";
-      loadData();
+      document.getElementById("login").style.display = "block";
+      document.getElementById("app").style.display = "none";
+      document.getElementById("content").innerHTML = "";
     }
 
     async function loadData() {
@@ -257,8 +206,10 @@
           const status = r[12]?.v || "";
           const comment = r[13]?.v || "";
 
-          // фильтруем по текущему пользователю
-          if (recruiter !== users[currentUser].name) continue;
+          // 🔎 Фильтрация
+          if (currentUser.role !== "admin" && recruiter !== currentUser.name) {
+            continue;
+          }
 
           let statusClass = "";
           if (status.includes("Новый")) statusClass = "new";
@@ -290,7 +241,7 @@
           `;
         }
 
-        document.getElementById("content").innerHTML = html;
+        document.getElementById("content").innerHTML = html || "<p>Нет данных для отображения</p>";
       } catch (e) {
         console.error("Ошибка загрузки данных:", e);
         document.getElementById("content").innerHTML = "<p>Не удалось загрузить данные</p>";
