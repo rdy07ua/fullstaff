@@ -31,15 +31,15 @@
     }
     .status {
       display: inline-block;
-      padding: 4px 10px;
-      border-radius: 6px;
-      font-size: 13px;
-      margin-top: 8px;
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-size: 14px;
       font-weight: bold;
+      margin-top: 10px;
     }
-    .status.new { background: #28a745; color: white; }
-    .status.sent { background: #007bff; color: white; }
-    .status.reject { background: #dc3545; color: white; }
+    .new { background: #28a745; color: white; }       /* Новый */
+    .sent { background: #007bff; color: white; }      /* Передан заказчику */
+    .reject { background: #dc3545; color: white; }    /* Отказ */
   </style>
 </head>
 <body>
@@ -58,7 +58,7 @@
 
         for (let i = 1; i < rows.length; i++) {
           const r = rows[i].c;
-          if (!r[4]) continue; // если нет кандидата — пропускаем строку
+          if (!r[4]) continue;
 
           const date = r[0]?.v || "";
           const agency = r[1]?.v || "";
@@ -74,7 +74,7 @@
           const status = r[11]?.v || "";
           const comment = r[12]?.v || "";
 
-          // Подсветка статуса
+          // Определяем класс по статусу
           let statusClass = "";
           if (status.includes("Новый")) statusClass = "new";
           if (status.includes("Отказ")) statusClass = "reject";
