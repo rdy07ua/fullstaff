@@ -27,17 +27,29 @@
     }
     .card {
       font-family: 'Roboto', sans-serif;
-      font-size: 17px;
+      font-size: 16px;
       line-height: 1.4;
       background: #1a1a1a;
       color: #f1f1f1;
       border-radius: 10px;
       padding: 14px;
       transition: 0.3s;
+      cursor: pointer;
+      overflow: hidden;
     }
     .card p { margin: 6px 0; }
     .card:hover {
       transform: translateY(-4px);
+    }
+
+    /* Скрытые детали */
+    .card-details {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.5s ease;
+    }
+    .card.expanded .card-details {
+      max-height: 500px; /* достаточно для всех полей */
     }
 
     /* Кнопки */
@@ -53,28 +65,25 @@
       text-decoration: none;
       transition: 0.3s;
     }
-      .email-link {
-        color: #fff;
-        text-decoration: none; /* убираем подчёркивание */
+    .email-link {
+      color: #fff;
+      text-decoration: none;
     }
-      .email-link:hover {
-        text-decoration: underline; /* подчёркивание при наведении */
+    .email-link:hover {
+      text-decoration: underline;
     }
-
-    .btn-linkedin {
-      background: #0077b5;
-    }
+    .btn-linkedin { background: #0077b5; }
     .btn-linkedin:hover {
       background: #005582;
       box-shadow: 0 0 8px rgba(0,119,181,0.7);
     }
-    .btn-cv {
-      background: #28a745;
-    }
+    .btn-cv { background: #28a745; }
     .btn-cv:hover {
       background: #1e7e34;
       box-shadow: 0 0 8px rgba(40,167,69,0.7);
     }
+
+    /* Статус */
     .status {
       display: inline-block;
       padding: 2px 8px;
@@ -82,15 +91,14 @@
       font-size: 13px;
       font-weight: 600;
       color: #fff;
-}
-.status.new { background: #f39c12; }
-.status.sent { background: #007bff; }
-.status.interview { background: #9b59b6; }
-.status.offer { background: #28a745; }
-.status.reject { background: #dc3545; }
+    }
+    .status.new { background: #f39c12; }
+    .status.sent { background: #007bff; }
+    .status.interview { background: #9b59b6; }
+    .status.offer { background: #28a745; }
+    .status.reject { background: #dc3545; }
 
-
-    /* Неоновые границы по статусу */
+    /* Неоновые границы */
     .new {
       border: 2px solid #f39c12;
       box-shadow: 0 0 6px #f39c12, 0 0 12px #f39c12, 0 0 18px #f39c12;
@@ -124,7 +132,6 @@
         const text = await res.text();
         const json = JSON.parse(text.substr(47).slice(0, -2));
 
-        // новые кандидаты сверху
         const rows = json.table.rows.reverse();
         let html = "";
 
@@ -144,7 +151,6 @@
           const status = r[12]?.v || "";
           const comment = r[13]?.v || "";
 
-          // стиль по статусу
           let statusClass = "";
           if (status.includes("Новый")) statusClass = "new";
           if (status.includes("Передан")) statusClass = "sent";
@@ -153,20 +159,24 @@
           if (status.includes("Отказ")) statusClass = "reject";
 
           html += `
-            <div class="card ${statusClass}">
-              <p><b>Агентство:</b> ${agency}</p>
-              <p><b>Рекрутер:</b> ${recruiter}</p>
-              <p><b>Вакансия:</b> ${vacancy}</p>
-              <p><b>Кандидат:</b> ${candidate}</p>
-              <p><b>Email:</b> <a href="mailto:${email}" class="email-link">${email}</a></p>
-              <p><b>З/П:</b> ${salary}</p>
-              <p><b>Локация:</b> ${location}</p>
-              <p>
-                ${linkedin ? `<a href="${linkedin}" target="_blank" class="btn btn-linkedin">LinkedIn</a>` : ""}
-                ${cv ? `<a href="${cv}" target="_blank" class="btn btn-cv">CV</a>` : ""}
-              </p>
-              <p><b>Статус:</b> <span class="status ${statusClass}">${status}</span></p>
-              <p><b>Комментарий:</b> ${comment}</p>
+            <div class="card ${statusClass}" onclick="this.classList.toggle('expanded')">
+              <div class="card-preview">
+                <p><b>Кандидат:</b> ${candidate}</p>
+                <p><b>Вакансия:</b> ${vacancy}</p>
+                <p><b>Статус:</b> <span class="status ${statusClass}">${status}</span></p>
+              </div>
+              <div class="card-details">
+                <p><b>Агентство:</b> ${agency}</p>
+                <p><b>Рекрутер:</b> ${recruiter}</p>
+                <p><b>Email:</b> <a href="mailto:${email}" class="email-link">${email}</a></p>
+                <p><b>З/П:</b> ${salary}</p>
+                <p><b>Локация:</b> ${location}</p>
+                <p>
+                  ${linkedin ? `<a href="${linkedin}" target="_blank" class="btn btn-linkedin">LinkedIn</a>` : ""}
+                  ${cv ? `<a href="${cv}" target="_blank" class="btn btn-cv">CV</a>` : ""}
+                </p>
+                <p><b>Комментарий:</b> ${comment}</p>
+              </div>
             </div>
           `;
         }
