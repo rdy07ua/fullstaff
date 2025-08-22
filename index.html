@@ -6,11 +6,12 @@
   <style>
     body {
       font-family: Arial, sans-serif;
-      background: #f9f9f9;
+      background: #111; /* тёмный фон, чтобы неон красиво светился */
       margin: 0;
       padding: 20px;
+      color: #fff;
     }
-    h1 { text-align: center; }
+    h1 { text-align: center; color: #fff; }
     .grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
@@ -18,24 +19,39 @@
       margin-top: 20px;
     }
     .card {
-      background: white;
+      background: #1a1a1a;
       border-radius: 12px;
       padding: 15px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-      transition: 0.2s;
+      box-shadow: 0 0 15px rgba(0,0,0,0.6);
+      transition: 0.3s;
     }
-    .card:hover { transform: translateY(-4px); }
-    .status {
-      display: inline-block;
-      padding: 6px 12px;
-      border-radius: 8px;
-      font-size: 14px;
-      font-weight: bold;
-      margin-top: 10px;
+    .card:hover {
+      transform: translateY(-4px);
     }
-    .new { background: #28a745; color: white; }
-    .sent { background: #007bff; color: white; }
-    .reject { background: #dc3545; color: white; }
+
+    /* Неоновые границы по статусу */
+    .new {
+      border: 2px solid #28a745;
+      box-shadow: 0 0 10px #28a745, 0 0 20px #28a745, 0 0 30px #28a745;
+    }
+    .sent {
+      border: 2px solid #007bff;
+      box-shadow: 0 0 10px #007bff, 0 0 20px #007bff, 0 0 30px #007bff;
+    }
+    .interview {
+      border: 2px solid #9b59b6;
+      box-shadow: 0 0 10px #9b59b6, 0 0 20px #9b59b6, 0 0 30px #9b59b6;
+    }
+    .offer {
+      border: 2px solid #f39c12;
+      box-shadow: 0 0 10px #f39c12, 0 0 20px #f39c12, 0 0 30px #f39c12;
+    }
+    .reject {
+      border: 2px solid #dc3545;
+      box-shadow: 0 0 10px #dc3545, 0 0 20px #dc3545, 0 0 30px #dc3545;
+    }
+
+    a { color: #1e90ff; }
   </style>
 </head>
 <body>
@@ -54,7 +70,7 @@
 
         for (let i = 0; i < rows.length; i++) {
           const r = rows[i].c;
-          if (!r[4]) continue; // если нет кандидата — пропускаем
+          if (!r[4]) continue;
 
           const agency = r[1]?.v || "";
           const recruiter = r[2]?.v || "";
@@ -62,19 +78,22 @@
           const candidate = r[4]?.v || "";
           const email = r[5]?.v || "";
           const salary = r[7]?.v || "";
-          const location = r[9]?.v || "";
-          const linkedin = r[10]?.v || "";
-          const cv = r[11]?.v || "";
-          const status = r[12]?.v || "";
-          const comment = r[13]?.v || "";
+          const location = r[8]?.v || "";
+          const linkedin = r[9]?.v || "";
+          const cv = r[10]?.v || "";
+          const status = r[11]?.v || "";
+          const comment = r[12]?.v || "";
 
+          // Выбираем стиль по статусу
           let statusClass = "";
           if (status.includes("Новый")) statusClass = "new";
-          if (status.includes("Отказ")) statusClass = "reject";
           if (status.includes("Передан")) statusClass = "sent";
+          if (status.includes("Интервью")) statusClass = "interview";
+          if (status.includes("Оффер")) statusClass = "offer";
+          if (status.includes("Отказ")) statusClass = "reject";
 
           html += `
-            <div class="card">
+            <div class="card ${statusClass}">
               <p><b>Агентство:</b> ${agency}</p>
               <p><b>Рекрутер:</b> ${recruiter}</p>
               <p><b>Вакансия:</b> ${vacancy}</p>
@@ -84,7 +103,7 @@
               <p><b>Локация:</b> ${location}</p>
               <p><b>LinkedIn:</b> <a href="${linkedin}" target="_blank">Профиль</a></p>
               <p><b>CV:</b> <a href="${cv}" target="_blank">Скачать</a></p>
-              <div class="status ${statusClass}">${status}</div>
+              <p><b>Статус:</b> ${status}</p>
               <p><b>Комментарий:</b> ${comment}</p>
             </div>
           `;
