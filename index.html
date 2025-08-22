@@ -53,6 +53,14 @@
       text-decoration: none;
       transition: 0.3s;
     }
+      .email-link {
+        color: #fff;
+          text-decoration: none; /* убираем подчёркивание */
+    }
+      .email-link:hover {
+        text-decoration: underline; /* подчёркивание при наведении */
+    }
+
     .btn-linkedin {
       background: #0077b5;
     }
@@ -136,7 +144,7 @@
               <p><b>Рекрутер:</b> ${recruiter}</p>
               <p><b>Вакансия:</b> ${vacancy}</p>
               <p><b>Кандидат:</b> ${candidate}</p>
-              <p><b>Email:</b> <a href="mailto:${email}">${email}</a></p>
+              <p><b>Email:</b> <a href="mailto:${email}" class="email-link">${email}</a></p>
               <p><b>З/П:</b> ${salary}</p>
               <p><b>Локация:</b> ${location}</p>
               <p>
