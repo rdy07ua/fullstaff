@@ -50,7 +50,7 @@
       transition: max-height 0.5s ease;
     }
     .card.expanded .card-details {
-      max-height: 500px; /* достаточно для всех полей */
+      max-height: 500px;
     }
 
     /* Кнопки */
@@ -119,6 +119,33 @@
     .reject {
       border: 2px solid #dc3545;
       box-shadow: 0 0 6px #dc3545, 0 0 12px #dc3545, 0 0 18px #dc3545;
+    }
+
+    /* 📱 Адаптация под мобильные */
+    @media (max-width: 768px) {
+      body {
+        padding: 10px;
+      }
+      h1 {
+        font-size: 28px;
+        margin-bottom: 30px;
+      }
+      .grid {
+        grid-template-columns: 1fr; /* карточки в 1 колонку */
+        gap: 15px;
+      }
+      .card {
+        font-size: 14px;
+        padding: 12px;
+      }
+      .btn {
+        font-size: 12px;
+        padding: 5px 10px;
+      }
+      .status {
+        font-size: 12px;
+        padding: 2px 6px;
+      }
     }
   </style>
 </head>
