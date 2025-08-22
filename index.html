@@ -38,16 +38,9 @@
       cursor: pointer;
       overflow: hidden;
     }
+    .card p { margin: 6px 0; }
     .card:hover {
       transform: translateY(-4px);
-    }
-
-    /* Одинаковый размер текста для превью и деталей */
-    .card-preview p,
-    .card-details p {
-      font-size: 16px;
-      line-height: 1.4;
-      margin: 6px 0;
     }
 
     /* Скрытые детали */
@@ -58,6 +51,13 @@
     }
     .card.expanded .card-details {
       max-height: 500px; /* достаточно для всех полей */
+    }
+
+    /* Выравнивание текста */
+    .card-preview b,
+    .card-details b {
+      font-weight: 600;   /* одинаковый вес */
+      font-size: 16px;    /* одинаковый размер */
     }
 
     /* Кнопки */
@@ -128,24 +128,16 @@
       box-shadow: 0 0 6px #dc3545, 0 0 12px #dc3545, 0 0 18px #dc3545;
     }
 
-    /* Адаптив для мобильных */
-    @media (max-width: 768px) {
-      h1 {
-        font-size: 28px;
-        margin-bottom: 30px;
-      }
+    /* Мобильная адаптация */
+    @media (max-width: 600px) {
+      h1 { font-size: 28px; }
       .card {
-        font-size: 14px;
+        font-size: 15px;
         padding: 12px;
       }
-      .card-preview p,
-      .card-details p {
-        font-size: 14px;
-        line-height: 1.4;
-      }
-      .btn {
-        font-size: 12px;
-        padding: 5px 10px;
+      .card-preview b,
+      .card-details b {
+        font-size: 15px;
       }
     }
   </style>
