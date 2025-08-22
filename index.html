@@ -6,7 +6,7 @@
   <style>
     body {
       font-family: Arial, sans-serif;
-      background: #111; /* тёмный фон, чтобы неон красиво светился */
+      background: #fff; /* тёмный фон, чтобы неон красиво светился */
       margin: 0;
       padding: 20px;
       color: #fff;
@@ -22,7 +22,6 @@
       background: #1a1a1a;
       border-radius: 12px;
       padding: 15px;
-      box-shadow: 0 0 15px rgba(0,0,0,0.6);
       transition: 0.3s;
     }
     .card:hover {
@@ -65,12 +64,13 @@
         const text = await res.text();
         const json = JSON.parse(text.substr(47).slice(0, -2));
 
-        const rows = json.table.rows;
+        // разворачиваем массив, чтобы новые были сверху
+        const rows = json.table.rows.reverse();
         let html = "";
 
         for (let i = 0; i < rows.length; i++) {
           const r = rows[i].c;
-          if (!r[4]) continue;
+          if (!r[4]) continue; // если нет кандидата — пропускаем
 
           const agency = r[1]?.v || "";
           const recruiter = r[2]?.v || "";
@@ -84,7 +84,7 @@
           const status = r[12]?.v || "";
           const comment = r[13]?.v || "";
 
-          // Выбираем стиль по статусу
+          // выбираем стиль по статусу
           let statusClass = "";
           if (status.includes("Новый")) statusClass = "new";
           if (status.includes("Передан")) statusClass = "sent";
