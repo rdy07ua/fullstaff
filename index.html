@@ -52,7 +52,7 @@
         const rows = json.table.rows;
         let html = "";
 
-        for (let i = 1; i < rows.length; i++) {
+        for (let i = 0; i < rows.length; i++) {
           const r = rows[i].c;
           if (!r[4]) continue; // если нет кандидата — пропускаем
 
