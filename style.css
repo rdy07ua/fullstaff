@@ -18,7 +18,7 @@ body {
 
 /* 2. Хедер */
 .header {
-  width: 1200px;
+  width: 1000px;
   margin: 0 auto;
   display: flex;
   justify-content: space-between;
@@ -62,7 +62,11 @@ body {
 /* 3. Заглавная надпись */
 .title {
   text-align: center;
-  background: #f5f5f5;
+  background: #fff;
+
+  font-size: 32px;           /* размер шрифта */
+  font-family: 'Oswald', sans-serif; /* шрифт */
+  font-weight: bold;         /* жирный текст */
 }
 .title h1 {
   margin: 0;
@@ -70,26 +74,122 @@ body {
 }
 
 /* 4. Текст */
-.text {
-  max-width: 800px;
-  margin: 0 auto;
-  line-height: 1.6;
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;300&display=swap');
+
+.thin-text {
+  font-family: 'Roboto', sans-serif;
+  font-weight: 300;
+  font-size: 1.2rem;
+  text-align: center;
+  margin: 20px 0;
+  color: #000;
+  text-shadow: 0 0 1px rgba(0,0,0,0.4);
+}
+
+/* Скрыть на мобильных */
+@media (max-width: 600px) {
+  .thin-text {
+    display: none !important;
+  }
 }
 
 /* 5. Карточки */
-.cards {
-  display: flex;
-  justify-content: center;
-  gap: 20px;
-  flex-wrap: wrap;
-}
-.card {
-  background: #fff;
-  border: 1px solid #ccc;
-  padding: 20px 40px;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-}
+ @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@400;600&family=Roboto:wght@300;400&display=swap');
+
+  * {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+  }
+
+   .card-wrapper {
+    display: flex;            /* включаем flex-контейнер */
+    justify-content: center;  /* центрируем карточки по горизонтали */
+    gap: 20px;
+    background: transparent !important;
+  }
+
+  .card {
+    flex: 0 0 200px;
+    position: relative;
+    background: transparent !important;
+    box-shadow: none;
+  }
+
+  .front-card {
+    padding: 30px 20px;
+    text-align: center;
+    background: transparent !important;
+    border-radius: 20px;
+    border: 1px solid #e0e0e0;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+  }
+
+  .front-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 24px rgba(0,0,0,0.15);
+  }
+
+  .front-card h1 {
+    font-family: 'Oswald', sans-serif;
+    font-size: 2rem;
+    margin-bottom: 10px;
+  }
+
+  .front-card p {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 300; /* тонкий Roboto */
+    font-size: 1.2rem;
+    margin-bottom: 20px;
+    color: #000; /* черный */
+    text-shadow: 0 0 1px rgba(0,0,0,0.3); /* легкая тень для насыщенности */
+  }
+
+  .button-group {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+  }
+
+  .card-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 20px;
+    border-radius: 10px;
+    font-size: 1rem;
+    font-weight: 600;
+    text-decoration: none;
+    color: white;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.12);
+  }
+
+  .card-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.2);
+  }
+
+  .upload-btn {
+    background-color: #28a745;
+  }
+  .upload-btn:hover {
+    background-color: #218838;
+  }
+
+  .pipeline-btn {
+    background-color: #1e6c93;
+  }
+  .pipeline-btn:hover {
+    background-color: #15516d;
+  }
+
+  @media only screen and (max-width: 700px) {
+    .card-wrapper {
+      max-width: 90%;
+    }
+  }
 
 /* 6. Пустой блок снизу */
 .empty-bottom {
@@ -97,9 +197,35 @@ body {
 }
 
 /* 7. Футер */
+
 .footer {
-  background: #333;
-  color: #fff;
-  text-align: center;
-  padding: 20px;
+    background: #000;
+    color: #fff;
+    font-size: 0.85rem;
+    text-align: center;
+    padding: 8px 0;
+    border-top: 1px solid #333;
+  }
+
+  footer p {
+    margin: 0;
+    font-weight: 300;
+    letter-spacing: 0.5px;
+  }
+
+  footer a {
+    color: #fff;
+    text-decoration: none;
+  }
+
+  footer a:hover {
+    text-decoration: underline;
+  }
+
+  /* Скрыть футер на мобилках */
+  @media (max-width: 600px) {
+    footer {
+      display: none;
+    }
+  }
 }
