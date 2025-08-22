@@ -46,7 +46,7 @@
 
   <script>
     async function loadData() {
-      const res = await fetch("https://docs.google.com/spreadsheets/d/ВАШ_ID/gviz/tq?tqx=out:json");
+      const res = await fetch("https://docs.google.com/spreadsheets/d/1ZISfkRoQPYzlPkIXkWdyNtueJTRq3_edQtQQuPDDasw/gviz/tq?tqx=out:json");
       const text = await res.text();
       const json = JSON.parse(text.substr(47).slice(0, -2));
 
