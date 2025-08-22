@@ -46,7 +46,30 @@
       color: #fff;
       cursor: pointer;
       font-size: 14px;
+      transition: 0.3s;
     }
+    .login-box button:hover {
+      background: #a71d2a;
+    }
+
+    /* Кнопка выхода */
+    .logout-btn {
+      display: block;
+      margin: 0 auto 20px auto;
+      padding: 10px 20px;
+      background: #dc3545;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .logout-btn:hover {
+      background: #a71d2a;
+      box-shadow: 0 0 8px rgba(220,53,69,0.6);
+    }
+
     .grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
@@ -143,7 +166,7 @@
   </div>
 
   <div id="app" style="display:none;">
-    <button onclick="logout()" style="margin-bottom:20px;">Выйти</button>
+    <button class="logout-btn" onclick="logout()">Выйти</button>
     <div class="grid" id="content"></div>
   </div>
 
