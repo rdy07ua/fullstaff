@@ -7,30 +7,188 @@
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
   <link rel="stylesheet" href="../css/style.css">
   <link rel="stylesheet" href="../css/pipeline.css">
+  <style>
+    header {
+      background-color: #fff;
+      border-bottom: 1px solid #ddd;
+    }
+
+    header .header-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 0;
+    }
+
+    .logo {
+      font-family: 'Oswald', sans-serif;
+      font-size: 28px;
+      font-weight: 600;
+      color: #000;
+    }
+
+    .social-icons {
+      display: flex;
+      gap: 20px;
+    }
+
+    .social-icons a {
+      color: #000;
+      font-size: 28px;
+      text-decoration: none;
+      transition: transform 0.2s ease, color 0.2s ease;
+    }
+
+    .social-icons a:hover {
+      transform: scale(1.2);
+      color: #555;
+    }
+
+    @media (max-width: 600px) {
+      header { display: none !important; }
+    }
+
+    body {
+      font-family: Oswald, sans-serif;
+      background: linear-gradient(135deg, #f9f9f9, #ececec);
+      margin: 0;
+      color: #111;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .container {
+      width: 70%;
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    @media (max-width: 600px) {
+      .container { width: 100%; }
+    }
+
+    h1 {
+      text-align: center;
+      color: #111;
+      font-family: 'Oswald', sans-serif;
+      font-size: 48px !important;
+      margin-bottom: 30px;
+    }
+
+    #content { margin-bottom: 20px; }
+
+    footer {
+      background: #000;
+      color: #fff;
+      font-size: 0.85rem;
+      text-align: center;
+      padding: 8px 0;
+      border-top: 1px solid #333;
+      font-family: 'Oswald', sans-serif;
+      font-weight: 300;
+    }
+    footer p {
+      margin: 0;
+      font-weight: 300;
+      letter-spacing: 0.5px;
+    }
+    footer a {
+      color: #fff;
+      text-decoration: none;
+      transition: 0.3s;
+    }
+    footer a:hover {
+      text-decoration: underline;
+      color: #fff;
+    }
+    footer.container { padding: 8px; }
+    .footer-gap { height: 40px; }
+    @media (max-width: 600px) { footer { display: none; } }
+
+    .top-controls {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-bottom: 50px;
+    }
+
+      .logout-btn {
+      padding: 10px 20px;
+      background: #dc3545;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: 0.3s;
+      display: none;
+    }
+    .logout-btn:hover {
+      background: #a71d2a;
+      box-shadow: 0 0 8px rgba(220,53,69,0.6);
+    }
+
+    .login-box {
+      max-width: 320px;
+      margin: 100px auto;
+      padding: 20px;
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: 0 0 8px rgba(0,0,0,0.15);
+      text-align: center;
+    }
+    .login-box input {
+      width: 90%;
+      padding: 10px;
+      margin: 8px 0;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 14px;
+    }
+    .login-box button {
+      padding: 10px 18px;
+      border: none;
+      border-radius: 6px;
+      background: #dc3545;
+      color: #fff;
+      cursor: pointer;
+      font-size: 14px;
+      transition: 0.3s;
+    }
+    .login-box button:hover { background: #a71d2a; }
+  </style>
 </head>
 
 <body>
   <!-- Хедер -->
-<header>
-  <div class="container header-inner">
-    <div class="logo">&lt;/vacancy&gt;</div>
-    <div class="social-icons">
-      <a href="https://t.me/Serhii_Riabovol" target="_blank"><i class="fab fa-telegram"></i></a>
-      <a href="https://mail.google.com/mail/?view=cm&fs=1&to=serhii.riabovol@fullstaff.net" target="_blank">
-        <i class="fas fa-envelope"></i>
-      </a>
-      <a href="https://linkedin.com/in/serhii-riabovol-245b11298" target="_blank"><i class="fab fa-linkedin"></i></a>
-      <a href="https://wa.me/48793379163" target="_blank"><i class="fab fa-whatsapp"></i></a>
+  <header>
+    <div class="container header-inner">
+      <div class="logo">&lt;/vacancy&gt;</div>
+      <div class="social-icons">
+        <a href="https://t.me/Serhii_Riabovol" target="_blank"><i class="fab fa-telegram"></i></a>
+        <a href="https://mail.google.com/mail/?view=cm&fs=1&to=serhii.riabovol@fullstaff.net" target="_blank">
+          <i class="fas fa-envelope"></i>
+        </a>
+        <a href="https://linkedin.com/in/serhii-riabovol-245b11298" target="_blank"><i class="fab fa-linkedin"></i></a>
+        <a href="https://wa.me/48793379163" target="_blank"><i class="fab fa-whatsapp"></i></a>
+      </div>
     </div>
-  </div>
-</header>
+  </header>
 
   <!-- Контент -->
   <main class="container">
     <h1>&lt;FULLSTAFF &amp; PARTNERS&gt;</h1>
 
     <div class="top-controls">
-      <button class="logout-btn" onclick="logout()" style="display:none;">Выйти</button>
+      <span id="user-name"></span>
+      <button class="logout-btn" onclick="logout()">Выйти</button>
     </div>
 
     <div id="login" class="login-box">
@@ -88,6 +246,11 @@
           document.getElementById("login").style.display = "none";
           document.getElementById("app").style.display = "block";
           document.querySelector(".logout-btn").style.display = "inline-block";
+
+          // показать имя над кнопкой
+          document.getElementById("user-name").style.display = "block";
+          document.getElementById("user-name").innerText = currentUser.name || username;
+
           return;
         }
       }
@@ -101,6 +264,10 @@
       document.getElementById("app").style.display = "none";
       document.getElementById("content").innerHTML = "<p>Здесь будет контент страницы</p>";
       document.querySelector(".logout-btn").style.display = "none";
+
+      // скрыть имя
+      document.getElementById("user-name").style.display = "none";
+      document.getElementById("user-name").innerText = "";
     }
 
     window.onload = function () {
@@ -110,6 +277,10 @@
         document.getElementById("login").style.display = "none";
         document.getElementById("app").style.display = "block";
         document.querySelector(".logout-btn").style.display = "inline-block";
+
+        // показать имя при перезагрузке
+        document.getElementById("user-name").style.display = "block";
+        document.getElementById("user-name").innerText = currentUser.name || savedUser;
       }
     };
   </script>
