@@ -154,3 +154,11 @@ footer.container { padding: 8px; }
   transition: 0.3s;
 }
 .login-box button:hover { background: #a71d2a; }
+
+#user-name {
+  display: none;
+  margin-bottom: 10px;
+  font-size: 18px;
+  font-weight: 500;
+  color: #111;
+}
