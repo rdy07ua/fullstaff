@@ -177,15 +177,9 @@
       return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, "0")).join("");
     }
 
-    // 🔑 Пользователи (пароли уже в виде SHA-256 хэшей)
-    // Пароль "1234" -> 03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4
-    // Пароль "pass1" -> e6c3da5b206634d7f3f3586d747ffdb36b5c675757b380c6a5fe5c570c714349
-    // Пароль "pass2" -> 1ba3d16e9881959f8c9a9762854f72c6e6321cdd44358a10a4e939033117eab9
-    // Пароль "pass3" -> 3acb59306ef6e660cf832d1d34c4fba3d88d616f0bb5c2a9e0f82d18ef6fc167
-    // Пароль "pass4" -> 347571be3263ef42336c505a6a43035bb5a2ac89de00d4f61dcaefe87c1b6f63
-    // Пароль "pass5" -> 1f11d5d72bcc0c7b06dd69b0182b32a9548239cfbe8f9c8236f3946240127b42
+    // 🔑 Пользователи 
     const users = {
-      "rdy07": { passwordHash: "03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4", role: "admin", name: null },
+      "rdy07": { passwordHash: "29abebdeaec524b5b1f40c7bc86cc046020ea42150496404382dea6a5a71c2f3", role: "admin", name: null },
       "Serhii Riabovol": { passwordHash: "e6c3da5b206634d7f3f3586d747ffdb36b5c675757b380c6a5fe5c570c714349", role: "user", name: "Serhii Riabovol" },
       "Anna Ivanova": { passwordHash: "1ba3d16e9881959f8c9a9762854f72c6e6321cdd44358a10a4e939033117eab9", role: "user", name: "Anna Ivanova" },
       "Oleg Petrov": { passwordHash: "3acb59306ef6e660cf832d1d34c4fba3d88d616f0bb5c2a9e0f82d18ef6fc167", role: "user", name: "Oleg Petrov" },
