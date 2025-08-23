@@ -189,6 +189,9 @@
 
       if (users[username] && users[username].password === password) {
         currentUser = users[username];
+        // ✅ сохраняем логин в localStorage
+        localStorage.setItem("loggedUser", username);
+
         document.getElementById("login").style.display = "none";
         document.getElementById("app").style.display = "block";
         loadData();
@@ -199,10 +202,22 @@
 
     function logout() {
       currentUser = null;
+      localStorage.removeItem("loggedUser"); // ❌ удаляем сохранённый логин
       document.getElementById("login").style.display = "block";
       document.getElementById("app").style.display = "none";
       document.getElementById("content").innerHTML = "";
     }
+
+    // 🔄 Автовход при обновлении
+    window.onload = function () {
+      const savedUser = localStorage.getItem("loggedUser");
+      if (savedUser && users[savedUser]) {
+        currentUser = users[savedUser];
+        document.getElementById("login").style.display = "none";
+        document.getElementById("app").style.display = "block";
+        loadData();
+      }
+    };
 
     async function loadData() {
       try {
