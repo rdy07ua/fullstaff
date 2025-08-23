@@ -170,4 +170,47 @@ footer.container { padding: 8px; }
   50%  { text-shadow: 0 0 15px rgba(220,53,69,1); }
   100% { text-shadow: 0 0 5px rgba(220,53,69,0.6); }
 }
+/* Навигация */
+.main-nav {
+  display: flex;
+  gap: 30px;
+  justify-content: center;
+  align-items: center;
+}
+
+.main-nav a {
+  font-family: 'Oswald', sans-serif;
+  font-size: 18px;
+  text-decoration: none;
+  color: #111;
+  position: relative;
+  transition: color 0.3s ease;
+}
+
+.main-nav a::after {
+  content: "";
+  display: block;
+  width: 0;
+  height: 2px;
+  background: #dc3545;
+  transition: width 0.3s;
+  margin-top: 4px;
+}
+
+.main-nav a:hover {
+  color: #dc3545;
+}
+
+.main-nav a:hover::after {
+  width: 100%;
+}
+
+@media (max-width: 800px) {
+  .main-nav {
+    gap: 15px;
+  }
+  .main-nav a {
+    font-size: 16px;
+  }
+}
 
