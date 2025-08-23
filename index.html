@@ -20,11 +20,15 @@
       font-size: 36px;
       margin-bottom: 10px;
     }
-    .sheet-wrapper {
+
+    /* Контейнер для кнопок */
+    .top-controls {
       display: flex;
-      justify-content: flex-end;
+      align-items: center;
+      justify-content: center;
       margin-bottom: 30px;
     }
+
     .sheet-btn {
       font-family: 'Roboto', sans-serif;
       font-size: 14px;
@@ -39,6 +43,23 @@
       background: #1e7e34;
       box-shadow: 0 0 8px rgba(40,167,69,0.6);
     }
+
+    .logout-btn {
+      margin-left: auto;  /* прижимает вправо */
+      padding: 10px 20px;
+      background: #dc3545;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .logout-btn:hover {
+      background: #a71d2a;
+      box-shadow: 0 0 8px rgba(220,53,69,0.6);
+    }
+
     .login-box {
       max-width: 320px;
       margin: 100px auto;
@@ -69,22 +90,7 @@
     .login-box button:hover {
       background: #a71d2a;
     }
-    .logout-btn {
-      display: inline-block;
-      margin: 0 0 50px auto;
-      padding: 10px 20px;
-      background: #dc3545;
-      color: #fff;
-      border: none;
-      border-radius: 6px;
-      font-size: 16px;
-      cursor: pointer;
-      transition: 0.3s;
-    }
-    .logout-btn:hover {
-      background: #a71d2a;
-      box-shadow: 0 0 8px rgba(220,53,69,0.6);
-    }
+
     .grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
@@ -158,8 +164,11 @@
 </head>
 <body>
   <h1>Pipeline кандидатов</h1>
-  <div class="sheet-wrapper">
+
+  <!-- блок кнопок -->
+  <div class="top-controls">
     <a id="sheetLink" href="#" target="_blank" class="sheet-btn" style="display:none;">Смотреть в Google Sheets</a>
+    <button class="logout-btn" onclick="logout()" style="display:none;">Выйти</button>
   </div>
 
   <div id="login" class="login-box">
@@ -170,7 +179,6 @@
   </div>
 
   <div id="app" style="display:none;">
-    <button class="logout-btn" onclick="logout()">Выйти</button>
     <div class="grid" id="content"></div>
   </div>
 
@@ -204,9 +212,10 @@
           document.getElementById("login").style.display = "none";
           document.getElementById("app").style.display = "block";
 
-          // показываем кнопку с ссылкой
           document.getElementById("sheetLink").href = currentUser.sheetUrl || "#";
           document.getElementById("sheetLink").style.display = "inline-block";
+
+          document.querySelector(".logout-btn").style.display = "inline-block";
 
           loadData();
           return;
@@ -222,6 +231,7 @@
       document.getElementById("app").style.display = "none";
       document.getElementById("content").innerHTML = "";
       document.getElementById("sheetLink").style.display = "none";
+      document.querySelector(".logout-btn").style.display = "none";
     }
 
     window.onload = function () {
@@ -233,6 +243,7 @@
 
         document.getElementById("sheetLink").href = currentUser.sheetUrl || "#";
         document.getElementById("sheetLink").style.display = "inline-block";
+        document.querySelector(".logout-btn").style.display = "inline-block";
 
         loadData();
       }
