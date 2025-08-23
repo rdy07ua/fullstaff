@@ -10,7 +10,6 @@
       font-family: Oswald, sans-serif;
       background: linear-gradient(135deg, #f9f9f9, #ececec);
       margin: 0;
-      padding: 20px;
       color: #111;
 
       /* sticky footer */
@@ -30,6 +29,7 @@
       width: 70%;
       max-width: 1400px;
       margin: 0 auto;
+      padding: 20px; /* ← перенесли сюда padding */
     }
     @media (max-width: 600px) {
       .container { width: 100%; }
@@ -43,7 +43,7 @@
       margin-bottom: 30px;
     }
     #content {
-      margin-bottom: 20px;
+      margin-bottom: 20px; /* ← отступ перед футером */
     }
 
     /* футер */
@@ -54,7 +54,6 @@
       text-align: center;
       padding: 10px 0;
       border-top: 1px solid #333;
-      margin-top: 10px; /* ← дополнительный отступ от карточек */
     }
 
     footer p {
