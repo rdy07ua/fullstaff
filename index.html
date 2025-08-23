@@ -24,7 +24,9 @@
     </div>
 
     <div id="app" style="display:none;">
-      <div id="content"></div>
+      <div id="content">
+        <p>Здесь будет контент страницы</p>
+      </div>
     </div>
   </main>
 
@@ -67,8 +69,6 @@
           document.getElementById("login").style.display = "none";
           document.getElementById("app").style.display = "block";
           document.querySelector(".logout-btn").style.display = "inline-block";
-
-          loadData();
           return;
         }
       }
@@ -80,7 +80,7 @@
       localStorage.removeItem("loggedUser");
       document.getElementById("login").style.display = "block";
       document.getElementById("app").style.display = "none";
-      document.getElementById("content").innerHTML = "";
+      document.getElementById("content").innerHTML = "<p>Здесь будет контент страницы</p>";
       document.querySelector(".logout-btn").style.display = "none";
     }
 
@@ -91,40 +91,8 @@
         document.getElementById("login").style.display = "none";
         document.getElementById("app").style.display = "block";
         document.querySelector(".logout-btn").style.display = "inline-block";
-        loadData();
       }
     };
-
-    async function loadData() {
-      try {
-        const res = await fetch("https://docs.google.com/spreadsheets/d/1ZISfkRoQPYzlPkIXkWdyNtueJTRq3_edQtQQuPDDasw/gviz/tq?tqx=out:json");
-        const text = await res.text();
-        const json = JSON.parse(text.substr(47).slice(0, -2));
-
-        const rows = json.table.rows.reverse();
-        let html = "<ul>";
-
-        for (let i = 0; i < rows.length; i++) {
-          const r = rows[i].c;
-          if (!r[4]) continue;
-
-          const recruiter = r[2]?.v || "";
-          const vacancy = r[3]?.v || "";
-          const candidate = r[4]?.v || "";
-          const status = r[12]?.v || "";
-
-          if (currentUser.role !== "admin" && recruiter !== currentUser.name) continue;
-
-          html += `<li><b>${candidate}</b> — ${vacancy} [${status}]</li>`;
-        }
-
-        html += "</ul>";
-        document.getElementById("content").innerHTML = html || "<p>Нет данных для отображения</p>";
-      } catch (e) {
-        console.error("Ошибка загрузки данных:", e);
-        document.getElementById("content").innerHTML = "<p>Не удалось загрузить данные</p>";
-      }
-    }
   </script>
 </body>
 </html>
