@@ -106,9 +106,21 @@ footer.container { padding: 8px; }
 .top-controls {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between; /* распределим элементы */
   margin-bottom: 50px;
+  position: relative;
 }
+
+.top-controls #user-name {
+  margin-right: 20px;
+}
+
+.top-controls .main-nav {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%); /* ставим меню точно по центру */
+}
+
 
 .logout-btn {
   margin-left: auto;
