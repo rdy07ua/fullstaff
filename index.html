@@ -18,22 +18,26 @@
       color: #111; 
       font-family: 'Oswald', sans-serif;
       font-size: 36px;
+      margin-bottom: 10px;
+    }
+    .sheet-wrapper {
+      display: flex;
+      justify-content: flex-end;
       margin-bottom: 30px;
     }
     .sheet-btn {
       font-family: 'Roboto', sans-serif;
       font-size: 14px;
-      margin-left: 15px;
-      padding: 6px 12px;
-      background: #007bff;
+      padding: 8px 14px;
+      background: #28a745;
       color: #fff;
       border-radius: 6px;
       text-decoration: none;
       transition: 0.3s;
     }
     .sheet-btn:hover {
-      background: #0056b3;
-      box-shadow: 0 0 8px rgba(0,123,255,0.6);
+      background: #1e7e34;
+      box-shadow: 0 0 8px rgba(40,167,69,0.6);
     }
     .login-box {
       max-width: 320px;
@@ -153,10 +157,10 @@
   </style>
 </head>
 <body>
-  <h1>
-    Pipeline кандидатов
+  <h1>Pipeline кандидатов</h1>
+  <div class="sheet-wrapper">
     <a id="sheetLink" href="#" target="_blank" class="sheet-btn" style="display:none;">Смотреть в Google Sheets</a>
-  </h1>
+  </div>
 
   <div id="login" class="login-box">
     <h3>Вход</h3>
@@ -200,7 +204,7 @@
           document.getElementById("login").style.display = "none";
           document.getElementById("app").style.display = "block";
 
-          // показать кнопку с правильной ссылкой
+          // показываем кнопку с ссылкой
           document.getElementById("sheetLink").href = currentUser.sheetUrl || "#";
           document.getElementById("sheetLink").style.display = "inline-block";
 
@@ -227,7 +231,6 @@
         document.getElementById("login").style.display = "none";
         document.getElementById("app").style.display = "block";
 
-        // выставляем ссылку для автологина
         document.getElementById("sheetLink").href = currentUser.sheetUrl || "#";
         document.getElementById("sheetLink").style.display = "inline-block";
 
