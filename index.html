@@ -7,6 +7,16 @@
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
   <link rel="stylesheet" href="../css/style.css">
   <link rel="stylesheet" href="../css/pipeline.css">
+  <style>
+    /* Подсветка активного пункта меню */
+    .main-nav a.active {
+      color: #dc3545;
+      font-weight: 600;
+    }
+    .main-nav a.active::after {
+      width: 100%;
+    }
+  </style>
 </head>
 
 <body>
@@ -32,16 +42,15 @@
     <div class="top-controls">
       <span id="user-name"></span>
 
-  <nav class="main-nav">
-    <a href="#">Upload CV</a>
-    <a href="#">My vacancies</a>
-    <a href="/pipeline/index.html">Pipeline</a>
-    <a href="#">Tasks</a>
-  </nav>
+      <nav class="main-nav" style="display:none;">
+        <a href="#">Upload CV</a>
+        <a href="#">My vacancies</a>
+        <a href="/pipeline/index.html">Pipeline</a>
+        <a href="#">Tasks</a>
+      </nav>
 
-  <button class="logout-btn" onclick="logout()">Выйти</button>
-</div>
-
+      <button class="logout-btn" onclick="logout()" style="display:none;">Выйти</button>
+    </div>
 
     <div id="login" class="login-box">
       <h3>Вход</h3>
@@ -98,8 +107,8 @@
           document.getElementById("login").style.display = "none";
           document.getElementById("app").style.display = "block";
           document.querySelector(".logout-btn").style.display = "inline-block";
+          document.querySelector(".main-nav").style.display = "flex";
 
-          // показать имя над кнопкой
           document.getElementById("user-name").style.display = "block";
           document.getElementById("user-name").innerText = currentUser.name || username;
 
@@ -116,8 +125,8 @@
       document.getElementById("app").style.display = "none";
       document.getElementById("content").innerHTML = "<p>Здесь будет контент страницы</p>";
       document.querySelector(".logout-btn").style.display = "none";
+      document.querySelector(".main-nav").style.display = "none";
 
-      // скрыть имя
       document.getElementById("user-name").style.display = "none";
       document.getElementById("user-name").innerText = "";
     }
@@ -129,11 +138,19 @@
         document.getElementById("login").style.display = "none";
         document.getElementById("app").style.display = "block";
         document.querySelector(".logout-btn").style.display = "inline-block";
+        document.querySelector(".main-nav").style.display = "flex";
 
-        // показать имя при перезагрузке
         document.getElementById("user-name").style.display = "block";
         document.getElementById("user-name").innerText = currentUser.name || savedUser;
       }
+
+      // Подсветка активного пункта меню
+      const path = window.location.pathname;
+      document.querySelectorAll(".main-nav a").forEach(link => {
+        if (link.getAttribute("href") && path.includes(link.getAttribute("href"))) {
+          link.classList.add("active");
+        }
+      });
     };
   </script>
 </body>
