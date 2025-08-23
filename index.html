@@ -4,11 +4,26 @@
   <meta charset="UTF-8">
   <title>&lt;FULLSTAFF &amp; PARTNERS PIPELINE&gt;</title>
   <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500&family=Roboto:wght@400;500&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
   <link rel="stylesheet" href="../css/style.css">
   <link rel="stylesheet" href="../css/pipeline.css">
 </head>
 
 <body>
+  <!-- Хедер -->
+  <header>
+    <div class="logo">&lt;/vacancy&gt;</div>
+    <div class="social-icons">
+      <a href="https://t.me/Serhii_Riabovol" target="_blank"><i class="fab fa-telegram"></i></a>
+      <a href="https://mail.google.com/mail/?view=cm&fs=1&to=serhii.riabovol@fullstaff.net" target="_blank">
+        <i class="fas fa-envelope"></i>
+      </a>
+      <a href="https://linkedin.com/in/serhii-riabovol-245b11298" target="_blank"><i class="fab fa-linkedin"></i></a>
+      <a href="https://wa.me/48793379163" target="_blank"><i class="fab fa-whatsapp"></i></a>
+    </div>
+  </header>
+
+  <!-- Контент -->
   <main class="container">
     <h1>&lt;FULLSTAFF &amp; PARTNERS PIPELINE&gt;</h1>
 
@@ -30,6 +45,7 @@
     </div>
   </main>
 
+  <!-- Футер -->
   <footer class="container">
     <p>
       © 2025 FullStaff · 
@@ -39,6 +55,7 @@
   </footer>
   <div class="footer-gap"></div>
 
+  <!-- Скрипты -->
   <script>
     async function hash(str) {
       const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(str));
