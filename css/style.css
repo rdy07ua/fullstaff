@@ -12,13 +12,12 @@ main {
   flex: 1;
   display: flex;
   flex-direction: column;
-  margin-left: 200px;   /* сдвиг под меню */
-  align-items: center;  /* центрируем .container */
 }
 
 .container {
   width: 70%;
   max-width: 1400px;
+  margin: 0 auto;
   padding: 20px;
 }
 @media (max-width: 600px) {
@@ -237,7 +236,10 @@ footer.container { padding: 8px; }
   background: #28a745;
 }
 
-
+/* Контент сдвигаем вправо на ширину меню */
+main {
+  margin-left: 200px;   /* ширина sidebar */
+}
 
 /* Чтобы футер не налезал */
 footer {
