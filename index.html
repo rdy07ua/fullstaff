@@ -13,7 +13,6 @@
     <h1>&lt;FULLSTAFF &amp; PARTNERS PIPELINE&gt;</h1>
 
     <div class="top-controls">
-      <a id="sheetLink" href="#" target="_blank" class="sheet-btn" style="display:none;">Смотреть в Google Sheets</a>
       <button class="logout-btn" onclick="logout()" style="display:none;">Выйти</button>
     </div>
 
@@ -25,7 +24,7 @@
     </div>
 
     <div id="app" style="display:none;">
-      <div class="grid" id="content"></div>
+      <div id="content"></div>
     </div>
   </main>
 
@@ -45,12 +44,12 @@
     }
 
     const users = {
-      "rdy07": { passwordHash: "29abebdeaec524b5b1f40c7bc86cc046020ea42150496404382dea6a5a71c2f3", role: "admin", name: null, sheetUrl: "https://docs.google.com/spreadsheets/d/ADMIN_SHEET_ID/edit" },
-      "Serhii Riabovol": { passwordHash: "e6c3da5b206634d7f3f3586d747ffdb36b5c675757b380c6a5fe5c570c714349", role: "user", name: "Serhii Riabovol", sheetUrl: "https://docs.google.com/spreadsheets/d/SERHII_SHEET_ID/edit" },
-      "Anna Ivanova": { passwordHash: "1ba3d16e9881959f8c9a9762854f72c6e6321cdd44358a10a4e939033117eab9", role: "user", name: "Anna Ivanova", sheetUrl: "https://docs.google.com/spreadsheets/d/ANNA_SHEET_ID/edit" },
-      "Oleg Petrov": { passwordHash: "3acb59306ef6e660cf832d1d34c4fba3d88d616f0bb5c2a9e0f82d18ef6fc167", role: "user", name: "Oleg Petrov", sheetUrl: "https://docs.google.com/spreadsheets/d/OLEG_SHEET_ID/edit" },
-      "Marina Kozlova": { passwordHash: "347571be3263ef42336c505a6a43035bb5a2ac89de00d4f61dcaefe87c1b6f63", role: "user", name: "Marina Kozlova", sheetUrl: "https://docs.google.com/spreadsheets/d/MARINA_SHEET_ID/edit" },
-      "Dmitry Sokolov": { passwordHash: "1f11d5d72bcc0c7b06dd69b0182b32a9548239cfbe8f9c8236f3946240127b42", role: "user", name: "Dmitry Sokolov", sheetUrl: "https://docs.google.com/spreadsheets/d/DMITRY_SHEET_ID/edit" }
+      "rdy07": { passwordHash: "29abebdeaec524b5b1f40c7bc86cc046020ea42150496404382dea6a5a71c2f3", role: "admin", name: null },
+      "Serhii Riabovol": { passwordHash: "e6c3da5b206634d7f3f3586d747ffdb36b5c675757b380c6a5fe5c570c714349", role: "user", name: "Serhii Riabovol" },
+      "Anna Ivanova": { passwordHash: "1ba3d16e9881959f8c9a9762854f72c6e6321cdd44358a10a4e939033117eab9", role: "user", name: "Anna Ivanova" },
+      "Oleg Petrov": { passwordHash: "3acb59306ef6e660cf832d1d34c4fba3d88d616f0bb5c2a9e0f82d18ef6fc167", role: "user", name: "Oleg Petrov" },
+      "Marina Kozlova": { passwordHash: "347571be3263ef42336c505a6a43035bb5a2ac89de00d4f61dcaefe87c1b6f63", role: "user", name: "Marina Kozlova" },
+      "Dmitry Sokolov": { passwordHash: "1f11d5d72bcc0c7b06dd69b0182b32a9548239cfbe8f9c8236f3946240127b42", role: "user", name: "Dmitry Sokolov" }
     };
 
     let currentUser = null;
@@ -67,10 +66,6 @@
 
           document.getElementById("login").style.display = "none";
           document.getElementById("app").style.display = "block";
-
-          document.getElementById("sheetLink").href = currentUser.sheetUrl || "#";
-          document.getElementById("sheetLink").style.display = "inline-block";
-
           document.querySelector(".logout-btn").style.display = "inline-block";
 
           loadData();
@@ -86,7 +81,6 @@
       document.getElementById("login").style.display = "block";
       document.getElementById("app").style.display = "none";
       document.getElementById("content").innerHTML = "";
-      document.getElementById("sheetLink").style.display = "none";
       document.querySelector(".logout-btn").style.display = "none";
     }
 
@@ -96,11 +90,7 @@
         currentUser = users[savedUser];
         document.getElementById("login").style.display = "none";
         document.getElementById("app").style.display = "block";
-
-        document.getElementById("sheetLink").href = currentUser.sheetUrl || "#";
-        document.getElementById("sheetLink").style.display = "inline-block";
         document.querySelector(".logout-btn").style.display = "inline-block";
-
         loadData();
       }
     };
@@ -112,65 +102,28 @@
         const json = JSON.parse(text.substr(47).slice(0, -2));
 
         const rows = json.table.rows.reverse();
-        let html = "";
+        let html = "<ul>";
 
         for (let i = 0; i < rows.length; i++) {
           const r = rows[i].c;
           if (!r[4]) continue;
 
-          const agency = r[1]?.v || "";
           const recruiter = r[2]?.v || "";
           const vacancy = r[3]?.v || "";
           const candidate = r[4]?.v || "";
-          const email = r[5]?.v || "";
-          const salary = r[7]?.v || "";
-          const location = r[9]?.v || "";
-          const linkedin = r[10]?.v || "";
-          const cv = r[11]?.v || "";
           const status = r[12]?.v || "";
-          const comment = r[13]?.v || "";
 
           if (currentUser.role !== "admin" && recruiter !== currentUser.name) continue;
 
-          let statusClass = "";
-          if (status.includes("Новый")) statusClass = "new";
-          if (status.includes("Передан")) statusClass = "sent";
-          if (status.includes("Интервью")) statusClass = "interview";
-          if (status.includes("Оффер")) statusClass = "offer";
-          if (status.includes("Отказ")) statusClass = "reject";
-
-          html += `
-            <div class="card ${statusClass}" onclick="toggleCard(this)">
-              <div class="card-preview">
-                <p><b>Кандидат:</b> ${candidate}</p>
-                <p><b>Вакансия:</b> ${vacancy}</p>
-                <p><b>Статус:</b> <span class="status ${statusClass}">${status}</span></p>
-              </div>
-              <div class="card-details">
-                <p><b>Агентство:</b> ${agency}</p>
-                <p><b>Рекрутер:</b> ${recruiter}</p>
-                <p><b>Email:</b> <a href="mailto:${email}" class="email-link">${email}</a></p>
-                <p><b>З/П:</b> ${salary}</p>
-                <p><b>Локация:</b> ${location}</p>
-                <p>
-                  ${linkedin ? `<a href="${linkedin}" target="_blank" class="btn btn-linkedin">LinkedIn</a>` : ""}
-                  ${cv ? `<a href="${cv}" target="_blank" class="btn btn-cv">CV</a>` : ""}
-                </p>
-                <p><b>Комментарий:</b> ${comment}</p>
-              </div>
-            </div>
-          `;
+          html += `<li><b>${candidate}</b> — ${vacancy} [${status}]</li>`;
         }
 
+        html += "</ul>";
         document.getElementById("content").innerHTML = html || "<p>Нет данных для отображения</p>";
       } catch (e) {
         console.error("Ошибка загрузки данных:", e);
         document.getElementById("content").innerHTML = "<p>Не удалось загрузить данные</p>";
       }
-    }
-
-    function toggleCard(card) {
-      card.classList.toggle('expanded');
     }
   </script>
 </body>
