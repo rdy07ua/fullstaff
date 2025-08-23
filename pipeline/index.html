@@ -15,16 +15,15 @@
     <div class="top-controls">
       <a id="sheetLink" href="#" target="_blank" class="sheet-btn" style="display:none;">Смотреть в Google Sheets</a>
 
-      <nav class="main-nav">
+      <nav class="main-nav" style="display:none;">
         <a href="#">Upload CV</a>
         <a href="#">My vacancies</a>
         <a href="#">Pipeline</a>
         <a href="#">Tasks</a>
       </nav>
 
-  <button class="logout-btn" onclick="logout()" style="display:none;">Выйти</button>
-</div>
-
+      <button class="logout-btn" onclick="logout()" style="display:none;">Выйти</button>
+    </div>
 
     <div id="login" class="login-box">
       <h3>Вход</h3>
@@ -76,11 +75,11 @@
 
           document.getElementById("login").style.display = "none";
           document.getElementById("app").style.display = "block";
+          document.querySelector(".main-nav").style.display = "flex";
+          document.querySelector(".logout-btn").style.display = "inline-block";
 
           document.getElementById("sheetLink").href = currentUser.sheetUrl || "#";
           document.getElementById("sheetLink").style.display = "inline-block";
-
-          document.querySelector(".logout-btn").style.display = "inline-block";
 
           loadData();
           return;
@@ -92,11 +91,14 @@
     function logout() {
       currentUser = null;
       localStorage.removeItem("loggedUser");
+
       document.getElementById("login").style.display = "block";
       document.getElementById("app").style.display = "none";
       document.getElementById("content").innerHTML = "";
-      document.getElementById("sheetLink").style.display = "none";
+
+      document.querySelector(".main-nav").style.display = "none";
       document.querySelector(".logout-btn").style.display = "none";
+      document.getElementById("sheetLink").style.display = "none";
     }
 
     window.onload = function () {
@@ -105,10 +107,11 @@
         currentUser = users[savedUser];
         document.getElementById("login").style.display = "none";
         document.getElementById("app").style.display = "block";
+        document.querySelector(".main-nav").style.display = "flex";
+        document.querySelector(".logout-btn").style.display = "inline-block";
 
         document.getElementById("sheetLink").href = currentUser.sheetUrl || "#";
         document.getElementById("sheetLink").style.display = "inline-block";
-        document.querySelector(".logout-btn").style.display = "inline-block";
 
         loadData();
       }
