@@ -1,11 +1,13 @@
-/* Хедер */
 header {
+  background-color: #fff;
+  border-bottom: 1px solid #ddd;
+}
+
+header .header-inner {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 15px 30px;
-  background-color: #fff;
-  border-bottom: 1px solid #ddd;
+  padding: 15px 0; /* убираем боковые отступы, т.к. контейнер уже центрирует */
 }
 
 .logo {
@@ -36,6 +38,7 @@ header {
 @media (max-width: 600px) {
   header { display: none !important; }
 }
+
 
 body {
   font-family: Oswald, sans-serif;
