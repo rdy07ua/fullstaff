@@ -157,8 +157,17 @@ footer.container { padding: 8px; }
 
 #user-name {
   display: none;
-  margin-bottom: 10px;
+  margin-bottom: 8px;
   font-size: 18px;
   font-weight: 500;
-  color: #111;
+  color: #dc3545;
+  text-align: right;
+  animation: pulse 2s infinite;
 }
+
+@keyframes pulse {
+  0%   { text-shadow: 0 0 5px rgba(220,53,69,0.6); }
+  50%  { text-shadow: 0 0 15px rgba(220,53,69,1); }
+  100% { text-shadow: 0 0 5px rgba(220,53,69,0.6); }
+}
+
