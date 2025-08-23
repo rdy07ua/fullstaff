@@ -3,7 +3,6 @@
 <head>
   <meta charset="UTF-8">
   <title>&lt;FULLSTAFF &amp; PARTNERS&gt;</title>
-  <!-- Подключаем шрифты -->
   <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500&family=Roboto:wght@400;500&family=Inter:wght@400;500&display=swap" rel="stylesheet">
 
   <style>
@@ -20,6 +19,21 @@
       font-family: 'Oswald', sans-serif;
       font-size: 36px;
       margin-bottom: 30px;
+    }
+    .sheet-btn {
+      font-family: 'Roboto', sans-serif;
+      font-size: 14px;
+      margin-left: 15px;
+      padding: 6px 12px;
+      background: #007bff;
+      color: #fff;
+      border-radius: 6px;
+      text-decoration: none;
+      transition: 0.3s;
+    }
+    .sheet-btn:hover {
+      background: #0056b3;
+      box-shadow: 0 0 8px rgba(0,123,255,0.6);
     }
     .login-box {
       max-width: 320px;
@@ -51,8 +65,6 @@
     .login-box button:hover {
       background: #a71d2a;
     }
-
-    /* Кнопка выхода */
     .logout-btn {
       display: block;
       margin: 0 auto 20px auto;
@@ -69,7 +81,6 @@
       background: #a71d2a;
       box-shadow: 0 0 8px rgba(220,53,69,0.6);
     }
-
     .grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
@@ -89,22 +100,14 @@
     }
     .card p { margin: 6px 0; }
     .card:hover { transform: translateY(-4px); }
-
     .card-details {
       max-height: 0;
       overflow: hidden;
       transition: max-height 0.5s ease;
     }
-    .card.expanded .card-details {
-      max-height: 500px;
-    }
-
+    .card.expanded .card-details { max-height: 500px; }
     .card-preview b,
-    .card-details b {
-      font-weight: 600;
-      font-size: 16px;
-    }
-
+    .card-details b { font-weight: 600; font-size: 16px; }
     .btn {
       display: inline-block;
       margin-top: 4px;
@@ -117,16 +120,12 @@
       text-decoration: none;
       transition: 0.3s;
     }
-    .email-link {
-      color: #fff;
-      text-decoration: none;
-    }
+    .email-link { color: #fff; text-decoration: none; }
     .email-link:hover { text-decoration: underline; }
     .btn-linkedin { background: #0077b5; }
     .btn-linkedin:hover { background: #005582; box-shadow: 0 0 8px rgba(0,119,181,0.7); }
     .btn-cv { background: #28a745; }
     .btn-cv:hover { background: #1e7e34; box-shadow: 0 0 8px rgba(40,167,69,0.7); }
-
     .status {
       display: inline-block;
       padding: 2px 8px;
@@ -140,13 +139,11 @@
     .status.interview { background: #9b59b6; }
     .status.offer { background: #28a745; }
     .status.reject { background: #dc3545; }
-
     .new { border: 2px solid #f39c12; box-shadow: 0 0 6px #f39c12, 0 0 12px #f39c12, 0 0 18px #f39c12; }
     .sent { border: 2px solid #007bff; box-shadow: 0 0 6px #007bff, 0 0 12px #007bff, 0 0 18px #007bff; }
     .interview { border: 2px solid #9b59b6; box-shadow: 0 0 6px #9b59b6, 0 0 12px #9b59b6, 0 0 18px #9b59b6; }
     .offer { border: 2px solid #28a745; box-shadow: 0 0 6px #28a745, 0 0 12px #28a745, 0 0 18px #28a745; }
     .reject { border: 2px solid #dc3545; box-shadow: 0 0 6px #dc3545, 0 0 12px #dc3545, 0 0 18px #dc3545; }
-
     @media (max-width: 600px) {
       h1 { font-size: 28px; }
       .card { font-size: 15px; padding: 12px; }
@@ -156,7 +153,10 @@
   </style>
 </head>
 <body>
-  <h1>Pipeline кандидатов</h1>
+  <h1>
+    Pipeline кандидатов
+    <a id="sheetLink" href="#" target="_blank" class="sheet-btn" style="display:none;">Смотреть в Google Sheets</a>
+  </h1>
 
   <div id="login" class="login-box">
     <h3>Вход</h3>
@@ -171,20 +171,18 @@
   </div>
 
   <script>
-    // 🔑 SHA-256 хэширование строки
     async function hash(str) {
       const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(str));
       return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, "0")).join("");
     }
 
-    // 🔑 Пользователи 
     const users = {
-      "rdy07": { passwordHash: "29abebdeaec524b5b1f40c7bc86cc046020ea42150496404382dea6a5a71c2f3", role: "admin", name: null },
-      "Serhii Riabovol": { passwordHash: "e6c3da5b206634d7f3f3586d747ffdb36b5c675757b380c6a5fe5c570c714349", role: "user", name: "Serhii Riabovol" },
-      "Anna Ivanova": { passwordHash: "1ba3d16e9881959f8c9a9762854f72c6e6321cdd44358a10a4e939033117eab9", role: "user", name: "Anna Ivanova" },
-      "Oleg Petrov": { passwordHash: "3acb59306ef6e660cf832d1d34c4fba3d88d616f0bb5c2a9e0f82d18ef6fc167", role: "user", name: "Oleg Petrov" },
-      "Marina Kozlova": { passwordHash: "347571be3263ef42336c505a6a43035bb5a2ac89de00d4f61dcaefe87c1b6f63", role: "user", name: "Marina Kozlova" },
-      "Dmitry Sokolov": { passwordHash: "1f11d5d72bcc0c7b06dd69b0182b32a9548239cfbe8f9c8236f3946240127b42", role: "user", name: "Dmitry Sokolov" }
+      "rdy07": { passwordHash: "29abebdeaec524b5b1f40c7bc86cc046020ea42150496404382dea6a5a71c2f3", role: "admin", name: null, sheetUrl: "https://docs.google.com/spreadsheets/d/ADMIN_SHEET_ID/edit" },
+      "Serhii Riabovol": { passwordHash: "e6c3da5b206634d7f3f3586d747ffdb36b5c675757b380c6a5fe5c570c714349", role: "user", name: "Serhii Riabovol", sheetUrl: "https://docs.google.com/spreadsheets/d/SERHII_SHEET_ID/edit" },
+      "Anna Ivanova": { passwordHash: "1ba3d16e9881959f8c9a9762854f72c6e6321cdd44358a10a4e939033117eab9", role: "user", name: "Anna Ivanova", sheetUrl: "https://docs.google.com/spreadsheets/d/ANNA_SHEET_ID/edit" },
+      "Oleg Petrov": { passwordHash: "3acb59306ef6e660cf832d1d34c4fba3d88d616f0bb5c2a9e0f82d18ef6fc167", role: "user", name: "Oleg Petrov", sheetUrl: "https://docs.google.com/spreadsheets/d/OLEG_SHEET_ID/edit" },
+      "Marina Kozlova": { passwordHash: "347571be3263ef42336c505a6a43035bb5a2ac89de00d4f61dcaefe87c1b6f63", role: "user", name: "Marina Kozlova", sheetUrl: "https://docs.google.com/spreadsheets/d/MARINA_SHEET_ID/edit" },
+      "Dmitry Sokolov": { passwordHash: "1f11d5d72bcc0c7b06dd69b0182b32a9548239cfbe8f9c8236f3946240127b42", role: "user", name: "Dmitry Sokolov", sheetUrl: "https://docs.google.com/spreadsheets/d/DMITRY_SHEET_ID/edit" }
     };
 
     let currentUser = null;
@@ -198,8 +196,14 @@
         if (hashPass === users[username].passwordHash) {
           currentUser = users[username];
           localStorage.setItem("loggedUser", username);
+
           document.getElementById("login").style.display = "none";
           document.getElementById("app").style.display = "block";
+
+          // показать кнопку с правильной ссылкой
+          document.getElementById("sheetLink").href = currentUser.sheetUrl || "#";
+          document.getElementById("sheetLink").style.display = "inline-block";
+
           loadData();
           return;
         }
@@ -213,15 +217,20 @@
       document.getElementById("login").style.display = "block";
       document.getElementById("app").style.display = "none";
       document.getElementById("content").innerHTML = "";
+      document.getElementById("sheetLink").style.display = "none";
     }
 
-    // 🔄 Автовход при обновлении
     window.onload = function () {
       const savedUser = localStorage.getItem("loggedUser");
       if (savedUser && users[savedUser]) {
         currentUser = users[savedUser];
         document.getElementById("login").style.display = "none";
         document.getElementById("app").style.display = "block";
+
+        // выставляем ссылку для автологина
+        document.getElementById("sheetLink").href = currentUser.sheetUrl || "#";
+        document.getElementById("sheetLink").style.display = "inline-block";
+
         loadData();
       }
     };
@@ -251,10 +260,7 @@
           const status = r[12]?.v || "";
           const comment = r[13]?.v || "";
 
-          // 🔎 Фильтрация
-          if (currentUser.role !== "admin" && recruiter !== currentUser.name) {
-            continue;
-          }
+          if (currentUser.role !== "admin" && recruiter !== currentUser.name) continue;
 
           let statusClass = "";
           if (status.includes("Новый")) statusClass = "new";
