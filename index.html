@@ -22,8 +22,7 @@
       flex: 1;
       display: flex;
       flex-direction: column;
-      padding-bottom: 40px; /* создаём белую зону под футером */
-    }
+     }
 
     /* Контейнер */
     .container {
@@ -76,7 +75,9 @@
     footer.container {
       padding: 0; /* убираем лишний padding у футера */
     }
-
+    .footer-gap {
+      height: 40px; /* регулируй отступ снизу */
+    }
 
     @media (max-width: 600px) {
       footer { display: none; }
@@ -252,7 +253,8 @@
       <a href="tel:+48793379163">+48 793 379 163</a>
     </p>
   </footer>
-
+  <!-- Пустой блок для отступа -->
+  <div class="footer-gap"></div>
   <script>
     async function hash(str) {
       const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(str));
