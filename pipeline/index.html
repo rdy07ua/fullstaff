@@ -6,14 +6,6 @@
   <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500&family=Roboto:wght@400;500&family=Inter:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/css/style.css">
   <link rel="stylesheet" href="/css/pipeline.css">
-  <style>
-    /* полностью скрываем кнопку на мобилках */
-    @media (max-width: 600px) {
-      .sheet-btn {
-        display: none !important;
-      }
-    }
-  </style>
 </head>
 
 <body>
@@ -25,8 +17,6 @@
     </h1>
 
     <div class="top-controls">
-      <a id="sheetLink" href="#" target="_blank" class="sheet-btn" style="display:none;">Смотреть в Google Sheets</a>
-
       <nav class="main-nav" style="display:none;">
         <a href="/upload/index.html">Upload CV</a>
         <a href="#">My vacancies</a>
@@ -65,12 +55,12 @@
     }
 
     const users = {
-      "rdy07": { passwordHash: "29abebdeaec524b5b1f40c7bc86cc046020ea42150496404382dea6a5a71c2f3", role: "admin", name: null, sheetUrl: "https://docs.google.com/spreadsheets/d/ADMIN_SHEET_ID/edit" },
-      "Serhii Riabovol": { passwordHash: "e6c3da5b206634d7f3f3586d747ffdb36b5c675757b380c6a5fe5c570c714349", role: "user", name: "Serhii Riabovol", sheetUrl: "https://docs.google.com/spreadsheets/d/SERHII_SHEET_ID/edit" },
-      "Anna Ivanova": { passwordHash: "1ba3d16e9881959f8c9a9762854f72c6e6321cdd44358a10a4e939033117eab9", role: "user", name: "Anna Ivanova", sheetUrl: "https://docs.google.com/spreadsheets/d/ANNA_SHEET_ID/edit" },
-      "Oleg Petrov": { passwordHash: "3acb59306ef6e660cf832d1d34c4fba3d88d616f0bb5c2a9e0f82d18ef6fc167", role: "user", name: "Oleg Petrov", sheetUrl: "https://docs.google.com/spreadsheets/d/OLEG_SHEET_ID/edit" },
-      "Marina Kozlova": { passwordHash: "347571be3263ef42336c505a6a43035bb5a2ac89de00d4f61dcaefe87c1b6f63", role: "user", name: "Marina Kozlova", sheetUrl: "https://docs.google.com/spreadsheets/d/MARINA_SHEET_ID/edit" },
-      "Dmitry Sokolov": { passwordHash: "1f11d5d72bcc0c7b06dd69b0182b32a9548239cfbe8f9c8236f3946240127b42", role: "user", name: "Dmitry Sokolov", sheetUrl: "https://docs.google.com/spreadsheets/d/DMITRY_SHEET_ID/edit" }
+      "rdy07": { passwordHash: "29abebdeaec524b5b1f40c7bc86cc046020ea42150496404382dea6a5a71c2f3", role: "admin", name: null },
+      "Serhii Riabovol": { passwordHash: "e6c3da5b206634d7f3f3586d747ffdb36b5c675757b380c6a5fe5c570c714349", role: "user", name: "Serhii Riabovol" },
+      "Anna Ivanova": { passwordHash: "1ba3d16e9881959f8c9a9762854f72c6e6321cdd44358a10a4e939033117eab9", role: "user", name: "Anna Ivanova" },
+      "Oleg Petrov": { passwordHash: "3acb59306ef6e660cf832d1d34c4fba3d88d616f0bb5c2a9e0f82d18ef6fc167", role: "user", name: "Oleg Petrov" },
+      "Marina Kozlova": { passwordHash: "347571be3263ef42336c505a6a43035bb5a2ac89de00d4f61dcaefe87c1b6f63", role: "user", name: "Marina Kozlova" },
+      "Dmitry Sokolov": { passwordHash: "1f11d5d72bcc0c7b06dd69b0182b32a9548239cfbe8f9c8236f3946240127b42", role: "user", name: "Dmitry Sokolov" }
     };
 
     let currentUser = null;
@@ -90,14 +80,6 @@
           document.querySelector(".main-nav").style.display = "flex";
           document.querySelector(".logout-btn").style.display = "inline-block";
 
-          // показываем кнопку только на десктопе
-          if (window.innerWidth > 600) {
-            document.getElementById("sheetLink").href = currentUser.sheetUrl || "#";
-            document.getElementById("sheetLink").style.display = "inline-block";
-          } else {
-            document.getElementById("sheetLink").style.display = "none";
-          }
-
           loadData();
           return;
         }
@@ -115,7 +97,6 @@
 
       document.querySelector(".main-nav").style.display = "none";
       document.querySelector(".logout-btn").style.display = "none";
-      document.getElementById("sheetLink").style.display = "none";
     }
 
     window.onload = function () {
@@ -126,14 +107,6 @@
         document.getElementById("app").style.display = "block";
         document.querySelector(".main-nav").style.display = "flex";
         document.querySelector(".logout-btn").style.display = "inline-block";
-
-        // показываем кнопку только на десктопе
-        if (window.innerWidth > 600) {
-          document.getElementById("sheetLink").href = currentUser.sheetUrl || "#";
-          document.getElementById("sheetLink").style.display = "inline-block";
-        } else {
-          document.getElementById("sheetLink").style.display = "none";
-        }
 
         loadData();
       }
