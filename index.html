@@ -211,25 +211,28 @@
           if (status.includes("Оффер")) statusClass = "offer";
           if (status.includes("Отказ")) statusClass = "reject";
 
-          let block = "";
+          let block = `<div class="update-item status"><div class="update-bubble">`;
           if (status === "Новый") {
-            block = `<div class="update-item"><b>${candidate}</b> загружен.</div>`;
+            block += `<b>${candidate}</b> загружен.`;
           } else if (status) {
-            block = `<div class="update-item"><b>${candidate}</b>: статус изменён на <span class="status ${statusClass}">${status}</span></div>`;
+            block += `<b>${candidate}</b>: статус → <span class="status ${statusClass}">${status}</span>`;
           }
+          block += `</div></div>`;
 
           if (comment) {
             block += `
-              <div class="update-item">
-                💬 Комментарий по <b>${candidate}</b>: ${comment}
-                ${
-                  answer 
-                  ? `<p class="answer">Ваш ответ: ${answer}</p>` 
-                  : `<form class="answer-form" data-candidate="${candidate}">
-                      <input type="text" name="answer" placeholder="Your answer..." required>
-                      <button type="submit">Reply</button>
-                    </form>`
-                }
+              <div class="update-item comment">
+                <div class="update-bubble">
+                  💬 <b>${candidate}</b>: ${comment}
+                  ${
+                    answer 
+                    ? `<p class="answer">Ваш ответ: ${answer}</p>` 
+                    : `<form class="answer-form" data-candidate="${candidate}">
+                        <input type="text" name="answer" placeholder="Ваш ответ..." required>
+                        <button type="submit">Ответить</button>
+                      </form>`
+                  }
+                </div>
               </div>`;
           }
 
@@ -256,7 +259,7 @@
             });
           }
 
-          // обработка форм "Ответить"
+          // 📩 обработка форм ответа
           document.querySelectorAll(".answer-form").forEach(form => {
             form.addEventListener("submit", async (e) => {
               e.preventDefault();
@@ -280,7 +283,7 @@
 
                 const result = await res.json();
                 if (result.status === "ok") {
-                  form.outerHTML = `<p class="answer">Your answer: ${answer}</p>`;
+                  form.outerHTML = `<p class="answer">Ваш ответ: ${answer}</p>`;
                 } else {
                   loader.innerHTML = "❌ Error: " + result.message;
                   button.disabled = false;
