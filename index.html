@@ -6,7 +6,6 @@
   <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500&family=Roboto:wght@400;500&family=Inter:wght@400;500&display=swap" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
   <link rel="stylesheet" href="../css/main.css">
-  
   <style>
     .main-nav a.active { color: #dc3545; font-weight: 600; }
     .main-nav a.active::after { width: 100%; }
@@ -54,6 +53,10 @@
     </div>
 
     <div id="app" style="display:none;">
+      <!-- 📊 Карточки статистики -->
+      <div id="stats" class="stats-container"></div>
+
+      <!-- 📰 Лента обновлений -->
       <div id="content"></div>
     </div>
   </main>
@@ -114,6 +117,7 @@
       localStorage.removeItem("loggedUser");
       document.getElementById("login").style.display = "block";
       document.getElementById("app").style.display = "none";
+      document.getElementById("stats").innerHTML = "";
       document.getElementById("content").innerHTML = "<p>Здесь будет контент страницы</p>";
       document.querySelector(".logout-btn").style.display = "none";
       document.querySelector(".main-nav").style.display = "none";
@@ -135,7 +139,7 @@
       }
     };
 
-    // 🚀 Загрузка обновлений
+    // 🚀 Загрузка обновлений + статистики
     async function loadUpdates() {
       try {
         const res = await fetch("https://docs.google.com/spreadsheets/d/1PrAj8rfZRVUtmDRcnoZyBysWdrNih5OYgna7MuPH4mE/gviz/tq?tqx=out:json");
@@ -144,6 +148,7 @@
         const rows = json.table.rows.reverse();
 
         let html = "<div class='updates-feed'>";
+        let uploaded = 0, interview = 0, offer = 0;
 
         for (let r of rows) {
           const cells = r.c;
@@ -157,6 +162,13 @@
 
           if (currentUser.role !== "admin" && recruiter !== currentUser.name) continue;
 
+          // 📊 статистика
+          if (status) {
+            uploaded++;
+            if (status.includes("Интервью")) interview++;
+            if (status.includes("Оффер")) offer++;
+          }
+
           // 🎨 класс статуса
           let statusClass = "";
           if (status.includes("Новый")) statusClass = "new";
@@ -165,16 +177,12 @@
           if (status.includes("Оффер")) statusClass = "offer";
           if (status.includes("Отказ")) statusClass = "reject";
 
-          // 🆕 Новый кандидат
           if (status === "Новый") {
             html += `<div class="update-item"><b>${candidate}</b> загружен.</div>`;
-          } 
-          // 🔄 Изменение статуса
-          else if (status) {
+          } else if (status) {
             html += `<div class="update-item"><b>${candidate}</b>: статус изменён на <span class="status ${statusClass}">${status}</span></div>`;
           }
 
-          // 💬 Комментарий + форма ответа
           if (comment) {
             html += `
               <div class="update-item">
@@ -193,6 +201,22 @@
 
         html += "</div>";
         document.getElementById("content").innerHTML = html || "<p>Нет обновлений</p>";
+
+        // 📊 Отрисовка статистики
+        const interviewRate = uploaded > 0 ? Math.round((interview / uploaded) * 100) : 0;
+        const offerFromInterview = interview > 0 ? Math.round((offer / interview) * 100) : 0;
+        const offerRate = uploaded > 0 ? Math.round((offer / uploaded) * 100) : 0;
+
+        document.getElementById("stats").innerHTML = `
+          <div class="stat-card">Uploaded CVs: <b>${uploaded}</b></div>
+          <div class="stat-card">Interviews: <b>${interview}</b></div>
+          <div class="stat-card">Offers: <b>${offer}</b></div>
+          <div class="stat-card">Pipeline metrics:<br>
+            Interview rate: <b>${interviewRate}%</b><br>
+            Offer from interview: <b>${offerFromInterview}%</b><br>
+            Offer rate: <b>${offerRate}%</b>
+          </div>
+        `;
 
         // 📩 Обработка форм "Ответить"
         document.querySelectorAll(".answer-form").forEach(form => {
