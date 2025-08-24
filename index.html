@@ -65,7 +65,8 @@
 
     <div id="app" style="display:none;">
       <div id="content">
-        <p>Здесь будет статистика рекрутера</p>
+        <!-- Здесь будет новостная лента -->
+        <div id="feed" class="feed"></div>
       </div>
     </div>
   </main>
@@ -116,6 +117,7 @@
           document.getElementById("user-name").style.display = "block";
           document.getElementById("user-name").innerText = currentUser.name || username;
 
+          loadFeed(); // загружаем события
           return;
         }
       }
@@ -127,12 +129,11 @@
       localStorage.removeItem("loggedUser");
       document.getElementById("login").style.display = "block";
       document.getElementById("app").style.display = "none";
-      document.getElementById("content").innerHTML = "<p>Здесь будет контент страницы</p>";
       document.querySelector(".logout-btn").style.display = "none";
       document.querySelector(".main-nav").style.display = "none";
-
       document.getElementById("user-name").style.display = "none";
       document.getElementById("user-name").innerText = "";
+      document.getElementById("feed").innerHTML = "";
     }
 
     window.onload = function () {
@@ -146,6 +147,8 @@
 
         document.getElementById("user-name").style.display = "block";
         document.getElementById("user-name").innerText = currentUser.name || savedUser;
+
+        loadFeed();
       }
 
       // Подсветка активного пункта меню
@@ -156,6 +159,77 @@
         }
       });
     };
+
+    // 🚀 Загрузка событий + форма ответа
+    async function loadFeed() {
+      try {
+        const res = await fetch("https://docs.google.com/spreadsheets/d/1PrAj8rfZRVUtmDRcnoZyBysWdrNih5OYgna7MuPH4mE/gviz/tq?tqx=out:json");
+        const text = await res.text();
+        const json = JSON.parse(text.substr(47).slice(0, -2));
+
+        const rows = json.table.rows.reverse();
+        let html = "";
+
+        for (let i = 0; i < rows.length; i++) {
+          const r = rows[i].c;
+          if (!r[3]) continue; // нет кандидата
+
+          const recruiter = r[1]?.v || "";
+          const candidate = r[3]?.v || "";
+          const status = r[12]?.v || "";
+          const comment = r[13]?.v || "";
+          const answer = r[14]?.v || "";
+          const updated = r[15]?.v || "";
+
+          // фильтр для рекрутера
+          if (currentUser.role !== "admin" && recruiter !== currentUser.name) continue;
+
+          // события
+          if (status) {
+            html += `<p>📌 ${candidate} статус изменен на: <b>${status}</b></p>`;
+          }
+          if (comment) {
+            html += `
+              <div class="comment-block">
+                <p>💬 Комментарий для ${candidate}: "${comment}"</p>
+                ${answer ? `<p>↩️ Ваш ответ: "${answer}"</p>` : `
+                  <form class="answer-form" onsubmit="sendAnswer(event, '${candidate}', this)">
+                    <input type="text" name="answer" placeholder="Ваш ответ..." required>
+                    <button type="submit">Отправить</button>
+                  </form>
+                `}
+              </div>
+            `;
+          }
+        }
+
+        document.getElementById("feed").innerHTML = html || "<p>Нет событий</p>";
+      } catch (e) {
+        console.error("Ошибка загрузки данных:", e);
+        document.getElementById("feed").innerHTML = "<p>Не удалось загрузить данные</p>";
+      }
+    }
+
+    // 🚀 Отправка ответа в Google Script
+    async function sendAnswer(e, candidate, form) {
+      e.preventDefault();
+      const answer = form.answer.value;
+
+      const payload = { candidate, answer };
+
+      const res = await fetch("https://script.google.com/macros/s/ТВОЙ_SCRIPT_ID/exec", {
+        method: "POST",
+        body: JSON.stringify(payload)
+      });
+
+      const result = await res.json();
+      if (result.status === "ok") {
+        alert("✅ Ответ отправлен");
+        loadFeed(); // перезагрузить ленту
+      } else {
+        alert("Ошибка: " + result.message);
+      }
+    }
   </script>
 </body>
 </html>
