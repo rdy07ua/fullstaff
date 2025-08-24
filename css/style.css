@@ -241,7 +241,7 @@ footer.container { padding: 8px; }
 
 @media (max-width: 800px) {
   .main-nav {
-    gap: 15px;
+    gap: 10px;
   }
   .main-nav a {
     font-size: 16px;
