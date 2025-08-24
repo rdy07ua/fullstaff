@@ -367,6 +367,7 @@ footer.container { padding: 8px; }
   align-items: stretch;
   gap: 15px;
   flex-wrap: nowrap; /* ❌ запрет переноса */
+  margin-bottom: 40px;
   overflow: hidden;
 }
 
