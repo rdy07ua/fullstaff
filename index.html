@@ -190,49 +190,47 @@
     document.getElementById("content").innerHTML = html || "<p>Нет обновлений</p>";
 
     // 🚀 обработка форм "Ответить"
-    document.querySelectorAll(".answer-form").forEach(form => {
-      form.addEventListener("submit", async (e) => {
-        e.preventDefault();
-        const candidate = form.getAttribute("data-candidate");
-        const answer = form.querySelector("input[name='answer']").value;
-        const button = form.querySelector("button");
+document.querySelectorAll(".answer-form").forEach(form => {
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const candidate = form.getAttribute("data-candidate");
+    const answer = form.querySelector("input[name='answer']").value;
+    const button = form.querySelector("button");
 
-        // ⏳ Показать индикатор
-        const loader = document.createElement("div");
-        loader.className = "spinner-wrap";
-        loader.innerHTML = `<div class="spinner"></div> <span>Отправка...</span>`;
-        form.appendChild(loader);
-        button.disabled = true;
+    // ⏳ Показать индикатор
+    const loader = document.createElement("div");
+    loader.className = "spinner-wrap";
+    loader.innerHTML = `<div class="spinner"></div> <span>Отправка...</span>`;
+    form.appendChild(loader);
+    button.disabled = true;
 
-        const payload = {
-          action: "answer",
-          recruiter: currentUser.name,
-          candidate: candidate,
-          answer: answer
-        };
+    const payload = {
+      action: "answer",
+      recruiter: currentUser.name,
+      candidate: candidate,
+      answer: answer
+    };
 
-        try {
-          const res = await fetch("https://script.google.com/macros/s/AKfycbztPneKvfBlRSwOmUiYEysa2CnycHhU9b5R25-7ai5UyaytxJLs7yduH4XDAgqOPIu_/exec", {
-            method: "POST",
-            body: JSON.stringify(payload)
-          });
-
-          const result = await res.json();
-          if (result.status === "ok") {
-            loader.innerHTML = "✅ Ответ сохранён!";
-            setTimeout(() => {
-              loadUpdates(); // 🔄 обновим ленту, чтобы форма исчезла и показался ответ
-            }, 1200);
-          } else {
-            loader.innerHTML = "❌ Ошибка: " + result.message;
-            button.disabled = false;
-          }
-        } catch (err) {
-          loader.innerHTML = "❌ Сеть недоступна";
-          button.disabled = false;
-        }
+    try {
+      const res = await fetch("https://script.google.com/macros/s/AKfycbztPneKvfBlRSwOmUiYEysa2CnycHhU9b5R25-7ai5UyaytxJLs7yduH4XDAgqOPIu_/exec", {
+        method: "POST",
+        body: JSON.stringify(payload)
       });
-    });
+
+      const result = await res.json();
+      if (result.status === "ok") {
+        // ✅ заменяем форму на текст ответа
+        form.outerHTML = `<p class="answer">Ваш ответ: ${answer}</p>`;
+      } else {
+        loader.innerHTML = "❌ Ошибка: " + result.message;
+        button.disabled = false;
+      }
+    } catch (err) {
+      loader.innerHTML = "❌ Сеть недоступна";
+      button.disabled = false;
+    }
+  });
+});
   } catch (err) {
     console.error("Ошибка loadUpdates:", err);
     document.getElementById("content").innerHTML = "<p>Не удалось загрузить обновления</p>";
