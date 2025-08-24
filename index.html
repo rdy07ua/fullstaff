@@ -102,7 +102,7 @@
           document.getElementById("user-name").style.display = "block";
           document.getElementById("user-name").innerText = currentUser.name || username;
 
-          loadUpdates(); // загрузка новостной ленты
+          loadUpdates(); 
           return;
         }
       }
@@ -135,110 +135,105 @@
       }
     };
 
-    // 🚀 Загрузка обновлений из Google Sheets
+    // 🚀 Загрузка обновлений
     async function loadUpdates() {
       try {
-    const res = await fetch("https://docs.google.com/spreadsheets/d/1PrAj8rfZRVUtmDRcnoZyBysWdrNih5OYgna7MuPH4mE/gviz/tq?tqx=out:json");
-    const text = await res.text();
-    const json = JSON.parse(text.substr(47).slice(0, -2));
+        const res = await fetch("https://docs.google.com/spreadsheets/d/1PrAj8rfZRVUtmDRcnoZyBysWdrNih5OYgna7MuPH4mE/gviz/tq?tqx=out:json");
+        const text = await res.text();
+        const json = JSON.parse(text.substr(47).slice(0, -2));
+        const rows = json.table.rows.reverse();
 
-    const rows = json.table.rows.reverse();
-    console.log("ROWS:", rows); // 🛠️ Проверим
+        let html = "<div class='updates-feed'>";
 
-    let html = "<div class='updates-feed'>";
+        for (let r of rows) {
+          const cells = r.c;
+          if (!cells[3] || !cells[3].v) continue;
 
-    for (let r of rows) {
-      const cells = r.c;
-      if (!cells[3] || !cells[3].v) continue; // пропускаем если нет кандидата
+          const recruiter = cells[1]?.v || "";
+          const candidate = cells[3]?.v || "";
+          const status = cells[12]?.v || "";
+          const comment = cells[13]?.v || "";
+          const answer = cells[14]?.v || "";
 
-      const recruiter = cells[1]?.v || "";
-      const candidate = cells[3]?.v || "";
-      const status = cells[12]?.v || "";
-      const comment = cells[13]?.v || "";
-      const answer = cells[14]?.v || "";
+          if (currentUser.role !== "admin" && recruiter !== currentUser.name) continue;
 
-      // 🔑 фильтр по рекрутеру
-      if (currentUser.role !== "admin" && recruiter !== currentUser.name) continue;
+          // класс статуса
+          let statusClass = "";
+          if (status.includes("Новый")) statusClass = "new";
+          if (status.includes("Передан")) statusClass = "sent";
+          if (status.includes("Интервью")) statusClass = "interview";
+          if (status.includes("Оффер")) statusClass = "offer";
+          if (status.includes("Отказ")) statusClass = "reject";
 
-      // 🆕 Новый кандидат
-      if (status === "Новый") {
-        html += `<div class="update-item"><b>${candidate}</b> загружен.</div>`;
-      } 
-      // 🔄 Изменение статуса
-      else if (status) {
-        html += `<div class="update-item"><b>${candidate}</b>: статус изменён на <span class="status">${status}</span></div>`;
-      }
+          if (status === "Новый") {
+            html += `<div class="update-item"><b>${candidate}</b> загружен.</div>`;
+          } else if (status) {
+            html += `<div class="update-item"><b>${candidate}</b>: статус изменён на <span class="status ${statusClass}">${status}</span></div>`;
+          }
 
-      // 💬 Комментарий
-      if (comment) {
-        html += `
-          <div class="update-item">
-            💬 Комментарий по <b>${candidate}</b>: ${comment}
-            ${
-              answer 
-              ? `<p class="answer">Ваш ответ: ${answer}</p>` 
-              : `<form class="answer-form" data-candidate="${candidate}">
-                  <input type="text" name="answer" placeholder="Ваш ответ..." required>
-                  <button type="submit">Ответить</button>
-                </form>`
+          if (comment) {
+            html += `
+              <div class="update-item">
+                💬 Комментарий по <b>${candidate}</b>: ${comment}
+                ${
+                  answer 
+                  ? `<p class="answer">Ваш ответ: ${answer}</p>` 
+                  : `<form class="answer-form" data-candidate="${candidate}">
+                      <input type="text" name="answer" placeholder="Ваш ответ..." required>
+                      <button type="submit">Ответить</button>
+                    </form>`
+                }
+              </div>`;
+          }
+        }
+
+        html += "</div>";
+        document.getElementById("content").innerHTML = html || "<p>Нет обновлений</p>";
+
+        document.querySelectorAll(".answer-form").forEach(form => {
+          form.addEventListener("submit", async (e) => {
+            e.preventDefault();
+            const candidate = form.getAttribute("data-candidate");
+            const answer = form.querySelector("input[name='answer']").value;
+            const button = form.querySelector("button");
+
+            const loader = document.createElement("div");
+            loader.className = "spinner-wrap";
+            loader.innerHTML = `<div class="spinner"></div> <span>Отправка...</span>`;
+            form.appendChild(loader);
+            button.disabled = true;
+
+            const payload = {
+              action: "answer",
+              recruiter: currentUser.name,
+              candidate: candidate,
+              answer: answer
+            };
+
+            try {
+              const res = await fetch("https://script.google.com/macros/s/AKfycbztPneKvfBlRSwOmUiYEysa2CnycHhU9b5R25-7ai5UyaytxJLs7yduH4XDAgqOPIu_/exec", {
+                method: "POST",
+                body: JSON.stringify(payload)
+              });
+
+              const result = await res.json();
+              if (result.status === "ok") {
+                form.outerHTML = `<p class="answer">Ваш ответ: ${answer}</p>`;
+              } else {
+                loader.innerHTML = "❌ Ошибка: " + result.message;
+                button.disabled = false;
+              }
+            } catch (err) {
+              loader.innerHTML = "❌ Сеть недоступна";
+              button.disabled = false;
             }
-          </div>`;
+          });
+        });
+      } catch (err) {
+        console.error("Ошибка loadUpdates:", err);
+        document.getElementById("content").innerHTML = "<p>Не удалось загрузить обновления</p>";
       }
     }
-
-    html += "</div>";
-    document.getElementById("content").innerHTML = html || "<p>Нет обновлений</p>";
-
-    // 🚀 обработка форм "Ответить"
-document.querySelectorAll(".answer-form").forEach(form => {
-  form.addEventListener("submit", async (e) => {
-    e.preventDefault();
-    const candidate = form.getAttribute("data-candidate");
-    const answer = form.querySelector("input[name='answer']").value;
-    const button = form.querySelector("button");
-
-    // ⏳ Показать индикатор
-    const loader = document.createElement("div");
-    loader.className = "spinner-wrap";
-    loader.innerHTML = `<div class="spinner"></div> <span>Отправка...</span>`;
-    form.appendChild(loader);
-    button.disabled = true;
-
-    const payload = {
-      action: "answer",
-      recruiter: currentUser.name,
-      candidate: candidate,
-      answer: answer
-    };
-
-    try {
-      const res = await fetch("https://script.google.com/macros/s/AKfycbztPneKvfBlRSwOmUiYEysa2CnycHhU9b5R25-7ai5UyaytxJLs7yduH4XDAgqOPIu_/exec", {
-        method: "POST",
-        body: JSON.stringify(payload)
-      });
-
-      const result = await res.json();
-      if (result.status === "ok") {
-        // ✅ заменяем форму на текст ответа
-        form.outerHTML = `<p class="answer">Ваш ответ: ${answer}</p>`;
-      } else {
-        loader.innerHTML = "❌ Ошибка: " + result.message;
-        button.disabled = false;
-      }
-    } catch (err) {
-      loader.innerHTML = "❌ Сеть недоступна";
-      button.disabled = false;
-    }
-  });
-});
-  } catch (err) {
-    console.error("Ошибка loadUpdates:", err);
-    document.getElementById("content").innerHTML = "<p>Не удалось загрузить обновления</p>";
-  }
-}
-
-
-
   </script>
 </body>
 </html>
