@@ -156,7 +156,7 @@
           if (status.includes("Отказ")) statusClass = "reject";
 
           html += `
-            <div class="card ${statusClass}" onclick="toggleCard(this)">
+            <div class="card ${statusClass}" onclick="toggleCard(this, event)">
               <div class="card-preview">
                 <p><b>Кандидат:</b> ${candidate}</p>
                 <p><b>Вакансия:</b> ${vacancy}</p>
@@ -185,9 +185,13 @@
       }
     }
 
-    function toggleCard(card) {
-      card.classList.toggle('expanded');
+    function toggleCard(card, event) {
+      // если клик был по ссылке или кнопке — не сворачиваем карточку
+      if (event.target.tagName === "A" || event.target.tagName === "BUTTON") {
+      return;
     }
+  card.classList.toggle("expanded");
+}
   </script>
 </body>
 </html>
