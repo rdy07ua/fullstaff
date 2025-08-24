@@ -65,7 +65,23 @@
 
     <div id="app" style="display:none;">
       <div id="content">
-        <p>Здесь будет статистика рекрутера</p>
+
+        <!-- 🚀 Форма Upload CV -->
+        <form id="cvForm" class="cv-form">
+          <input type="text" name="agency" placeholder="Агенство" required>
+          <input type="text" name="recruiter" placeholder="Рекрутер" required>
+          <input type="text" name="vacancy" placeholder="Вакансия" required>
+          <input type="text" name="candidate" placeholder="Кандидат" required>
+          <input type="email" name="email" placeholder="E-mail" required>
+          <input type="text" name="position" placeholder="Позиция" required>
+          <input type="text" name="salary" placeholder="З/П">
+          <input type="text" name="start" placeholder="Старт">
+          <input type="text" name="location" placeholder="Локация">
+          <input type="url" name="linkedin" placeholder="LinkedIn">
+          <input type="file" name="cv" accept=".pdf,.doc,.docx" required>
+          <button type="submit">Отправить</button>
+        </form>
+
       </div>
     </div>
   </main>
@@ -156,6 +172,53 @@
         }
       });
     };
+
+    // 🚀 Скрипт отправки формы
+    document.addEventListener("DOMContentLoaded", () => {
+      const form = document.getElementById("cvForm");
+      if (form) {
+        form.addEventListener("submit", async (e) => {
+          e.preventDefault();
+          const file = form.cv.files[0];
+          const reader = new FileReader();
+
+          reader.onload = async function(evt) {
+            const base64 = evt.target.result.split(",")[1];
+            const payload = {
+              agency: form.agency.value,
+              recruiter: form.recruiter.value,
+              vacancy: form.vacancy.value,
+              candidate: form.candidate.value,
+              email: form.email.value,
+              position: form.position.value,
+              salary: form.salary.value,
+              start: form.start.value,
+              location: form.location.value,
+              linkedin: form.linkedin.value,
+              file: {
+                name: file.name,
+                type: file.type,
+                data: base64
+              }
+            };
+
+            const res = await fetch("ВАШ_URL_APPS_SCRIPT", {
+              method: "POST",
+              body: JSON.stringify(payload)
+            });
+
+            const result = await res.json();
+            if (result.status === "ok") {
+              alert("✅ Резюме успешно отправлено!");
+              form.reset();
+            } else {
+              alert("Ошибка: " + result.message);
+            }
+          };
+          reader.readAsDataURL(file);
+        });
+      }
+    });
   </script>
 </body>
 </html>
