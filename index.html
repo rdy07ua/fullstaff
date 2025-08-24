@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <title>&lt;FULLSTAFF &amp; PARTNERS&gt;</title>
+  <title>&lt;FULLSTAFF & PARTNERS&gt;</title>
   <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500&family=Roboto:wght@400;500&family=Inter:wght@400;500&display=swap" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
   <link rel="stylesheet" href="../css/main.css">
@@ -30,7 +30,7 @@
   <main class="container">
     <h1>
       <a href="/index.html" style="text-decoration:none; color:inherit;">
-        &lt;FULLSTAFF &amp; PARTNERS&gt;
+        &lt;FULLSTAFF & PARTNERS&gt;
       </a>
     </h1>
 
@@ -168,24 +168,12 @@
 
         // === 📊 Рендер статистики ===
         document.getElementById("stats").innerHTML = `
-          <div class="stat-card stat-cv">
-            <h2>${uploaded}</h2>
-            <p>Uploaded CVs</p>
-          </div>
-          <div class="stat-card stat-interview">
-            <h2>${interview}</h2>
-            <p>Interviews</p>
-          </div>
-          <div class="stat-card stat-offer">
-            <h2>${offer}</h2>
-            <p>Offers</p>
-          </div>
-          <div class="stat-card stat-metrics">
-            <h2>Pipeline</h2>
-            <p>Interview rate: <b>${interviewRate}%</b></p>
-            <p>Offer from interview: <b>${offerFromInterview}%</b></p>
-            <p>Offer rate: <b>${offerRate}%</b></p>
-          </div>
+          <div class="stat-card stat-cv"><h2>${uploaded}</h2><p>Uploaded CVs</p></div>
+          <div class="stat-card stat-interview"><h2>${interview}</h2><p>Interviews</p></div>
+          <div class="stat-card stat-offer"><h2>${offer}</h2><p>Offers</p></div>
+          <div class="stat-card stat-rate"><h2>${interviewRate}%</h2><p>Interview rate</p></div>
+          <div class="stat-card stat-rate"><h2>${offerFromInterview}%</h2><p>Offer from interview</p></div>
+          <div class="stat-card stat-rate"><h2>${offerRate}%</h2><p>Offer rate</p></div>
         `;
 
         // === 📰 Лента обновлений ===
