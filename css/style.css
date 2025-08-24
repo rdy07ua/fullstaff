@@ -279,4 +279,67 @@ footer.container { padding: 8px; }
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
 }
+/* Лента событий */
+.feed {
+  background: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 8px rgba(0,0,0,0.1);
+  margin-top: 20px;
+  font-family: 'Oswald', sans-serif;
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+.feed p {
+  margin: 8px 0;
+  padding: 6px 10px;
+  border-left: 4px solid #dc3545;
+  background: #f9f9f9;
+  border-radius: 4px;
+}
+
+/* Комментарии и ответы */
+.comment-block {
+  margin: 12px 0;
+  padding: 10px;
+  background: #fdfdfd;
+  border: 1px solid #eee;
+  border-radius: 6px;
+}
+
+.comment-block p {
+  margin: 6px 0;
+  font-size: 14px;
+}
+
+/* Форма ответа */
+.answer-form {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.answer-form input {
+  flex: 1;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+.answer-form button {
+  padding: 8px 14px;
+  border: none;
+  border-radius: 6px;
+  background: #dc3545;
+  color: #fff;
+  cursor: pointer;
+  font-size: 14px;
+  transition: 0.3s;
+}
+
+.answer-form button:hover {
+  background: #a71d2a;
+}
 
