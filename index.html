@@ -8,14 +8,8 @@
   <link rel="stylesheet" href="../css/style.css">
   <link rel="stylesheet" href="../css/pipeline.css">
   <style>
-    /* Подсветка активного пункта меню */
-    .main-nav a.active {
-      color: #dc3545;
-      font-weight: 600;
-    }
-    .main-nav a.active::after {
-      width: 100%;
-    }
+    .main-nav a.active { color: #dc3545; font-weight: 600; }
+    .main-nav a.active::after { width: 100%; }
   </style>
 </head>
 
@@ -26,9 +20,7 @@
       <div class="logo">&lt;/vacancy&gt;</div>
       <div class="social-icons">
         <a href="https://t.me/Serhii_Riabovol" target="_blank"><i class="fab fa-telegram"></i></a>
-        <a href="https://mail.google.com/mail/?view=cm&fs=1&to=serhii.riabovol@fullstaff.net" target="_blank">
-          <i class="fas fa-envelope"></i>
-        </a>
+        <a href="mailto:serhii.riabovol@fullstaff.net" target="_blank"><i class="fas fa-envelope"></i></a>
         <a href="https://linkedin.com/in/serhii-riabovol-245b11298" target="_blank"><i class="fab fa-linkedin"></i></a>
         <a href="https://wa.me/48793379163" target="_blank"><i class="fab fa-whatsapp"></i></a>
       </div>
@@ -45,14 +37,12 @@
 
     <div class="top-controls">
       <span id="user-name"></span>
-
       <nav class="main-nav" style="display:none;">
         <a href="/upload/index.html">Upload CV</a>
         <a href="#">My vacancies</a>
         <a href="/pipeline/index.html">Pipeline</a>
         <a href="#">Tasks</a>
       </nav>
-
       <button class="logout-btn" onclick="logout()" style="display:none;">Выйти</button>
     </div>
 
@@ -64,17 +54,12 @@
     </div>
 
     <div id="app" style="display:none;">
-      <div id="content">
-        <!-- Здесь будет новостная лента -->
-        <div id="feed" class="feed"></div>
-      </div>
+      <div id="content"></div>
     </div>
   </main>
 
-  <!-- Футер -->
   <footer class="container">
-    <p>
-      © 2025 FullStaff · 
+    <p>© 2025 FullStaff · 
       <a href="mailto:serhii.riabovol@fullstaff.net">serhii.riabovol@fullstaff.net</a> · 
       <a href="tel:+48793379163">+48 793 379 163</a>
     </p>
@@ -117,7 +102,7 @@
           document.getElementById("user-name").style.display = "block";
           document.getElementById("user-name").innerText = currentUser.name || username;
 
-          loadFeed(); // загружаем события
+          loadUpdates(); // загрузка новостной ленты
           return;
         }
       }
@@ -129,11 +114,11 @@
       localStorage.removeItem("loggedUser");
       document.getElementById("login").style.display = "block";
       document.getElementById("app").style.display = "none";
+      document.getElementById("content").innerHTML = "<p>Здесь будет контент страницы</p>";
       document.querySelector(".logout-btn").style.display = "none";
       document.querySelector(".main-nav").style.display = "none";
       document.getElementById("user-name").style.display = "none";
       document.getElementById("user-name").innerText = "";
-      document.getElementById("feed").innerHTML = "";
     }
 
     window.onload = function () {
@@ -144,91 +129,82 @@
         document.getElementById("app").style.display = "block";
         document.querySelector(".logout-btn").style.display = "inline-block";
         document.querySelector(".main-nav").style.display = "flex";
-
         document.getElementById("user-name").style.display = "block";
         document.getElementById("user-name").innerText = currentUser.name || savedUser;
-
-        loadFeed();
+        loadUpdates();
       }
-
-      // Подсветка активного пункта меню
-      const path = window.location.pathname;
-      document.querySelectorAll(".main-nav a").forEach(link => {
-        if (link.getAttribute("href") && path.includes(link.getAttribute("href"))) {
-          link.classList.add("active");
-        }
-      });
     };
 
-    // 🚀 Загрузка событий + форма ответа
-    async function loadFeed() {
-      try {
-        const res = await fetch("https://docs.google.com/spreadsheets/d/1PrAj8rfZRVUtmDRcnoZyBysWdrNih5OYgna7MuPH4mE/gviz/tq?tqx=out:json");
-        const text = await res.text();
-        const json = JSON.parse(text.substr(47).slice(0, -2));
+    // 🚀 Загрузка обновлений из Google Sheets
+    async function loadUpdates() {
+      const res = await fetch("https://docs.google.com/spreadsheets/d/1PrAj8rfZRVUtmDRcnoZyBysWdrNih5OYgna7MuPH4mE/gviz/tq?tqx=out:json");
+      const text = await res.text();
+      const json = JSON.parse(text.substr(47).slice(0, -2));
 
-        const rows = json.table.rows.reverse();
-        let html = "";
+      const rows = json.table.rows.reverse();
+      let html = "<div class='updates-feed'>";
 
-        for (let i = 0; i < rows.length; i++) {
-          const r = rows[i].c;
-          if (!r[3]) continue; // нет кандидата
+      for (let r of rows) {
+        if (!r[3]) continue;
+        const recruiter = r[1]?.v || "";
+        const candidate = r[3]?.v || "";
+        const status = r[12]?.v || "";
+        const comment = r[13]?.v || "";
+        const answer = r[14]?.v || "";
 
-          const recruiter = r[1]?.v || "";
-          const candidate = r[3]?.v || "";
-          const status = r[12]?.v || "";
-          const comment = r[13]?.v || "";
-          const answer = r[14]?.v || "";
-          const updated = r[15]?.v || "";
+        // фильтрация: рекрутер видит только своих кандидатов
+        if (currentUser.role !== "admin" && recruiter !== currentUser.name) continue;
 
-          // фильтр для рекрутера
-          if (currentUser.role !== "admin" && recruiter !== currentUser.name) continue;
-
-          // события
-          if (status) {
-            html += `<p>📌 ${candidate} статус изменен на: <b>${status}</b></p>`;
-          }
-          if (comment) {
-            html += `
-              <div class="comment-block">
-                <p>💬 Комментарий для ${candidate}: "${comment}"</p>
-                ${answer ? `<p>↩️ Ваш ответ: "${answer}"</p>` : `
-                  <form class="answer-form" onsubmit="sendAnswer(event, '${candidate}', this)">
-                    <input type="text" name="answer" placeholder="Ваш ответ..." required>
-                    <button type="submit">Отправить</button>
-                  </form>
-                `}
-              </div>
-            `;
-          }
+        if (status === "Новый") {
+          html += `<div class="update-item"><b>${candidate}</b> загружен.</div>`;
         }
-
-        document.getElementById("feed").innerHTML = html || "<p>Нет событий</p>";
-      } catch (e) {
-        console.error("Ошибка загрузки данных:", e);
-        document.getElementById("feed").innerHTML = "<p>Не удалось загрузить данные</p>";
+        if (status && status !== "Новый") {
+          html += `<div class="update-item"><b>${candidate}</b>: статус изменён на <span class="status">${status}</span></div>`;
+        }
+        if (comment) {
+          html += `
+            <div class="update-item">
+              💬 Комментарий по <b>${candidate}</b>: ${comment}
+              <form class="answer-form" data-candidate="${candidate}">
+                <input type="text" name="answer" placeholder="Ваш ответ..." required>
+                <button type="submit">Ответить</button>
+              </form>
+              ${answer ? `<p class="answer">Ваш ответ: ${answer}</p>` : ""}
+            </div>`;
+        }
       }
-    }
 
-    // 🚀 Отправка ответа в Google Script
-    async function sendAnswer(e, candidate, form) {
-      e.preventDefault();
-      const answer = form.answer.value;
+      html += "</div>";
+      document.getElementById("content").innerHTML = html;
 
-      const payload = { candidate, answer };
+      // обработка форм "Ответить"
+      document.querySelectorAll(".answer-form").forEach(form => {
+        form.addEventListener("submit", async (e) => {
+          e.preventDefault();
+          const candidate = form.getAttribute("data-candidate");
+          const answer = form.querySelector("input[name='answer']").value;
 
-      const res = await fetch("https://script.google.com/macros/s/ТВОЙ_SCRIPT_ID/exec", {
-        method: "POST",
-        body: JSON.stringify(payload)
+          const payload = {
+            action: "answer",
+            recruiter: currentUser.name,
+            candidate: candidate,
+            answer: answer
+          };
+
+          const res = await fetch("https://script.google.com/macros/s/AKfycbztPneKvfBlRSwOmUiYEysa2CnycHhU9b5R25-7ai5UyaytxJLs7yduH4XDAgqOPIu_/exec", {
+            method: "POST",
+            body: JSON.stringify(payload)
+          });
+
+          const result = await res.json();
+          if (result.status === "ok") {
+            alert("✅ Ответ сохранён!");
+            loadUpdates(); // перезагрузим обновления
+          } else {
+            alert("Ошибка: " + result.message);
+          }
+        });
       });
-
-      const result = await res.json();
-      if (result.status === "ok") {
-        alert("✅ Ответ отправлен");
-        loadFeed(); // перезагрузить ленту
-      } else {
-        alert("Ошибка: " + result.message);
-      }
     }
   </script>
 </body>
