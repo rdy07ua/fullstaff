@@ -342,15 +342,20 @@ footer.container { padding: 8px; }
   background: #a71d2a;
 }
 
-/* 🔹 Новый стиль статусов — только цвет текста */
+
+/* 🔹 Статус кандидата — только цвет текста */
 .status {
   font-weight: 600;
   font-size: 14px;
-  display: inline-block;
+  display: inline;
+  padding: 0;
+  background: none;
+  border: none;
+  box-shadow: none;
 }
 
-.status.new { color: #ff9800; }
-.status.sent { color: #2196f3; }
-.status.interview { color: #9c27b0; }
-.status.offer { color: #4caf50; }
-.status.reject { color: #f44336; }
+.status.new { color: #ff9800; }      /* Новый — оранжевый */
+.status.sent { color: #2196f3; }     /* Передан заказчику — синий */
+.status.interview { color: #9c27b0; }/* Интервью — фиолетовый */
+.status.offer { color: #4caf50; }    /* Оффер — зелёный */
+.status.reject { color: #f44336; }   /* Отказ — красный */
