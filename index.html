@@ -136,8 +136,8 @@
     };
 
     // 🚀 Загрузка обновлений из Google Sheets
-   async function loadUpdates() {
-  try {
+    async function loadUpdates() {
+      try {
     const res = await fetch("https://docs.google.com/spreadsheets/d/1PrAj8rfZRVUtmDRcnoZyBysWdrNih5OYgna7MuPH4mE/gviz/tq?tqx=out:json");
     const text = await res.text();
     const json = JSON.parse(text.substr(47).slice(0, -2));
@@ -148,7 +148,7 @@
     let html = "<div class='updates-feed'>";
 
     for (let r of rows) {
-      const cells = r.c; // теперь работаем с r.c
+      const cells = r.c;
       if (!cells[3] || !cells[3].v) continue; // пропускаем если нет кандидата
 
       const recruiter = cells[1]?.v || "";
@@ -157,24 +157,31 @@
       const comment = cells[13]?.v || "";
       const answer = cells[14]?.v || "";
 
-      // фильтр по рекрутеру
+      // 🔑 фильтр по рекрутеру
       if (currentUser.role !== "admin" && recruiter !== currentUser.name) continue;
 
+      // 🆕 Новый кандидат
       if (status === "Новый") {
         html += `<div class="update-item"><b>${candidate}</b> загружен.</div>`;
-      } else if (status) {
+      } 
+      // 🔄 Изменение статуса
+      else if (status) {
         html += `<div class="update-item"><b>${candidate}</b>: статус изменён на <span class="status">${status}</span></div>`;
       }
 
+      // 💬 Комментарий
       if (comment) {
         html += `
           <div class="update-item">
             💬 Комментарий по <b>${candidate}</b>: ${comment}
-            <form class="answer-form" data-candidate="${candidate}">
-              <input type="text" name="answer" placeholder="Ваш ответ..." required>
-              <button type="submit">Ответить</button>
-            </form>
-            ${answer ? `<p class="answer">Ваш ответ: ${answer}</p>` : ""}
+            ${
+              answer 
+              ? `<p class="answer">Ваш ответ: ${answer}</p>` 
+              : `<form class="answer-form" data-candidate="${candidate}">
+                  <input type="text" name="answer" placeholder="Ваш ответ..." required>
+                  <button type="submit">Ответить</button>
+                </form>`
+            }
           </div>`;
       }
     }
@@ -182,12 +189,20 @@
     html += "</div>";
     document.getElementById("content").innerHTML = html || "<p>Нет обновлений</p>";
 
-    // обработка форм "Ответить"
+    // 🚀 обработка форм "Ответить"
     document.querySelectorAll(".answer-form").forEach(form => {
       form.addEventListener("submit", async (e) => {
         e.preventDefault();
         const candidate = form.getAttribute("data-candidate");
         const answer = form.querySelector("input[name='answer']").value;
+        const button = form.querySelector("button");
+
+        // ⏳ Показать индикатор
+        const loader = document.createElement("div");
+        loader.className = "spinner-wrap";
+        loader.innerHTML = `<div class="spinner"></div> <span>Отправка...</span>`;
+        form.appendChild(loader);
+        button.disabled = true;
 
         const payload = {
           action: "answer",
@@ -196,17 +211,25 @@
           answer: answer
         };
 
-        const res = await fetch("https://script.google.com/macros/s/AKfycbztPneKvfBlRSwOmUiYEysa2CnycHhU9b5R25-7ai5UyaytxJLs7yduH4XDAgqOPIu_/exec", {
-          method: "POST",
-          body: JSON.stringify(payload)
-        });
+        try {
+          const res = await fetch("https://script.google.com/macros/s/AKfycbztPneKvfBlRSwOmUiYEysa2CnycHhU9b5R25-7ai5UyaytxJLs7yduH4XDAgqOPIu_/exec", {
+            method: "POST",
+            body: JSON.stringify(payload)
+          });
 
-        const result = await res.json();
-        if (result.status === "ok") {
-          alert("✅ Ответ сохранён!");
-          loadUpdates(); // обновим ленту
-        } else {
-          alert("Ошибка: " + result.message);
+          const result = await res.json();
+          if (result.status === "ok") {
+            loader.innerHTML = "✅ Ответ сохранён!";
+            setTimeout(() => {
+              loadUpdates(); // 🔄 обновим ленту, чтобы форма исчезла и показался ответ
+            }, 1200);
+          } else {
+            loader.innerHTML = "❌ Ошибка: " + result.message;
+            button.disabled = false;
+          }
+        } catch (err) {
+          loader.innerHTML = "❌ Сеть недоступна";
+          button.disabled = false;
         }
       });
     });
@@ -215,6 +238,7 @@
     document.getElementById("content").innerHTML = "<p>Не удалось загрузить обновления</p>";
   }
 }
+
 
 
   </script>
