@@ -344,32 +344,41 @@ footer.container { padding: 8px; }
 }
 /* Общий стиль статуса */
 .status {
+  padding: 4px 10px;
+  border-radius: 6px;
   font-weight: 600;
   font-size: 14px;
+  color: #fff;
   display: inline-block;
+  min-width: 90px;
+  text-align: center;
 }
 
-/* Конкретные статусы (только цвет текста) */
+/* Конкретные статусы */
 .status.new {
-  color: #ff9800;
+  background: #ff9800;
+  box-shadow: 0 0 10px rgba(255,152,0,0.6);
 }
 
 .status.sent {
-  color: #2196f3;
+  background: #2196f3;
+  box-shadow: 0 0 10px rgba(33,150,243,0.6);
 }
 
 .status.interview {
-  color: #9c27b0;
+  background: #9c27b0;
+  box-shadow: 0 0 10px rgba(156,39,176,0.6);
 }
 
 .status.offer {
-  color: #4caf50;
+  background: #4caf50;
+  box-shadow: 0 0 10px rgba(76,175,80,0.6);
 }
 
 .status.reject {
-  color: #f44336;
+  background: #f44336;
+  box-shadow: 0 0 10px rgba(244,67,54,0.6);
 }
-
 .answer-form {
   display: flex;
   align-items: center;
@@ -400,4 +409,3 @@ footer.container { padding: 8px; }
 .answer-form button:hover {
   background: #a71d2a;
 }
-
