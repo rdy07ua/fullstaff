@@ -9,6 +9,21 @@
   <style>
     .main-nav a.active { color: #dc3545; font-weight: 600; }
     .main-nav a.active::after { width: 100%; }
+    .show-more-btn {
+      margin: 15px auto;
+      display: block;
+      padding: 10px 20px;
+      font-size: 14px;
+      border: none;
+      border-radius: 6px;
+      background: #dc3545;
+      color: #fff;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .show-more-btn:hover {
+      background: #a71d2a;
+    }
   </style>
 </head>
 
@@ -177,7 +192,7 @@
         `;
 
         // === 📰 Лента обновлений ===
-        let html = "<div class='updates-feed'>";
+        let updates = [];
         for (let r of rows) {
           const cells = r.c;
           if (!cells[3] || !cells[3].v) continue;
@@ -196,65 +211,89 @@
           if (status.includes("Оффер")) statusClass = "offer";
           if (status.includes("Отказ")) statusClass = "reject";
 
+          let block = "";
           if (status === "Новый") {
-            html += `<div class="update-item"><b>${candidate}</b> загружен.</div>`;
+            block = `<div class="update-item"><b>${candidate}</b> загружен.</div>`;
           } else if (status) {
-            html += `<div class="update-item"><b>${candidate}</b>: статус изменён на <span class="status ${statusClass}">${status}</span></div>`;
+            block = `<div class="update-item"><b>${candidate}</b>: статус изменён на <span class="status ${statusClass}">${status}</span></div>`;
           }
 
           if (comment) {
-            html += `
+            block += `
               <div class="update-item">
                 💬 Комментарий по <b>${candidate}</b>: ${comment}
                 ${
                   answer 
                   ? `<p class="answer">Ваш ответ: ${answer}</p>` 
                   : `<form class="answer-form" data-candidate="${candidate}">
-                      <input type="text" name="answer" placeholder="Ваш ответ..." required>
-                      <button type="submit">Ответить</button>
+                      <input type="text" name="answer" placeholder="Your answer..." required>
+                      <button type="submit">Reply</button>
                     </form>`
                 }
               </div>`;
           }
+
+          updates.push(block);
         }
-        html += "</div>";
-        document.getElementById("content").innerHTML = html || "<p>Нет обновлений</p>";
 
-        // === 📩 Обработка форм "Ответить" ===
-        document.querySelectorAll(".answer-form").forEach(form => {
-          form.addEventListener("submit", async (e) => {
-            e.preventDefault();
-            const candidate = form.getAttribute("data-candidate");
-            const answer = form.querySelector("input[name='answer']").value;
-            const button = form.querySelector("button");
+        let visibleCount = 10;
+        function renderUpdates() {
+          let html = "<div class='updates-feed'>";
+          html += updates.slice(0, visibleCount).join("");
+          html += "</div>";
 
-            const loader = document.createElement("div");
-            loader.className = "spinner-wrap";
-            loader.innerHTML = `<div class="spinner"></div> <span>Отправка...</span>`;
-            form.appendChild(loader);
-            button.disabled = true;
+          if (updates.length > visibleCount) {
+            html += `<button id="showMore" class="show-more-btn">Show more</button>`;
+          }
 
-            const payload = { action: "answer", recruiter: currentUser.name, candidate, answer };
+          document.getElementById("content").innerHTML = html;
 
-            try {
-              const res = await fetch("https://script.google.com/macros/s/AKfycbztPneKvfBlRSwOmUiYEysa2CnycHhU9b5R25-7ai5UyaytxJLs7yduH4XDAgqOPIu_/exec", {
-                method: "POST",
-                body: JSON.stringify(payload)
-              });
+          const btn = document.getElementById("showMore");
+          if (btn) {
+            btn.addEventListener("click", () => {
+              visibleCount += 10;
+              renderUpdates();
+            });
+          }
 
-              const result = await res.json();
-              if (result.status === "ok") {
-                form.outerHTML = `<p class="answer">Ваш ответ: ${answer}</p>`;
-              } else {
-                loader.innerHTML = "❌ Ошибка: " + result.message;
+          // обработка форм "Ответить"
+          document.querySelectorAll(".answer-form").forEach(form => {
+            form.addEventListener("submit", async (e) => {
+              e.preventDefault();
+              const candidate = form.getAttribute("data-candidate");
+              const answer = form.querySelector("input[name='answer']").value;
+              const button = form.querySelector("button");
+
+              const loader = document.createElement("div");
+              loader.className = "spinner-wrap";
+              loader.innerHTML = `<div class="spinner"></div> <span>Sending...</span>`;
+              form.appendChild(loader);
+              button.disabled = true;
+
+              const payload = { action: "answer", recruiter: currentUser.name, candidate, answer };
+
+              try {
+                const res = await fetch("https://script.google.com/macros/s/AKfycbztPneKvfBlRSwOmUiYEysa2CnycHhU9b5R25-7ai5UyaytxJLs7yduH4XDAgqOPIu_/exec", {
+                  method: "POST",
+                  body: JSON.stringify(payload)
+                });
+
+                const result = await res.json();
+                if (result.status === "ok") {
+                  form.outerHTML = `<p class="answer">Your answer: ${answer}</p>`;
+                } else {
+                  loader.innerHTML = "❌ Error: " + result.message;
+                  button.disabled = false;
+                }
+              } catch (err) {
+                loader.innerHTML = "❌ Network error";
                 button.disabled = false;
               }
-            } catch (err) {
-              loader.innerHTML = "❌ Сеть недоступна";
-              button.disabled = false;
-            }
+            });
           });
-        });
+        }
+
+        renderUpdates();
       } catch (err) {
         console.error("Ошибка loadUpdates:", err);
         document.getElementById("content").innerHTML = "<p>Не удалось загрузить обновления</p>";
