@@ -6,8 +6,8 @@
   <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500&family=Roboto:wght@400;500&family=Inter:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/css/style.css">
   <link rel="stylesheet" href="/css/pipeline.css">
-    <style>
-    /* Полностью скрываем кнопку на мобильных до 600px */
+  <style>
+    /* Полностью скрываем кнопку на мобильных */
     @media (max-width: 600px) {
       .sheet-btn {
         display: none !important;
@@ -90,8 +90,11 @@
           document.querySelector(".main-nav").style.display = "flex";
           document.querySelector(".logout-btn").style.display = "inline-block";
 
-          document.getElementById("sheetLink").href = currentUser.sheetUrl || "#";
-          document.getElementById("sheetLink").style.display = "inline-block";
+          // показываем ссылку только на десктопах
+          if (window.innerWidth > 600) {
+            document.getElementById("sheetLink").href = currentUser.sheetUrl || "#";
+            document.getElementById("sheetLink").style.display = "inline-block";
+          }
 
           loadData();
           return;
@@ -122,8 +125,11 @@
         document.querySelector(".main-nav").style.display = "flex";
         document.querySelector(".logout-btn").style.display = "inline-block";
 
-        document.getElementById("sheetLink").href = currentUser.sheetUrl || "#";
-        document.getElementById("sheetLink").style.display = "inline-block";
+        // показываем ссылку только на десктопах
+        if (window.innerWidth > 600) {
+          document.getElementById("sheetLink").href = currentUser.sheetUrl || "#";
+          document.getElementById("sheetLink").style.display = "inline-block";
+        }
 
         loadData();
       }
@@ -194,12 +200,11 @@
     }
 
     function toggleCard(card, event) {
-      // если клик был по ссылке или кнопке — не сворачиваем карточку
       if (event.target.tagName === "A" || event.target.tagName === "BUTTON") {
-      return;
+        return;
+      }
+      card.classList.toggle("expanded");
     }
-  card.classList.toggle("expanded");
-}
   </script>
 </body>
 </html>
