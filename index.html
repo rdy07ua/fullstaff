@@ -56,7 +56,7 @@
     <!-- Приложение -->
     <div id="app" style="display:none;">
       <!-- 📊 Статистика -->
-      <div id="stats" class="stats-container"></div>
+      <div id="stats" class="stats-grid"></div>
       <!-- 📰 Лента -->
       <div id="content"></div>
     </div>
@@ -168,25 +168,23 @@
 
         // === 📊 Рендер статистики ===
         document.getElementById("stats").innerHTML = `
-          <div class="stat-card uploaded">
-            <div class="value">${uploaded}</div>
-            <div class="label">Uploaded CVs</div>
+          <div class="stat-card stat-cv">
+            <h2>${uploaded}</h2>
+            <p>Uploaded CVs</p>
           </div>
-          <div class="stat-card interview">
-            <div class="value">${interview}</div>
-            <div class="label">Interviews</div>
+          <div class="stat-card stat-interview">
+            <h2>${interview}</h2>
+            <p>Interviews</p>
           </div>
-          <div class="stat-card offer">
-            <div class="value">${offer}</div>
-            <div class="label">Offers</div>
+          <div class="stat-card stat-offer">
+            <h2>${offer}</h2>
+            <p>Offers</p>
           </div>
-          <div class="stat-card metrics">
-            <div class="value">Pipeline</div>
-            <div class="label">
-              Interview rate: <b>${interviewRate}%</b><br>
-              Offer from interview: <b>${offerFromInterview}%</b><br>
-              Offer rate: <b>${offerRate}%</b>
-            </div>
+          <div class="stat-card stat-metrics">
+            <h2>Pipeline</h2>
+            <p>Interview rate: <b>${interviewRate}%</b></p>
+            <p>Offer from interview: <b>${offerFromInterview}%</b></p>
+            <p>Offer rate: <b>${offerRate}%</b></p>
           </div>
         `;
 
