@@ -225,121 +225,72 @@ footer.container { padding: 8px; }
   }
 }
 
-.cv-form {
-  max-width: 600px;
-  margin: 0 auto;
+/* === 🎨 Лента в стиле мессенджера === */
+.updates-feed {
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  background: #fff;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 0 8px rgba(0,0,0,0.1);
+  gap: 15px;
+  padding: 15px;
+  background: #f5f5f5;
+  border-radius: 12px;
 }
 
-.cv-form input,
-.cv-form button {
-  padding: 10px;
-  font-size: 16px;
-  border-radius: 6px;
-  border: 1px solid #ccc;
-}
-
-.cv-form button {
-  background: #dc3545;
-  color: #fff;
-  cursor: pointer;
-  transition: 0.3s;
-}
-
-.cv-form button:hover {
-  background: #a71d2a;
-}
-
-.spinner-wrap {
+/* Элемент новости */
+.update-item {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 10px;
-  margin-top: 12px;
-  color: #dc3545;
-  font-weight: 500;
+  max-width: 80%;
 }
 
-.spinner {
-  width: 22px;
-  height: 22px;
-  border: 3px solid #ccc;
-  border-top: 3px solid #dc3545;
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
+/* Иконка */
+.update-item::before {
+  content: "👤";
+  font-size: 20px;
+  display: block;
+  width: 30px;
+  text-align: center;
+  opacity: 0.7;
 }
 
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
-
-/* Лента событий */
-.feed {
+/* Бабл */
+.update-bubble {
   background: #fff;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 0 8px rgba(0,0,0,0.1);
-  margin-top: 20px;
-  font-family: 'Oswald', sans-serif;
-  font-size: 15px;
-  line-height: 1.6;
-}
-
-.feed p {
-  margin: 8px 0;
-  padding: 6px 10px;
-  border-left: 4px solid #dc3545;
-  background: #f9f9f9;
-  border-radius: 4px;
-}
-
-/* Комментарии и ответы */
-.comment-block {
-  margin: 12px 0;
-  padding: 10px;
-  background: #fdfdfd;
-  border: 1px solid #eee;
-  border-radius: 6px;
-}
-
-.comment-block p {
-  margin: 6px 0;
+  border-radius: 12px;
+  padding: 10px 14px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
   font-size: 14px;
+  line-height: 1.4;
 }
 
-/* Форма ответа */
-.answer-form {
-  display: flex;
-  gap: 8px;
-  margin-top: 8px;
+/* Варианты цветов */
+.update-item.status .update-bubble {
+  background: #e6f3ff;
+  border-left: 4px solid #2196f3;
 }
 
-.answer-form input {
-  flex: 1;
-  padding: 8px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  font-size: 14px;
+.update-item.comment .update-bubble {
+  background: #fff8e1;
+  border-left: 4px solid #ff9800;
 }
 
-.answer-form button {
-  padding: 8px 14px;
-  border: none;
-  border-radius: 6px;
-  background: #dc3545;
-  color: #fff;
-  cursor: pointer;
-  font-size: 14px;
-  transition: 0.3s;
+.update-item.answer .update-bubble {
+  background: #e8f5e9;
+  border-left: 4px solid #4caf50;
 }
-.answer-form button:hover {
-  background: #a71d2a;
+
+/* Сообщения "моего типа" */
+.update-item.mine {
+  align-self: flex-end;
+  flex-direction: row-reverse;
+}
+.update-item.mine::before {
+  content: "✅";
+}
+.update-item.mine .update-bubble {
+  background: #dcf8c6;
+  border-left: none;
+  border-right: 4px solid #34b7f1;
 }
 
 /* 🔹 Статус кандидата */
@@ -387,16 +338,16 @@ footer.container { padding: 8px; }
 }
 /* 🎨 Цвет цифр */
 .stat-card.stat-cv h2 {
-  color: #ff9800; /* оранжевый */
+  color: #ff9800;
 }
 .stat-card.stat-interview h2 {
-  color: #9c27b0; /* фиолетовый */
+  color: #9c27b0;
 }
 .stat-card.stat-offer h2 {
-  color: #4caf50; /* зелёный */
+  color: #4caf50;
 }
 .stat-card.stat-rate h2 {
-  color: #2196f3; /* синий */
+  color: #2196f3;
 }
 
 /* 📱 На мобильных — 2 карточки в ряд */
