@@ -81,15 +81,14 @@ footer.container { padding: 8px; }
   background: #1e7e34;
   box-shadow: 0 0 8px rgba(40,167,69,0.6);
 }
+
+/* 📱 Для мобильных (до 600px) — уменьшаем */
 @media (max-width: 768px) {
   .sheet-btn {
-    display: none !important;
+    font-size: 12px;
+    padding: 6px 10px;
+    border-radius: 4px;
   }
-  @media (max-width: 768px) {
-  #sheetLink {
-    display: none !important;
-  }
-}
 }
 .logout-btn {
   margin-left: auto;
