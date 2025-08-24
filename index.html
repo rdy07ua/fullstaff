@@ -21,9 +21,7 @@
       cursor: pointer;
       transition: 0.3s;
     }
-    .show-more-btn:hover {
-      background: #a71d2a;
-    }
+    .show-more-btn:hover { background: #a71d2a; }
   </style>
 </head>
 
@@ -204,38 +202,25 @@
 
           if (currentUser.role !== "admin" && recruiter !== currentUser.name) continue;
 
-          let statusClass = "";
-          if (status.includes("Новый")) statusClass = "new";
-          if (status.includes("Передан")) statusClass = "sent";
-          if (status.includes("Интервью")) statusClass = "interview";
-          if (status.includes("Оффер")) statusClass = "offer";
-          if (status.includes("Отказ")) statusClass = "reject";
+          // 🔹 путь к аватаркам
+          let avatar = "/img/default.png";
+          if (recruiter === "Serhii Riabovol") avatar = "/img/serhii.jpg";
+          if (recruiter === "Anna Ivanova") avatar = "/img/anna.jpg";
+          if (recruiter === "Oleg Petrov") avatar = "/img/oleg.jpg";
+          if (recruiter === "Marina Kozlova") avatar = "/img/marina.jpg";
+          if (recruiter === "Dmitry Sokolov") avatar = "/img/dmitry.jpg";
 
-          let block = `<div class="update-item status"><div class="update-bubble">`;
-          if (status === "Новый") {
-            block += `<b>${candidate}</b> загружен.`;
-          } else if (status) {
-            block += `<b>${candidate}</b>: статус → <span class="status ${statusClass}">${status}</span>`;
-          }
-          block += `</div></div>`;
-
-          if (comment) {
-            block += `
-              <div class="update-item comment">
-                <div class="update-bubble">
-                  💬 <b>${candidate}</b>: ${comment}
-                  ${
-                    answer 
-                    ? `<p class="answer">Ваш ответ: ${answer}</p>` 
-                    : `<form class="answer-form" data-candidate="${candidate}">
-                        <input type="text" name="answer" placeholder="Ваш ответ..." required>
-                        <button type="submit">Ответить</button>
-                      </form>`
-                  }
-                </div>
-              </div>`;
-          }
-
+          let block = `
+            <div class="update-item">
+              <img src="${avatar}" class="avatar" alt="${recruiter}">
+              <div class="update-bubble">
+                <b>${candidate}</b>
+                ${status ? `<p>Статус: <span class="status">${status}</span></p>` : ""}
+                ${comment ? `<p>💬 ${comment}</p>` : ""}
+                ${answer ? `<p class="answer">Ваш ответ: ${answer}</p>` : ""}
+              </div>
+            </div>
+          `;
           updates.push(block);
         }
 
@@ -258,42 +243,6 @@
               renderUpdates();
             });
           }
-
-          // 📩 обработка форм ответа
-          document.querySelectorAll(".answer-form").forEach(form => {
-            form.addEventListener("submit", async (e) => {
-              e.preventDefault();
-              const candidate = form.getAttribute("data-candidate");
-              const answer = form.querySelector("input[name='answer']").value;
-              const button = form.querySelector("button");
-
-              const loader = document.createElement("div");
-              loader.className = "spinner-wrap";
-              loader.innerHTML = `<div class="spinner"></div> <span>Sending...</span>`;
-              form.appendChild(loader);
-              button.disabled = true;
-
-              const payload = { action: "answer", recruiter: currentUser.name, candidate, answer };
-
-              try {
-                const res = await fetch("https://script.google.com/macros/s/AKfycbztPneKvfBlRSwOmUiYEysa2CnycHhU9b5R25-7ai5UyaytxJLs7yduH4XDAgqOPIu_/exec", {
-                  method: "POST",
-                  body: JSON.stringify(payload)
-                });
-
-                const result = await res.json();
-                if (result.status === "ok") {
-                  form.outerHTML = `<p class="answer">Ваш ответ: ${answer}</p>`;
-                } else {
-                  loader.innerHTML = "❌ Error: " + result.message;
-                  button.disabled = false;
-                }
-              } catch (err) {
-                loader.innerHTML = "❌ Network error";
-                button.disabled = false;
-              }
-            });
-          });
         }
 
         renderUpdates();
