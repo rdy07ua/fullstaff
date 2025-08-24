@@ -370,17 +370,16 @@ footer.container { padding: 8px; }
 
 .stat-card {
   flex: 1;
-  min-width: 180px;
+  min-width: 200px;
   padding: 20px;
   border-radius: 12px;
   font-family: 'Oswald', sans-serif;
-  background: #fff; /* белый фон */
+  background: #fff;
   text-align: center;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start; /* текст сверху */
   align-items: center;
-  height: 140px;
   box-shadow: 0 4px 10px rgba(0,0,0,0.08);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
   border: 2px solid transparent;
@@ -403,21 +402,21 @@ footer.container { padding: 8px; }
   letter-spacing: 0.5px;
 }
 
-/* 🎨 Цветовые акценты */
-.stat-card.stat-cv {
-  border-color: #ff9800;
-  color: #ff9800;
+/* Специальный стиль для метрик */
+.stat-card.stat-metrics .value {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 10px;
 }
-.stat-card.stat-interview {
-  border-color: #9c27b0;
-  color: #9c27b0;
+.stat-card.stat-metrics .label {
+  font-size: 13px;
+  line-height: 1.5;
+  text-align: left;
 }
-.stat-card.stat-offer {
-  border-color: #4caf50;
-  color: #4caf50;
-}
-.stat-card.stat-metrics {
-  border-color: #2196f3;
-  color: #2196f3;
-}
+
+/* Цвета карточек */
+.stat-card.stat-cv { border-color: #ff9800; color: #ff9800; }
+.stat-card.stat-interview { border-color: #9c27b0; color: #9c27b0; }
+.stat-card.stat-offer { border-color: #4caf50; color: #4caf50; }
+.stat-card.stat-metrics { border-color: #2196f3; color: #2196f3; }
 
