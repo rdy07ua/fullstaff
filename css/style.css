@@ -379,4 +379,34 @@ footer.container { padding: 8px; }
   background: #f44336;
   box-shadow: 0 0 10px rgba(244,67,54,0.6);
 }
+.answer-form {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 6px;
+}
+
+.answer-form input[type="text"] {
+  flex: 1;
+  padding: 8px 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+.answer-form button {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  background: #dc3545;
+  color: #fff;
+  cursor: pointer;
+  font-size: 14px;
+  transition: 0.3s;
+  white-space: nowrap; /* 🔑 чтобы текст "Ответить" не ломался */
+}
+
+.answer-form button:hover {
+  background: #a71d2a;
+}
 
