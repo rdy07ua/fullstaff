@@ -79,7 +79,13 @@
           <input type="text" name="location" placeholder="Локация" required>
           <input type="url" name="linkedin" placeholder="LinkedIn" required>
           <input type="file" name="cv" accept=".pdf,.doc,.docx" required>
-          <button type="submit">Отправить</button>
+          <button type="submit" id="submitBtn">Отправить</button>
+
+          <!-- 🔹 Спиннер + текст -->
+          <div class="spinner-wrap" id="spinnerWrap" style="display:none;">
+            <div class="spinner"></div>
+            <span>Идёт загрузка...</span>
+          </div>
         </form>
 
       </div>
@@ -143,7 +149,6 @@
       localStorage.removeItem("loggedUser");
       document.getElementById("login").style.display = "block";
       document.getElementById("app").style.display = "none";
-      // убрали сброс innerHTML
       document.querySelector(".logout-btn").style.display = "none";
       document.querySelector(".main-nav").style.display = "none";
 
@@ -176,11 +181,18 @@
     // 🚀 Скрипт отправки формы
     document.addEventListener("DOMContentLoaded", () => {
       const form = document.getElementById("cvForm");
+      const spinner = document.getElementById("spinnerWrap");
+      const submitBtn = document.getElementById("submitBtn");
+
       if (form) {
         form.addEventListener("submit", async (e) => {
           e.preventDefault();
           const file = form.cv.files[0];
           const reader = new FileReader();
+
+          // показать спиннер + блокировка кнопки
+          spinner.style.display = "flex";
+          submitBtn.disabled = true;
 
           reader.onload = async function(evt) {
             const base64 = evt.target.result.split(",")[1];
@@ -202,19 +214,28 @@
               }
             };
 
-            const res = await fetch("https://script.google.com/macros/s/AKfycbztPneKvfBlRSwOmUiYEysa2CnycHhU9b5R25-7ai5UyaytxJLs7yduH4XDAgqOPIu_/exec", {
-              method: "POST",
-              body: JSON.stringify(payload)
-            });
+            try {
+              const res = await fetch("https://script.google.com/macros/s/AKfycbztPneKvfBlRSwOmUiYEysa2CnycHhU9b5R25-7ai5UyaytxJLs7yduH4XDAgqOPIu_/exec", {
+                method: "POST",
+                body: JSON.stringify(payload)
+              });
 
-            const result = await res.json();
-            if (result.status === "ok") {
-              alert("✅ Резюме успешно отправлено!");
-              form.reset();
-            } else {
-              alert("Ошибка: " + result.message);
+              const result = await res.json();
+              if (result.status === "ok") {
+                alert("✅ Резюме успешно отправлено!");
+                form.reset();
+              } else {
+                alert("❌ Ошибка: " + result.message);
+              }
+            } catch (err) {
+              alert("⚠️ Ошибка сети, попробуйте ещё раз.");
             }
+
+            // скрыть спиннер + вернуть кнопку
+            spinner.style.display = "none";
+            submitBtn.disabled = false;
           };
+
           reader.readAsDataURL(file);
         });
       }
