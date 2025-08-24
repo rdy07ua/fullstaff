@@ -136,24 +136,26 @@
     };
 
     // 🚀 Загрузка обновлений из Google Sheets
-    async function loadUpdates() {
+   async function loadUpdates() {
   try {
     const res = await fetch("https://docs.google.com/spreadsheets/d/1PrAj8rfZRVUtmDRcnoZyBysWdrNih5OYgna7MuPH4mE/gviz/tq?tqx=out:json");
     const text = await res.text();
     const json = JSON.parse(text.substr(47).slice(0, -2));
 
     const rows = json.table.rows.reverse();
-    console.log("ROWS:", rows); // 🛠️ смотри в консоли браузера
+    console.log("ROWS:", rows); // 🛠️ Проверим
 
     let html = "<div class='updates-feed'>";
 
     for (let r of rows) {
-      if (!r[3] || !r[3].v) continue; // если нет кандидата, пропускаем
-      const recruiter = r[1]?.v || "";
-      const candidate = r[3]?.v || "";
-      const status = r[12]?.v || "";
-      const comment = r[13]?.v || "";
-      const answer = r[14]?.v || "";
+      const cells = r.c; // теперь работаем с r.c
+      if (!cells[3] || !cells[3].v) continue; // пропускаем если нет кандидата
+
+      const recruiter = cells[1]?.v || "";
+      const candidate = cells[3]?.v || "";
+      const status = cells[12]?.v || "";
+      const comment = cells[13]?.v || "";
+      const answer = cells[14]?.v || "";
 
       // фильтр по рекрутеру
       if (currentUser.role !== "admin" && recruiter !== currentUser.name) continue;
@@ -213,6 +215,7 @@
     document.getElementById("content").innerHTML = "<p>Не удалось загрузить обновления</p>";
   }
 }
+
 
   </script>
 </body>
