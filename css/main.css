@@ -360,54 +360,7 @@ footer.container { padding: 8px; }
 .status.offer { color: #4caf50; }    /* Оффер — зелёный */
 .status.reject { color: #f44336; }   /* Отказ — красный */
 
-/* 📊 Карточки статистики */
-.stats-cards {
-  display: flex;
-  gap: 20px;
-  margin-bottom: 25px;
-  flex-wrap: wrap;
-}
-
-.stat-card {
-  flex: 1;
-  min-width: 200px;
-  background: #fff;
-  border-radius: 10px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-  padding: 15px;
-  text-align: center;
-  font-family: 'Oswald', sans-serif;
-}
-
-.stat-card h3 {
-  font-size: 18px;
-  margin-bottom: 8px;
-  font-weight: 500;
-  color: #444;
-}
-
-.stat-card p {
-  font-size: 22px;
-  font-weight: 700;
-  margin: 0;
-}
-
-.stat-card.metrics {
-  text-align: left;
-  font-size: 14px;
-  line-height: 1.5;
-}
-
-.stat-card.metrics h3 {
-  text-align: center;
-  margin-bottom: 12px;
-}
-
-/* Цвета */
-.stat-upload { color: #555; }
-.stat-interview { color: #9c27b0; }
-.stat-offer { color: #4caf50; }
-
+/* 📊 Карточки статистики - стиль dashboard */
 .stats-container {
   display: flex;
   gap: 20px;
@@ -418,17 +371,42 @@ footer.container { padding: 8px; }
 .stat-card {
   flex: 1;
   min-width: 180px;
-  padding: 15px;
-  border-radius: 10px;
+  padding: 20px;
+  border-radius: 12px;
   font-family: 'Oswald', sans-serif;
-  font-size: 16px;
   color: #fff;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 140px; /* фиксированная высота */
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-.stat-card.uploaded { background: #ff9800; }   /* оранжевый */
-.stat-card.interview { background: #9c27b0; }  /* фиолетовый */
-.stat-card.offer { background: #4caf50; }      /* зелёный */
-.stat-card.metrics { background: #2196f3; }    /* синий */
+.stat-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 14px rgba(0,0,0,0.25);
+}
+
+.stat-card .value {
+  font-size: 36px;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.stat-card .label {
+  font-size: 14px;
+  font-weight: 400;
+  opacity: 0.9;
+  letter-spacing: 0.5px;
+}
+
+/* Цвета карточек */
+.stat-card.uploaded { background: #ff9800; }
+.stat-card.interview { background: #9c27b0; }
+.stat-card.offer { background: #4caf50; }
+.stat-card.metrics { background: #2196f3; }
 
 
