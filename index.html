@@ -157,7 +157,7 @@
 
           if (currentUser.role !== "admin" && recruiter !== currentUser.name) continue;
 
-          // класс статуса
+          // 🎨 класс статуса
           let statusClass = "";
           if (status.includes("Новый")) statusClass = "new";
           if (status.includes("Передан")) statusClass = "sent";
@@ -165,12 +165,16 @@
           if (status.includes("Оффер")) statusClass = "offer";
           if (status.includes("Отказ")) statusClass = "reject";
 
+          // 🆕 Новый кандидат
           if (status === "Новый") {
             html += `<div class="update-item"><b>${candidate}</b> загружен.</div>`;
-          } else if (status) {
+          } 
+          // 🔄 Изменение статуса
+          else if (status) {
             html += `<div class="update-item"><b>${candidate}</b>: статус изменён на <span class="status ${statusClass}">${status}</span></div>`;
           }
 
+          // 💬 Комментарий + форма ответа
           if (comment) {
             html += `
               <div class="update-item">
@@ -190,6 +194,7 @@
         html += "</div>";
         document.getElementById("content").innerHTML = html || "<p>Нет обновлений</p>";
 
+        // 📩 Обработка форм "Ответить"
         document.querySelectorAll(".answer-form").forEach(form => {
           form.addEventListener("submit", async (e) => {
             e.preventDefault();
