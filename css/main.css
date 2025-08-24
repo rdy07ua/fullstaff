@@ -360,7 +360,7 @@ footer.container { padding: 8px; }
 .status.offer { color: #4caf50; }    /* Оффер — зелёный */
 .status.reject { color: #f44336; }   /* Отказ — красный */
 
-/* 📊 Карточки статистики - стиль dashboard */
+/* 📊 Карточки статистики - светлые */
 .stats-grid {
   display: flex;
   gap: 20px;
@@ -374,40 +374,50 @@ footer.container { padding: 8px; }
   padding: 20px;
   border-radius: 12px;
   font-family: 'Oswald', sans-serif;
-  color: #fff;
+  background: #fff; /* белый фон */
   text-align: center;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  height: 140px; /* фиксированная высота */
-  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+  height: 140px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.08);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
+  border: 2px solid transparent;
 }
 
 .stat-card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 6px 14px rgba(0,0,0,0.25);
+  box-shadow: 0 6px 14px rgba(0,0,0,0.15);
 }
 
 .stat-card .value {
-  font-size: 36px;
+  font-size: 32px;
   font-weight: 700;
   margin-bottom: 6px;
 }
 
 .stat-card .label {
   font-size: 14px;
-  font-weight: 400;
-  opacity: 0.9;
+  font-weight: 500;
   letter-spacing: 0.5px;
-  line-height: 1.4;
 }
 
-/* Цвета карточек */
-.stat-card.stat-cv { background: #ff9800; }
-.stat-card.stat-interview { background: #9c27b0; }
-.stat-card.stat-offer { background: #4caf50; }
-.stat-card.stat-metrics { background: #2196f3; }
-
+/* 🎨 Цветовые акценты */
+.stat-card.stat-cv {
+  border-color: #ff9800;
+  color: #ff9800;
+}
+.stat-card.stat-interview {
+  border-color: #9c27b0;
+  color: #9c27b0;
+}
+.stat-card.stat-offer {
+  border-color: #4caf50;
+  color: #4caf50;
+}
+.stat-card.stat-metrics {
+  border-color: #2196f3;
+  color: #2196f3;
+}
 
