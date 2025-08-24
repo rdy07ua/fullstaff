@@ -9,6 +9,28 @@
   <style>
     .main-nav a.active { color: #dc3545; font-weight: 600; }
     .main-nav a.active::after { width: 100%; }
+
+    /* 📊 Карточки статистики */
+    .stats-container {
+      display: flex;
+      gap: 20px;
+      margin-bottom: 25px;
+      flex-wrap: wrap;
+    }
+    .stat-card {
+      flex: 1;
+      min-width: 180px;
+      padding: 15px;
+      border-radius: 10px;
+      font-family: 'Oswald', sans-serif;
+      font-size: 16px;
+      color: #fff;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+    }
+    .stat-card.uploaded { background: #ff9800; }
+    .stat-card.interview { background: #9c27b0; }
+    .stat-card.offer { background: #4caf50; }
+    .stat-card.metrics { background: #2196f3; }
   </style>
 </head>
 
@@ -55,7 +77,6 @@
     <div id="app" style="display:none;">
       <!-- 📊 Карточки статистики -->
       <div id="stats" class="stats-container"></div>
-
       <!-- 📰 Лента обновлений -->
       <div id="content"></div>
     </div>
@@ -101,11 +122,10 @@
           document.getElementById("app").style.display = "block";
           document.querySelector(".logout-btn").style.display = "inline-block";
           document.querySelector(".main-nav").style.display = "flex";
-
           document.getElementById("user-name").style.display = "block";
           document.getElementById("user-name").innerText = currentUser.name || username;
 
-          loadUpdates(); 
+          loadStatsAndUpdates(); 
           return;
         }
       }
@@ -117,8 +137,8 @@
       localStorage.removeItem("loggedUser");
       document.getElementById("login").style.display = "block";
       document.getElementById("app").style.display = "none";
+      document.getElementById("content").innerHTML = "";
       document.getElementById("stats").innerHTML = "";
-      document.getElementById("content").innerHTML = "<p>Здесь будет контент страницы</p>";
       document.querySelector(".logout-btn").style.display = "none";
       document.querySelector(".main-nav").style.display = "none";
       document.getElementById("user-name").style.display = "none";
@@ -135,19 +155,18 @@
         document.querySelector(".main-nav").style.display = "flex";
         document.getElementById("user-name").style.display = "block";
         document.getElementById("user-name").innerText = currentUser.name || savedUser;
-        loadUpdates();
+        loadStatsAndUpdates();
       }
     };
 
-    // 🚀 Загрузка обновлений + статистики
-    async function loadUpdates() {
+    // 📊 Загружаем статистику и обновления
+    async function loadStatsAndUpdates() {
       try {
         const res = await fetch("https://docs.google.com/spreadsheets/d/1PrAj8rfZRVUtmDRcnoZyBysWdrNih5OYgna7MuPH4mE/gviz/tq?tqx=out:json");
         const text = await res.text();
         const json = JSON.parse(text.substr(47).slice(0, -2));
         const rows = json.table.rows.reverse();
 
-        let html = "<div class='updates-feed'>";
         let uploaded = 0, interview = 0, offer = 0;
 
         for (let r of rows) {
@@ -155,113 +174,123 @@
           if (!cells[3] || !cells[3].v) continue;
 
           const recruiter = cells[1]?.v || "";
-          const candidate = cells[3]?.v || "";
           const status = cells[12]?.v || "";
-          const comment = cells[13]?.v || "";
-          const answer = cells[14]?.v || "";
 
           if (currentUser.role !== "admin" && recruiter !== currentUser.name) continue;
 
-          // 📊 статистика
-          if (status) {
-            uploaded++;
-            if (status.includes("Интервью")) interview++;
-            if (status.includes("Оффер")) offer++;
-          }
-
-          // 🎨 класс статуса
-          let statusClass = "";
-          if (status.includes("Новый")) statusClass = "new";
-          if (status.includes("Передан")) statusClass = "sent";
-          if (status.includes("Интервью")) statusClass = "interview";
-          if (status.includes("Оффер")) statusClass = "offer";
-          if (status.includes("Отказ")) statusClass = "reject";
-
-          if (status === "Новый") {
-            html += `<div class="update-item"><b>${candidate}</b> загружен.</div>`;
-          } else if (status) {
-            html += `<div class="update-item"><b>${candidate}</b>: статус изменён на <span class="status ${statusClass}">${status}</span></div>`;
-          }
-
-          if (comment) {
-            html += `
-              <div class="update-item">
-                💬 Комментарий по <b>${candidate}</b>: ${comment}
-                ${
-                  answer 
-                  ? `<p class="answer">Ваш ответ: ${answer}</p>` 
-                  : `<form class="answer-form" data-candidate="${candidate}">
-                      <input type="text" name="answer" placeholder="Ваш ответ..." required>
-                      <button type="submit">Ответить</button>
-                    </form>`
-                }
-              </div>`;
-          }
+          if (status) uploaded++;
+          if (status.includes("Интервью")) interview++;
+          if (status.includes("Оффер")) offer++;
         }
 
-        html += "</div>";
-        document.getElementById("content").innerHTML = html || "<p>Нет обновлений</p>";
-
-        // 📊 Отрисовка статистики
         const interviewRate = uploaded > 0 ? Math.round((interview / uploaded) * 100) : 0;
         const offerFromInterview = interview > 0 ? Math.round((offer / interview) * 100) : 0;
         const offerRate = uploaded > 0 ? Math.round((offer / uploaded) * 100) : 0;
 
         document.getElementById("stats").innerHTML = `
-          <div class="stat-card">Uploaded CVs: <b>${uploaded}</b></div>
-          <div class="stat-card">Interviews: <b>${interview}</b></div>
-          <div class="stat-card">Offers: <b>${offer}</b></div>
-          <div class="stat-card">Pipeline metrics:<br>
+          <div class="stat-card uploaded">Uploaded CVs: <b>${uploaded}</b></div>
+          <div class="stat-card interview">Interviews: <b>${interview}</b></div>
+          <div class="stat-card offer">Offers: <b>${offer}</b></div>
+          <div class="stat-card metrics">
+            Pipeline metrics:<br>
             Interview rate: <b>${interviewRate}%</b><br>
             Offer from interview: <b>${offerFromInterview}%</b><br>
             Offer rate: <b>${offerRate}%</b>
           </div>
         `;
 
-        // 📩 Обработка форм "Ответить"
-        document.querySelectorAll(".answer-form").forEach(form => {
-          form.addEventListener("submit", async (e) => {
-            e.preventDefault();
-            const candidate = form.getAttribute("data-candidate");
-            const answer = form.querySelector("input[name='answer']").value;
-            const button = form.querySelector("button");
+        // 📰 теперь загружаем обновления
+        loadUpdates(rows);
+      } catch (err) {
+        console.error("Ошибка loadStatsAndUpdates:", err);
+      }
+    }
 
-            const loader = document.createElement("div");
-            loader.className = "spinner-wrap";
-            loader.innerHTML = `<div class="spinner"></div> <span>Отправка...</span>`;
-            form.appendChild(loader);
-            button.disabled = true;
+    // 📰 Лента обновлений
+    function loadUpdates(rows) {
+      let html = "<div class='updates-feed'>";
+      for (let r of rows) {
+        const cells = r.c;
+        if (!cells[3] || !cells[3].v) continue;
 
-            const payload = {
-              action: "answer",
-              recruiter: currentUser.name,
-              candidate: candidate,
-              answer: answer
-            };
+        const recruiter = cells[1]?.v || "";
+        const candidate = cells[3]?.v || "";
+        const status = cells[12]?.v || "";
+        const comment = cells[13]?.v || "";
+        const answer = cells[14]?.v || "";
 
-            try {
-              const res = await fetch("https://script.google.com/macros/s/AKfycbztPneKvfBlRSwOmUiYEysa2CnycHhU9b5R25-7ai5UyaytxJLs7yduH4XDAgqOPIu_/exec", {
-                method: "POST",
-                body: JSON.stringify(payload)
-              });
+        if (currentUser.role !== "admin" && recruiter !== currentUser.name) continue;
 
-              const result = await res.json();
-              if (result.status === "ok") {
-                form.outerHTML = `<p class="answer">Ваш ответ: ${answer}</p>`;
-              } else {
-                loader.innerHTML = "❌ Ошибка: " + result.message;
-                button.disabled = false;
+        let statusClass = "";
+        if (status.includes("Новый")) statusClass = "new";
+        if (status.includes("Передан")) statusClass = "sent";
+        if (status.includes("Интервью")) statusClass = "interview";
+        if (status.includes("Оффер")) statusClass = "offer";
+        if (status.includes("Отказ")) statusClass = "reject";
+
+        if (status === "Новый") {
+          html += `<div class="update-item"><b>${candidate}</b> загружен.</div>`;
+        } else if (status) {
+          html += `<div class="update-item"><b>${candidate}</b>: статус изменён на <span class="status ${statusClass}">${status}</span></div>`;
+        }
+
+        if (comment) {
+          html += `
+            <div class="update-item">
+              💬 Комментарий по <b>${candidate}</b>: ${comment}
+              ${
+                answer 
+                ? `<p class="answer">Ваш ответ: ${answer}</p>` 
+                : `<form class="answer-form" data-candidate="${candidate}">
+                    <input type="text" name="answer" placeholder="Ваш ответ..." required>
+                    <button type="submit">Ответить</button>
+                  </form>`
               }
-            } catch (err) {
-              loader.innerHTML = "❌ Сеть недоступна";
+            </div>`;
+        }
+      }
+      html += "</div>";
+      document.getElementById("content").innerHTML = html || "<p>Нет обновлений</p>";
+
+      document.querySelectorAll(".answer-form").forEach(form => {
+        form.addEventListener("submit", async (e) => {
+          e.preventDefault();
+          const candidate = form.getAttribute("data-candidate");
+          const answer = form.querySelector("input[name='answer']").value;
+          const button = form.querySelector("button");
+
+          const loader = document.createElement("div");
+          loader.className = "spinner-wrap";
+          loader.innerHTML = `<div class="spinner"></div> <span>Отправка...</span>`;
+          form.appendChild(loader);
+          button.disabled = true;
+
+          const payload = {
+            action: "answer",
+            recruiter: currentUser.name,
+            candidate: candidate,
+            answer: answer
+          };
+
+          try {
+            const res = await fetch("https://script.google.com/macros/s/AKfycbztPneKvfBlRSwOmUiYEysa2CnycHhU9b5R25-7ai5UyaytxJLs7yduH4XDAgqOPIu_/exec", {
+              method: "POST",
+              body: JSON.stringify(payload)
+            });
+
+            const result = await res.json();
+            if (result.status === "ok") {
+              form.outerHTML = `<p class="answer">Ваш ответ: ${answer}</p>`;
+            } else {
+              loader.innerHTML = "❌ Ошибка: " + result.message;
               button.disabled = false;
             }
-          });
+          } catch (err) {
+            loader.innerHTML = "❌ Сеть недоступна";
+            button.disabled = false;
+          }
         });
-      } catch (err) {
-        console.error("Ошибка loadUpdates:", err);
-        document.getElementById("content").innerHTML = "<p>Не удалось загрузить обновления</p>";
-      }
+      });
     }
   </script>
 </body>
