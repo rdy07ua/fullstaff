@@ -342,27 +342,39 @@ footer.container { padding: 8px; }
   background: #a71d2a;
 }
 
-/* 🔹 Статус кандидата */
+/* 🔹 Статус кандидата — только цвет текста */
 .status {
   font-weight: 600;
   font-size: 14px;
+  display: inline;
+  padding: 0;
+  background: none;
+  border: none;
+  box-shadow: none;
 }
-.status.new { color: #ff9800; }
-.status.sent { color: #2196f3; }
+
+.status.new { color: #ff9800; }      
+.status.sent { color: #2196f3; }     
 .status.interview { color: #9c27b0; }
-.status.offer { color: #4caf50; }
-.status.reject { color: #f44336; }
+.status.offer { color: #4caf50; }    
+.status.reject { color: #f44336; }   
 
 /* 📊 Карточки статистики */
 .stats-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-  gap: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
+  gap: 15px;
+  flex-wrap: nowrap;
   margin-bottom: 40px;
+  overflow: hidden;
 }
 
 .stat-card {
-  padding: 20px;
+  flex: 1;
+  min-width: 120px;
+  max-width: 200px;
+  padding: 15px;
   border-radius: 10px;
   background: #fff;
   text-align: center;
@@ -378,18 +390,27 @@ footer.container { padding: 8px; }
 .stat-card h2 {
   font-size: clamp(20px, 2.5vw, 32px);
   margin: 0 0 6px;
+  color: #111; /* базовый цвет */
 }
 
 .stat-card p {
   margin: 0;
-  font-size: clamp(12px, 1.2vw, 16px);
+  font-size: 13px;
   color: #555;
 }
 
-/* 📱 На мобильных — 2 карточки в ряд */
-@media (max-width: 600px) {
+/* 📱 На мобильных — перенос в два ряда */
+@media (max-width: 768px) {
   .stats-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .stat-card {
+    flex: 1 1 calc(50% - 10px); /* два в ряд */
   }
 }
+
+/* 🎨 Цвет цифр */
+.stat-card.stat-cv h2 { color: #ff9800; }      
+.stat-card.stat-interview h2 { color: #9c27b0; }
+.stat-card.stat-offer h2 { color: #4caf50; }   
+.stat-card.stat-rate h2 { color: #2196f3; }    
