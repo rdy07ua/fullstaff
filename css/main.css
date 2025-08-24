@@ -385,6 +385,19 @@ footer.container { padding: 8px; }
   font-size: clamp(12px, 1.2vw, 16px);
   color: #555;
 }
+/* 🎨 Цвет цифр */
+.stat-card.stat-cv h2 {
+  color: #ff9800; /* оранжевый */
+}
+.stat-card.stat-interview h2 {
+  color: #9c27b0; /* фиолетовый */
+}
+.stat-card.stat-offer h2 {
+  color: #4caf50; /* зелёный */
+}
+.stat-card.stat-rate h2 {
+  color: #2196f3; /* синий */
+}
 
 /* 📱 На мобильных — 2 карточки в ряд */
 @media (max-width: 600px) {
