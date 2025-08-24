@@ -137,75 +137,83 @@
 
     // 🚀 Загрузка обновлений из Google Sheets
     async function loadUpdates() {
-      const res = await fetch("https://docs.google.com/spreadsheets/d/1PrAj8rfZRVUtmDRcnoZyBysWdrNih5OYgna7MuPH4mE/gviz/tq?tqx=out:json");
-      const text = await res.text();
-      const json = JSON.parse(text.substr(47).slice(0, -2));
+  try {
+    const res = await fetch("https://docs.google.com/spreadsheets/d/1PrAj8rfZRVUtmDRcnoZyBysWdrNih5OYgna7MuPH4mE/gviz/tq?tqx=out:json");
+    const text = await res.text();
+    const json = JSON.parse(text.substr(47).slice(0, -2));
 
-      const rows = json.table.rows.reverse();
-      let html = "<div class='updates-feed'>";
+    const rows = json.table.rows.reverse();
+    console.log("ROWS:", rows); // 🛠️ смотри в консоли браузера
 
-      for (let r of rows) {
-        if (!r[3]) continue;
-        const recruiter = r[1]?.v || "";
-        const candidate = r[3]?.v || "";
-        const status = r[12]?.v || "";
-        const comment = r[13]?.v || "";
-        const answer = r[14]?.v || "";
+    let html = "<div class='updates-feed'>";
 
-        // фильтрация: рекрутер видит только своих кандидатов
-        if (currentUser.role !== "admin" && recruiter !== currentUser.name) continue;
+    for (let r of rows) {
+      if (!r[3] || !r[3].v) continue; // если нет кандидата, пропускаем
+      const recruiter = r[1]?.v || "";
+      const candidate = r[3]?.v || "";
+      const status = r[12]?.v || "";
+      const comment = r[13]?.v || "";
+      const answer = r[14]?.v || "";
 
-        if (status === "Новый") {
-          html += `<div class="update-item"><b>${candidate}</b> загружен.</div>`;
-        }
-        if (status && status !== "Новый") {
-          html += `<div class="update-item"><b>${candidate}</b>: статус изменён на <span class="status">${status}</span></div>`;
-        }
-        if (comment) {
-          html += `
-            <div class="update-item">
-              💬 Комментарий по <b>${candidate}</b>: ${comment}
-              <form class="answer-form" data-candidate="${candidate}">
-                <input type="text" name="answer" placeholder="Ваш ответ..." required>
-                <button type="submit">Ответить</button>
-              </form>
-              ${answer ? `<p class="answer">Ваш ответ: ${answer}</p>` : ""}
-            </div>`;
-        }
+      // фильтр по рекрутеру
+      if (currentUser.role !== "admin" && recruiter !== currentUser.name) continue;
+
+      if (status === "Новый") {
+        html += `<div class="update-item"><b>${candidate}</b> загружен.</div>`;
+      } else if (status) {
+        html += `<div class="update-item"><b>${candidate}</b>: статус изменён на <span class="status">${status}</span></div>`;
       }
 
-      html += "</div>";
-      document.getElementById("content").innerHTML = html;
-
-      // обработка форм "Ответить"
-      document.querySelectorAll(".answer-form").forEach(form => {
-        form.addEventListener("submit", async (e) => {
-          e.preventDefault();
-          const candidate = form.getAttribute("data-candidate");
-          const answer = form.querySelector("input[name='answer']").value;
-
-          const payload = {
-            action: "answer",
-            recruiter: currentUser.name,
-            candidate: candidate,
-            answer: answer
-          };
-
-          const res = await fetch("https://script.google.com/macros/s/AKfycbztPneKvfBlRSwOmUiYEysa2CnycHhU9b5R25-7ai5UyaytxJLs7yduH4XDAgqOPIu_/exec", {
-            method: "POST",
-            body: JSON.stringify(payload)
-          });
-
-          const result = await res.json();
-          if (result.status === "ok") {
-            alert("✅ Ответ сохранён!");
-            loadUpdates(); // перезагрузим обновления
-          } else {
-            alert("Ошибка: " + result.message);
-          }
-        });
-      });
+      if (comment) {
+        html += `
+          <div class="update-item">
+            💬 Комментарий по <b>${candidate}</b>: ${comment}
+            <form class="answer-form" data-candidate="${candidate}">
+              <input type="text" name="answer" placeholder="Ваш ответ..." required>
+              <button type="submit">Ответить</button>
+            </form>
+            ${answer ? `<p class="answer">Ваш ответ: ${answer}</p>` : ""}
+          </div>`;
+      }
     }
+
+    html += "</div>";
+    document.getElementById("content").innerHTML = html || "<p>Нет обновлений</p>";
+
+    // обработка форм "Ответить"
+    document.querySelectorAll(".answer-form").forEach(form => {
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const candidate = form.getAttribute("data-candidate");
+        const answer = form.querySelector("input[name='answer']").value;
+
+        const payload = {
+          action: "answer",
+          recruiter: currentUser.name,
+          candidate: candidate,
+          answer: answer
+        };
+
+        const res = await fetch("https://script.google.com/macros/s/AKfycbztPneKvfBlRSwOmUiYEysa2CnycHhU9b5R25-7ai5UyaytxJLs7yduH4XDAgqOPIu_/exec", {
+          method: "POST",
+          body: JSON.stringify(payload)
+        });
+
+        const result = await res.json();
+        if (result.status === "ok") {
+          alert("✅ Ответ сохранён!");
+          loadUpdates(); // обновим ленту
+        } else {
+          alert("Ошибка: " + result.message);
+        }
+      });
+    });
+  } catch (err) {
+    console.error("Ошибка loadUpdates:", err);
+    document.getElementById("content").innerHTML = "<p>Не удалось загрузить обновления</p>";
+  }
+}
+
   </script>
 </body>
 </html>
