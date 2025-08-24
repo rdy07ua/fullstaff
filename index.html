@@ -27,7 +27,7 @@
     .updates-feed {
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: 15px;
     }
     .update-item {
       display: flex;
@@ -50,15 +50,20 @@
       font-size: 14px;
       line-height: 1.5;
     }
-    .update-bubble .answer {
-      margin-top: 8px;
-      padding: 6px 10px;
-      background: #f9f9f9;
-      border-left: 3px solid #2196f3;
-      border-radius: 6px;
+
+    /* 🔵 Ответ рекрутера — отдельный пузырь справа */
+    .answer {
+      align-self: flex-end;
+      background: #2196f3;
+      color: #fff;
+      padding: 10px 14px;
+      border-radius: 12px;
+      max-width: 70%;
       font-size: 13px;
-      color: #333;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.15);
     }
+
+    /* Форма ответа */
     .answer-form {
       display: flex;
       gap: 6px;
@@ -273,7 +278,7 @@
                 ${comment ? `<p>💬 ${comment}</p>` : ""}
                 ${
                   answer 
-                  ? `<p class="answer">Ваш ответ: ${answer}</p>` 
+                  ? `<div class="answer">Ваш ответ: ${answer}</div>` 
                   : comment 
                     ? `<form class="answer-form" data-candidate="${candidate}">
                          <input type="text" name="answer" placeholder="Ваш ответ..." required>
@@ -328,7 +333,7 @@
 
                 const result = await res.json();
                 if (result.status === "ok") {
-                  form.outerHTML = `<p class="answer">Ваш ответ: ${answer}</p>`;
+                  form.outerHTML = `<div class="answer">Ваш ответ: ${answer}</div>`;
                 } else {
                   loader.innerHTML = "❌ Ошибка: " + result.message;
                   button.disabled = false;
