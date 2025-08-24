@@ -350,34 +350,34 @@ footer.container { padding: 8px; }
   font-size: 14px;
   color: #fff;
   display: inline-block;
-  min-width: 90px;
+  min-width: 80px;
   text-align: center;
 }
 
 /* Конкретные статусы */
 .status.new {
   background: #ff9800;
-  box-shadow: 0 0 10px rgba(255,152,0,0.6);
+  box-shadow: 0 0 8px rgba(255,152,0,0.6);
 }
 
 .status.sent {
   background: #2196f3;
-  box-shadow: 0 0 10px rgba(33,150,243,0.6);
+  box-shadow: 0 0 8px rgba(33,150,243,0.6);
 }
 
 .status.interview {
   background: #9c27b0;
-  box-shadow: 0 0 10px rgba(156,39,176,0.6);
+  box-shadow: 0 0 8px rgba(156,39,176,0.6);
 }
 
 .status.offer {
   background: #4caf50;
-  box-shadow: 0 0 10px rgba(76,175,80,0.6);
+  box-shadow: 0 0 8px rgba(76,175,80,0.6);
 }
 
 .status.reject {
   background: #f44336;
-  box-shadow: 0 0 10px rgba(244,67,54,0.6);
+  box-shadow: 0 0 8px rgba(244,67,54,0.6);
 }
 .answer-form {
   display: flex;
