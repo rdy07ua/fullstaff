@@ -7,7 +7,7 @@
   <link rel="stylesheet" href="/css/style.css">
   <link rel="stylesheet" href="/css/pipeline.css">
   <style>
-    /* Полностью скрываем кнопку на мобильных */
+    /* полностью скрываем кнопку на мобилках */
     @media (max-width: 600px) {
       .sheet-btn {
         display: none !important;
@@ -90,10 +90,12 @@
           document.querySelector(".main-nav").style.display = "flex";
           document.querySelector(".logout-btn").style.display = "inline-block";
 
-          // показываем ссылку только на десктопах
+          // показываем кнопку только на десктопе
           if (window.innerWidth > 600) {
             document.getElementById("sheetLink").href = currentUser.sheetUrl || "#";
             document.getElementById("sheetLink").style.display = "inline-block";
+          } else {
+            document.getElementById("sheetLink").style.display = "none";
           }
 
           loadData();
@@ -125,10 +127,12 @@
         document.querySelector(".main-nav").style.display = "flex";
         document.querySelector(".logout-btn").style.display = "inline-block";
 
-        // показываем ссылку только на десктопах
+        // показываем кнопку только на десктопе
         if (window.innerWidth > 600) {
           document.getElementById("sheetLink").href = currentUser.sheetUrl || "#";
           document.getElementById("sheetLink").style.display = "inline-block";
+        } else {
+          document.getElementById("sheetLink").style.display = "none";
         }
 
         loadData();
