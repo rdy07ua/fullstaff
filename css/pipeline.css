@@ -85,6 +85,11 @@ footer.container { padding: 8px; }
   .sheet-btn {
     display: none !important;
   }
+  @media (max-width: 768px) {
+  #sheetLink {
+    display: none !important;
+  }
+}
 }
 .logout-btn {
   margin-left: auto;
