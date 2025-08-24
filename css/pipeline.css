@@ -97,6 +97,27 @@ footer.container { padding: 8px; }
   box-shadow: 0 0 8px rgba(220,53,69,0.6);
 }
 
+/* --- Для мобильных --- */
+@media (max-width: 768px) {
+  .top-controls {
+    flex-direction: column;
+    align-items: center;
+    gap: 15px; /* промежуток между элементами */
+  }
+
+  .top-controls .main-nav {
+    position: static; /* убираем absolute */
+    transform: none; /* убираем смещение */
+    flex-wrap: wrap; /* если много пунктов — переносим */
+    justify-content: center;
+    gap: 12px;
+  }
+
+  .logout-btn {
+    margin-left: 0; /* убираем "выталкивание вправо" */
+  }
+}
+
 .login-box {
   max-width: 320px;
   margin: 100px auto;
