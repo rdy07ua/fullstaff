@@ -177,6 +177,9 @@ footer.container { padding: 4px; }
   text-align: right;
   animation: pulse 2s infinite;
 }
+#login, #app {
+  display: none;
+}
 @keyframes pulse {
   0%   { text-shadow: 0 0 5px rgba(220,53,69,0.6); }
   50%  { text-shadow: 0 0 15px rgba(220,53,69,1); }
