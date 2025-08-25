@@ -104,12 +104,14 @@
           document.getElementById("user-name").style.display = "block";
           document.getElementById("user-name").innerText = currentUser.name || username;
 
-          loadStats(); 
-          return;
-        }
-      }
-      alert("Неверный логин или пароль");
+      // 🔹 Загружаем статистику сразу после входа
+      loadUpdates();
+      return;
     }
+  }
+  alert("Неверный логин или пароль");
+}
+
 
     function logout() {
       currentUser = null;
