@@ -124,18 +124,20 @@
     }
 
     window.onload = function () {
-      const savedUser = localStorage.getItem("loggedUser");
-      if (savedUser && users[savedUser]) {
-        currentUser = users[savedUser];
-        document.getElementById("login").style.display = "none";
-        document.getElementById("app").style.display = "block";
-        document.querySelector(".logout-btn").style.display = "inline-block";
-        document.querySelector(".main-nav").style.display = "flex";
-        document.getElementById("user-name").style.display = "block";
-        document.getElementById("user-name").innerText = currentUser.name || savedUser;
-        loadStats();
-      }
-    };
+  const savedUser = localStorage.getItem("loggedUser");
+  if (savedUser && users[savedUser]) {
+    currentUser = users[savedUser];
+    document.getElementById("login").style.display = "none";
+    document.getElementById("app").style.display = "block";
+    document.querySelector(".logout-btn").style.display = "inline-block";
+    document.querySelector(".main-nav").style.display = "flex";
+    document.getElementById("user-name").style.display = "block";
+    document.getElementById("user-name").innerText = currentUser.name || savedUser;
+    loadUpdates?.(); // если осталась функция
+  } else {
+    document.getElementById("login").style.display = "block";
+  }
+};
 
     async function loadStats() {
       try {
