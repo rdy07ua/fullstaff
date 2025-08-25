@@ -100,7 +100,7 @@ footer a:hover {
   text-decoration: underline;
   color: #fff;
 }
-footer.container { padding: 8px; }
+footer.container { padding: 4px; }
 .footer-gap { height: 40px; }
 @media (max-width: 600px) { footer { display: none; } }
 
