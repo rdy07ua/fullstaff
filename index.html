@@ -9,79 +9,6 @@
   <style>
     .main-nav a.active { color: #dc3545; font-weight: 600; }
     .main-nav a.active::after { width: 100%; }
-    .show-more-btn {
-      margin: 15px auto;
-      display: block;
-      padding: 10px 20px;
-      font-size: 14px;
-      border: none;
-      border-radius: 6px;
-      background: #dc3545;
-      color: #fff;
-      cursor: pointer;
-      transition: 0.3s;
-    }
-    .show-more-btn:hover { background: #a71d2a; }
-
-    /* 🟢 Чат-стиль для ленты */
-    .updates-feed {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-    .update-item {
-      display: flex;
-      align-items: flex-start;
-      gap: 10px;
-    }
-    .update-item .avatar {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      object-fit: cover;
-    }
-    .update-bubble {
-      background: #fff;
-      border: 1px solid #ddd;
-      padding: 12px 15px;
-      border-radius: 12px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.08);
-      max-width: 80%;
-      font-size: 14px;
-      line-height: 1.5;
-    }
-    .update-bubble .answer {
-      margin-top: 8px;
-      padding: 6px 10px;
-      background: #f9f9f9;
-      border-left: 3px solid #2196f3;
-      border-radius: 6px;
-      font-size: 13px;
-      color: #333;
-    }
-    .answer-form {
-      display: flex;
-      gap: 6px;
-      margin-top: 10px;
-    }
-    .answer-form input {
-      flex: 1;
-      padding: 6px 8px;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-      font-size: 13px;
-    }
-    .answer-form button {
-      padding: 6px 12px;
-      background: #dc3545;
-      border: none;
-      border-radius: 6px;
-      color: #fff;
-      font-size: 13px;
-      cursor: pointer;
-      transition: 0.3s;
-    }
-    .answer-form button:hover { background: #a71d2a; }
   </style>
 </head>
 
@@ -130,8 +57,6 @@
     <div id="app" style="display:none;">
       <!-- 📊 Статистика -->
       <div id="stats" class="stats-grid"></div>
-      <!-- 📰 Лента -->
-      <div id="content"></div>
     </div>
   </main>
 
@@ -161,7 +86,6 @@
     };
 
     let currentUser = null;
-    const avatar = "https://cojo.ru/wp-content/uploads/2022/12/krutoi-kot-4-1.webp"; // 🔹 путь к аватарке админа
 
     async function login() {
       const username = document.getElementById("username").value.trim();
@@ -180,7 +104,7 @@
           document.getElementById("user-name").style.display = "block";
           document.getElementById("user-name").innerText = currentUser.name || username;
 
-          loadUpdates(); 
+          loadStats(); 
           return;
         }
       }
@@ -193,7 +117,6 @@
       document.getElementById("login").style.display = "block";
       document.getElementById("app").style.display = "none";
       document.getElementById("stats").innerHTML = "";
-      document.getElementById("content").innerHTML = "<p>Здесь будет контент страницы</p>";
       document.querySelector(".logout-btn").style.display = "none";
       document.querySelector(".main-nav").style.display = "none";
       document.getElementById("user-name").style.display = "none";
@@ -210,11 +133,11 @@
         document.querySelector(".main-nav").style.display = "flex";
         document.getElementById("user-name").style.display = "block";
         document.getElementById("user-name").innerText = currentUser.name || savedUser;
-        loadUpdates();
+        loadStats();
       }
     };
 
-    async function loadUpdates() {
+    async function loadStats() {
       try {
         const res = await fetch("https://docs.google.com/spreadsheets/d/1PrAj8rfZRVUtmDRcnoZyBysWdrNih5OYgna7MuPH4mE/gviz/tq?tqx=out:json");
         const text = await res.text();
@@ -245,105 +168,9 @@
           <div class="stat-card stat-rate"><h2>${offerFromInterview}%</h2><p>Offer from interview</p></div>
           <div class="stat-card stat-rate"><h2>${offerRate}%</h2><p>Offer rate</p></div>
         `;
-
-        let updates = [];
-        for (let r of rows) {
-          const cells = r.c;
-          if (!cells[3] || !cells[3].v) continue;
-          const recruiter = cells[1]?.v || "";
-          const candidate = cells[3]?.v || "";
-          const status = cells[12]?.v || "";
-          const comment = cells[13]?.v || "";
-          const answer = cells[14]?.v || "";
-          if (currentUser.role !== "admin" && recruiter !== currentUser.name) continue;
-
-          let statusClass = "";
-          if (status.includes("Новый")) statusClass = "new";
-          if (status.includes("Передан")) statusClass = "sent";
-          if (status.includes("Интервью")) statusClass = "interview";
-          if (status.includes("Оффер")) statusClass = "offer";
-          if (status.includes("Отказ")) statusClass = "reject";
-
-          let block = `
-            <div class="update-item">
-              <img src="${avatar}" class="avatar" alt="Admin">
-              <div class="update-bubble">
-                <b>${candidate}</b>
-                ${status ? `<p>Статус: <span class="status ${statusClass}">${status}</span></p>` : ""}
-                ${comment ? `<p>💬 ${comment}</p>` : ""}
-                ${
-                  answer 
-                  ? `<p class="answer">Ваш ответ: ${answer}</p>` 
-                  : comment 
-                    ? `<form class="answer-form" data-candidate="${candidate}">
-                         <input type="text" name="answer" placeholder="Ваш ответ..." required>
-                         <button type="submit">Ответить</button>
-                       </form>`
-                    : ""
-                }
-              </div>
-            </div>
-          `;
-          updates.push(block);
-        }
-
-        let visibleCount = 10;
-        function renderUpdates() {
-          let html = "<div class='updates-feed'>";
-          html += updates.slice(0, visibleCount).join("");
-          html += "</div>";
-          if (updates.length > visibleCount) {
-            html += `<button id="showMore" class="show-more-btn">Show more</button>`;
-          }
-          document.getElementById("content").innerHTML = html;
-
-          const btn = document.getElementById("showMore");
-          if (btn) {
-            btn.addEventListener("click", () => {
-              visibleCount += 10;
-              renderUpdates();
-            });
-          }
-
-          document.querySelectorAll(".answer-form").forEach(form => {
-            form.addEventListener("submit", async (e) => {
-              e.preventDefault();
-              const candidate = form.getAttribute("data-candidate");
-              const answer = form.querySelector("input[name='answer']").value;
-              const button = form.querySelector("button");
-
-              const loader = document.createElement("div");
-              loader.className = "spinner-wrap";
-              loader.innerHTML = `<div class="spinner"></div> <span>Отправка...</span>`;
-              form.appendChild(loader);
-              button.disabled = true;
-
-              const payload = { action: "answer", recruiter: currentUser.name, candidate, answer };
-
-              try {
-                const res = await fetch("https://script.google.com/macros/s/AKfycbztPneKvfBlRSwOmUiYEysa2CnycHhU9b5R25-7ai5UyaytxJLs7yduH4XDAgqOPIu_/exec", {
-                  method: "POST",
-                  body: JSON.stringify(payload)
-                });
-
-                const result = await res.json();
-                if (result.status === "ok") {
-                  form.outerHTML = `<p class="answer">Ваш ответ: ${answer}</p>`;
-                } else {
-                  loader.innerHTML = "❌ Ошибка: " + result.message;
-                  button.disabled = false;
-                }
-              } catch (err) {
-                loader.innerHTML = "❌ Сеть недоступна";
-                button.disabled = false;
-              }
-            });
-          });
-        }
-        renderUpdates();
       } catch (err) {
-        console.error("Ошибка loadUpdates:", err);
-        document.getElementById("content").innerHTML = "<p>Не удалось загрузить обновления</p>";
+        console.error("Ошибка loadStats:", err);
+        document.getElementById("stats").innerHTML = "<p>Не удалось загрузить статистику</p>";
       }
     }
   </script>
