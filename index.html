@@ -2,14 +2,91 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <title>&lt;FULLSTAFF &amp; PARTNERS&gt;</title>
+  <title>&lt;FULLSTAFF & PARTNERS&gt;</title>
   <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500&family=Roboto:wght@400;500&family=Inter:wght@400;500&display=swap" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="../css/style.css">
-  <link rel="stylesheet" href="../css/pipeline.css">
+  <link rel="stylesheet" href="../css/main.css">
   <style>
     .main-nav a.active { color: #dc3545; font-weight: 600; }
     .main-nav a.active::after { width: 100%; }
+    .show-more-btn {
+      margin: 15px auto;
+      display: block;
+      padding: 10px 20px;
+      font-size: 14px;
+      border: none;
+      border-radius: 6px;
+      background: #dc3545;
+      color: #fff;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .show-more-btn:hover { background: #a71d2a; }
+
+    /* 🟢 Чат-стиль для ленты */
+    .updates-feed {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+    .update-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+    }
+    .update-item .avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+    .update-bubble {
+      background: #fff;
+      border: 1px solid #ddd;
+      padding: 12px 15px;
+      border-radius: 12px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.08);
+      max-width: 80%;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    /* 🔵 Ответ рекрутера */
+    .answer {
+      align-self: flex-end;
+      background: #2196f3;
+      color: #fff;
+      padding: 10px 14px;
+      border-radius: 12px;
+      max-width: 70%;
+      font-size: 13px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+    }
+
+    /* Форма ответа */
+    .answer-form {
+      display: flex;
+      gap: 6px;
+      margin-top: 10px;
+    }
+    .answer-form input {
+      flex: 1;
+      padding: 6px 8px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 13px;
+    }
+    .answer-form button {
+      padding: 6px 12px;
+      background: #dc3545;
+      border: none;
+      border-radius: 6px;
+      color: #fff;
+      font-size: 13px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .answer-form button:hover { background: #a71d2a; }
   </style>
 </head>
 
@@ -31,7 +108,7 @@
   <main class="container">
     <h1>
       <a href="/index.html" style="text-decoration:none; color:inherit;">
-        &lt;FULLSTAFF &amp; PARTNERS&gt;
+        &lt;FULLSTAFF & PARTNERS&gt;
       </a>
     </h1>
 
@@ -46,6 +123,7 @@
       <button class="logout-btn" onclick="logout()" style="display:none;">Выйти</button>
     </div>
 
+    <!-- Логин -->
     <div id="login" class="login-box">
       <h3>Вход</h3>
       <input type="text" id="username" placeholder="Логин"><br>
@@ -53,11 +131,16 @@
       <button onclick="login()">Войти</button>
     </div>
 
+    <!-- Приложение -->
     <div id="app" style="display:none;">
+      <!-- 📊 Статистика -->
+      <div id="stats" class="stats-grid"></div>
+      <!-- 📰 Лента -->
       <div id="content"></div>
     </div>
   </main>
 
+  <!-- Футер -->
   <footer class="container">
     <p>© 2025 FullStaff · 
       <a href="mailto:serhii.riabovol@fullstaff.net">serhii.riabovol@fullstaff.net</a> · 
@@ -83,6 +166,7 @@
     };
 
     let currentUser = null;
+    const avatar = "https://cojo.ru/wp-content/uploads/2022/12/krutoi-kot-4-1.webp"; // 🔹 аватарка админа
 
     async function login() {
       const username = document.getElementById("username").value.trim();
@@ -98,7 +182,6 @@
           document.getElementById("app").style.display = "block";
           document.querySelector(".logout-btn").style.display = "inline-block";
           document.querySelector(".main-nav").style.display = "flex";
-
           document.getElementById("user-name").style.display = "block";
           document.getElementById("user-name").innerText = currentUser.name || username;
 
@@ -114,6 +197,7 @@
       localStorage.removeItem("loggedUser");
       document.getElementById("login").style.display = "block";
       document.getElementById("app").style.display = "none";
+      document.getElementById("stats").innerHTML = "";
       document.getElementById("content").innerHTML = "<p>Здесь будет контент страницы</p>";
       document.querySelector(".logout-btn").style.display = "none";
       document.querySelector(".main-nav").style.display = "none";
@@ -135,15 +219,15 @@
       }
     };
 
-    // 🚀 Загрузка обновлений
     async function loadUpdates() {
       try {
         const res = await fetch("https://docs.google.com/spreadsheets/d/1PrAj8rfZRVUtmDRcnoZyBysWdrNih5OYgna7MuPH4mE/gviz/tq?tqx=out:json");
         const text = await res.text();
         const json = JSON.parse(text.substr(47).slice(0, -2));
-        const rows = json.table.rows.reverse();
+        const rows = json.table.rows;
 
-        let html = "<div class='updates-feed'>";
+        let uploaded = 0, interview = 0, offer = 0;
+        let updates = [];
 
         for (let r of rows) {
           const cells = r.c;
@@ -154,10 +238,14 @@
           const status = cells[12]?.v || "";
           const comment = cells[13]?.v || "";
           const answer = cells[14]?.v || "";
+          const updated = cells[15]?.f || cells[15]?.v || ""; // 📌 "Обновлено"
 
           if (currentUser.role !== "admin" && recruiter !== currentUser.name) continue;
 
-          // класс статуса
+          uploaded++;
+          if (status.includes("Интервью")) interview++;
+          if (status.includes("Оффер")) offer++;
+
           let statusClass = "";
           if (status.includes("Новый")) statusClass = "new";
           if (status.includes("Передан")) statusClass = "sent";
@@ -165,70 +253,106 @@
           if (status.includes("Оффер")) statusClass = "offer";
           if (status.includes("Отказ")) statusClass = "reject";
 
-          if (status === "Новый") {
-            html += `<div class="update-item"><b>${candidate}</b> загружен.</div>`;
-          } else if (status) {
-            html += `<div class="update-item"><b>${candidate}</b>: статус изменён на <span class="status ${statusClass}">${status}</span></div>`;
-          }
-
-          if (comment) {
-            html += `
-              <div class="update-item">
-                💬 Комментарий по <b>${candidate}</b>: ${comment}
+          let block = `
+            <div class="update-item">
+              <img src="${avatar}" class="avatar" alt="Admin">
+              <div class="update-bubble">
+                <b>${candidate}</b>
+                ${status ? `<p>Статус: <span class="status ${statusClass}">${status}</span></p>` : ""}
+                ${comment ? `<p>💬 ${comment}</p>` : ""}
                 ${
                   answer 
-                  ? `<p class="answer">Ваш ответ: ${answer}</p>` 
-                  : `<form class="answer-form" data-candidate="${candidate}">
-                      <input type="text" name="answer" placeholder="Ваш ответ..." required>
-                      <button type="submit">Ответить</button>
-                    </form>`
+                  ? `<div class="answer">Ваш ответ: ${answer}</div>` 
+                  : comment 
+                    ? `<form class="answer-form" data-candidate="${candidate}">
+                         <input type="text" name="answer" placeholder="Ваш ответ..." required>
+                         <button type="submit">Ответить</button>
+                       </form>`
+                    : ""
                 }
-              </div>`;
-          }
+                ${updated ? `<p style="font-size:11px;color:#777;">⏱ ${updated}</p>` : ""}
+              </div>
+            </div>
+          `;
+
+          updates.push({ updated, block });
         }
 
-        html += "</div>";
-        document.getElementById("content").innerHTML = html || "<p>Нет обновлений</p>";
+        // 📌 сортировка по дате "Обновлено"
+        updates.sort((a, b) => new Date(b.updated) - new Date(a.updated));
+        updates.reverse();
 
-        document.querySelectorAll(".answer-form").forEach(form => {
-          form.addEventListener("submit", async (e) => {
-            e.preventDefault();
-            const candidate = form.getAttribute("data-candidate");
-            const answer = form.querySelector("input[name='answer']").value;
-            const button = form.querySelector("button");
+        // 📊 статистика
+        const interviewRate = uploaded ? Math.round((interview / uploaded) * 100) : 0;
+        const offerFromInterview = interview ? Math.round((offer / interview) * 100) : 0;
+        const offerRate = uploaded ? Math.round((offer / uploaded) * 100) : 0;
 
-            const loader = document.createElement("div");
-            loader.className = "spinner-wrap";
-            loader.innerHTML = `<div class="spinner"></div> <span>Отправка...</span>`;
-            form.appendChild(loader);
-            button.disabled = true;
+        document.getElementById("stats").innerHTML = `
+          <div class="stat-card stat-cv"><h2>${uploaded}</h2><p>Uploaded CVs</p></div>
+          <div class="stat-card stat-interview"><h2>${interview}</h2><p>Interviews</p></div>
+          <div class="stat-card stat-offer"><h2>${offer}</h2><p>Offers</p></div>
+          <div class="stat-card stat-rate"><h2>${interviewRate}%</h2><p>Interview rate</p></div>
+          <div class="stat-card stat-rate"><h2>${offerFromInterview}%</h2><p>Offer from interview</p></div>
+          <div class="stat-card stat-rate"><h2>${offerRate}%</h2><p>Offer rate</p></div>
+        `;
 
-            const payload = {
-              action: "answer",
-              recruiter: currentUser.name,
-              candidate: candidate,
-              answer: answer
-            };
+        // 📌 рендеринг
+        let visibleCount = 10;
+        function renderUpdates() {
+          let html = "<div class='updates-feed'>";
+          html += updates.slice(0, visibleCount).map(u => u.block).join("");
+          html += "</div>";
+          if (updates.length > visibleCount) {
+            html += `<button id="showMore" class="show-more-btn">Show more</button>`;
+          }
+          document.getElementById("content").innerHTML = html;
 
-            try {
-              const res = await fetch("https://script.google.com/macros/s/AKfycbztPneKvfBlRSwOmUiYEysa2CnycHhU9b5R25-7ai5UyaytxJLs7yduH4XDAgqOPIu_/exec", {
-                method: "POST",
-                body: JSON.stringify(payload)
-              });
+          const btn = document.getElementById("showMore");
+          if (btn) {
+            btn.addEventListener("click", () => {
+              visibleCount += 10;
+              renderUpdates();
+            });
+          }
 
-              const result = await res.json();
-              if (result.status === "ok") {
-                form.outerHTML = `<p class="answer">Ваш ответ: ${answer}</p>`;
-              } else {
-                loader.innerHTML = "❌ Ошибка: " + result.message;
+          // 📌 обработка формы "Ответить"
+          document.querySelectorAll(".answer-form").forEach(form => {
+            form.addEventListener("submit", async (e) => {
+              e.preventDefault();
+              const candidate = form.getAttribute("data-candidate");
+              const answer = form.querySelector("input[name='answer']").value;
+              const button = form.querySelector("button");
+
+              const loader = document.createElement("div");
+              loader.className = "spinner-wrap";
+              loader.innerHTML = `<div class="spinner"></div> <span>Отправка...</span>`;
+              form.appendChild(loader);
+              button.disabled = true;
+
+              const payload = { action: "answer", recruiter: currentUser.name, candidate, answer };
+
+              try {
+                const res = await fetch("https://script.google.com/macros/s/AKfycbztPneKvfBlRSwOmUiYEysa2CnycHhU9b5R25-7ai5UyaytxJLs7yduH4XDAgqOPIu_/exec", {
+                  method: "POST",
+                  body: JSON.stringify(payload)
+                });
+
+                const result = await res.json();
+                if (result.status === "ok") {
+                  form.outerHTML = `<div class="answer">Ваш ответ: ${answer}</div>`;
+                } else {
+                  loader.innerHTML = "❌ Ошибка: " + result.message;
+                  button.disabled = false;
+                }
+              } catch (err) {
+                loader.innerHTML = "❌ Сеть недоступна";
                 button.disabled = false;
               }
-            } catch (err) {
-              loader.innerHTML = "❌ Сеть недоступна";
-              button.disabled = false;
-            }
+            });
           });
-        });
+        }
+        renderUpdates();
+
       } catch (err) {
         console.error("Ошибка loadUpdates:", err);
         document.getElementById("content").innerHTML = "<p>Не удалось загрузить обновления</p>";
