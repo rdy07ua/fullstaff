@@ -61,7 +61,7 @@ main {
   width: 70%;
   max-width: 1400px;
   margin: 0 auto;
-  padding: 20px;
+  padding: 8px;
 }
 @media (max-width: 600px) {
   .container { width: 100%; }
