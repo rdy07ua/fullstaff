@@ -220,131 +220,144 @@
     };
 
     async function loadUpdates() {
-      try {
-        const res = await fetch("https://docs.google.com/spreadsheets/d/1PrAj8rfZRVUtmDRcnoZyBysWdrNih5OYgna7MuPH4mE/gviz/tq?tqx=out:json");
-        const text = await res.text();
-        const json = JSON.parse(text.substr(47).slice(0, -2));
-        const rows = json.table.rows.reverse();
+  try {
+    const res = await fetch("https://docs.google.com/spreadsheets/d/1PrAj8rfZRVUtmDRcnoZyBysWdrNih5OYgna7MuPH4mE/gviz/tq?tqx=out:json");
+    const text = await res.text();
+    const json = JSON.parse(text.substr(47).slice(0, -2));
+    const rows = json.table.rows;
 
-        let uploaded = 0, interview = 0, offer = 0;
-        for (let r of rows) {
-          const cells = r.c;
-          if (!cells[3] || !cells[3].v) continue;
-          const recruiter = cells[1]?.v || "";
-          const status = cells[12]?.v || "";
-          if (currentUser.role !== "admin" && recruiter !== currentUser.name) continue;
-          uploaded++;
-          if (status.includes("Интервью")) interview++;
-          if (status.includes("Оффер")) offer++;
-        }
+    let uploaded = 0, interview = 0, offer = 0;
+    let updates = [];
 
-        const interviewRate = uploaded ? Math.round((interview / uploaded) * 100) : 0;
-        const offerFromInterview = interview ? Math.round((offer / interview) * 100) : 0;
-        const offerRate = uploaded ? Math.round((offer / uploaded) * 100) : 0;
+    for (let r of rows) {
+      const cells = r.c;
+      if (!cells[3] || !cells[3].v) continue;
 
-        document.getElementById("stats").innerHTML = `
-          <div class="stat-card stat-cv"><h2>${uploaded}</h2><p>Uploaded CVs</p></div>
-          <div class="stat-card stat-interview"><h2>${interview}</h2><p>Interviews</p></div>
-          <div class="stat-card stat-offer"><h2>${offer}</h2><p>Offers</p></div>
-          <div class="stat-card stat-rate"><h2>${interviewRate}%</h2><p>Interview rate</p></div>
-          <div class="stat-card stat-rate"><h2>${offerFromInterview}%</h2><p>Offer from interview</p></div>
-          <div class="stat-card stat-rate"><h2>${offerRate}%</h2><p>Offer rate</p></div>
-        `;
+      const recruiter = cells[1]?.v || "";
+      const candidate = cells[3]?.v || "";
+      const status = cells[12]?.v || "";
+      const comment = cells[13]?.v || "";
+      const answer = cells[14]?.v || "";
+      const updated = cells[15]?.f || cells[15]?.v || ""; // 📌 колонка "Обновлено"
 
-        let updates = [];
-        for (let r of rows) {
-          const cells = r.c;
-          if (!cells[3] || !cells[3].v) continue;
-          const recruiter = cells[1]?.v || "";
-          const candidate = cells[3]?.v || "";
-          const status = cells[12]?.v || "";
-          const comment = cells[13]?.v || "";
-          const answer = cells[14]?.v || "";
-          if (currentUser.role !== "admin" && recruiter !== currentUser.name) continue;
+      if (currentUser.role !== "admin" && recruiter !== currentUser.name) continue;
 
-          let statusClass = "";
-          if (status.includes("Новый")) statusClass = "new";
-          if (status.includes("Передан")) statusClass = "sent";
-          if (status.includes("Интервью")) statusClass = "interview";
-          if (status.includes("Оффер")) statusClass = "offer";
-          if (status.includes("Отказ")) statusClass = "reject";
+      uploaded++;
+      if (status.includes("Интервью")) interview++;
+      if (status.includes("Оффер")) offer++;
 
-          let block = `
-            <div class="update-item">
-              <img src="${avatar}" class="avatar" alt="Admin">
-              <div class="update-bubble">
-                <b>${candidate}</b>
-                ${status ? `<p>Статус: <span class="status ${statusClass}">${status}</span></p>` : ""}
-                ${comment ? `<p>💬 ${comment}</p>` : ""}
-                ${
-                  answer 
-                  ? `<div class="answer">Ваш ответ: ${answer}</div>` 
-                  : comment 
-                    ? `<form class="answer-form" data-candidate="${candidate}">
-                         <input type="text" name="answer" placeholder="Ваш ответ..." required>
-                         <button type="submit">Ответить</button>
-                       </form>`
-                    : ""
-                }
-              </div>
-            </div>
-          `;
-          updates.unshift(block);
-        }
+      let statusClass = "";
+      if (status.includes("Новый")) statusClass = "new";
+      if (status.includes("Передан")) statusClass = "sent";
+      if (status.includes("Интервью")) statusClass = "interview";
+      if (status.includes("Оффер")) statusClass = "offer";
+      if (status.includes("Отказ")) statusClass = "reject";
 
-        let visibleCount = 10;
-        function renderUpdates() {
-          let html = "<div class='updates-feed'>";
-          html += updates.slice(0, visibleCount).join("");
-          html += "</div>";
-          if (updates.length > visibleCount) {
-            html += `<button id="showMore" class="show-more-btn">Show more</button>`;
-          }
-          document.getElementById("content").innerHTML = html;
+      let block = `
+        <div class="update-item">
+          <img src="${avatar}" class="avatar" alt="Admin">
+          <div class="update-bubble">
+            <b>${candidate}</b>
+            ${status ? `<p>Статус: <span class="status ${statusClass}">${status}</span></p>` : ""}
+            ${comment ? `<p>💬 ${comment}</p>` : ""}
+            ${
+              answer 
+              ? `<div class="answer">Ваш ответ: ${answer}</div>` 
+              : comment 
+                ? `<form class="answer-form" data-candidate="${candidate}">
+                     <input type="text" name="answer" placeholder="Ваш ответ..." required>
+                     <button type="submit">Ответить</button>
+                   </form>`
+                : ""
+            }
+            ${updated ? `<p style="font-size:11px;color:#777;">⏱ ${updated}</p>` : ""}
+          </div>
+        </div>
+      `;
 
-          const btn = document.getElementById("showMore");
-          if (btn) {
-            btn.addEventListener("click", () => {
-              visibleCount += 10;
-              renderUpdates();
+      updates.push({ updated, block });
+    }
+
+    // 📌 сортировка по дате "Обновлено"
+    updates.sort((a, b) => new Date(b.updated) - new Date(a.updated));
+
+    // 📊 обновляем статистику
+    const interviewRate = uploaded ? Math.round((interview / uploaded) * 100) : 0;
+    const offerFromInterview = interview ? Math.round((offer / interview) * 100) : 0;
+    const offerRate = uploaded ? Math.round((offer / uploaded) * 100) : 0;
+
+    document.getElementById("stats").innerHTML = `
+      <div class="stat-card stat-cv"><h2>${uploaded}</h2><p>Uploaded CVs</p></div>
+      <div class="stat-card stat-interview"><h2>${interview}</h2><p>Interviews</p></div>
+      <div class="stat-card stat-offer"><h2>${offer}</h2><p>Offers</p></div>
+      <div class="stat-card stat-rate"><h2>${interviewRate}%</h2><p>Interview rate</p></div>
+      <div class="stat-card stat-rate"><h2>${offerFromInterview}%</h2><p>Offer from interview</p></div>
+      <div class="stat-card stat-rate"><h2>${offerRate}%</h2><p>Offer rate</p></div>
+    `;
+
+    // 📌 рендеринг с пагинацией
+    let visibleCount = 10;
+    function renderUpdates() {
+      let html = "<div class='updates-feed'>";
+      html += updates.slice(0, visibleCount).map(u => u.block).join("");
+      html += "</div>";
+      if (updates.length > visibleCount) {
+        html += `<button id="showMore" class="show-more-btn">Show more</button>`;
+      }
+      document.getElementById("content").innerHTML = html;
+
+      const btn = document.getElementById("showMore");
+      if (btn) {
+        btn.addEventListener("click", () => {
+          visibleCount += 10;
+          renderUpdates();
+        });
+      }
+
+      // 📌 обработка формы "Ответить"
+      document.querySelectorAll(".answer-form").forEach(form => {
+        form.addEventListener("submit", async (e) => {
+          e.preventDefault();
+          const candidate = form.getAttribute("data-candidate");
+          const answer = form.querySelector("input[name='answer']").value;
+          const button = form.querySelector("button");
+
+          const loader = document.createElement("div");
+          loader.className = "spinner-wrap";
+          loader.innerHTML = `<div class="spinner"></div> <span>Отправка...</span>`;
+          form.appendChild(loader);
+          button.disabled = true;
+
+          const payload = { action: "answer", recruiter: currentUser.name, candidate, answer };
+
+          try {
+            const res = await fetch("https://script.google.com/macros/s/AKfycbztPneKvfBlRSwOmUiYEysa2CnycHhU9b5R25-7ai5UyaytxJLs7yduH4XDAgqOPIu_/exec", {
+              method: "POST",
+              body: JSON.stringify(payload)
             });
+
+            const result = await res.json();
+            if (result.status === "ok") {
+              form.outerHTML = `<div class="answer">Ваш ответ: ${answer}</div>`;
+            } else {
+              loader.innerHTML = "❌ Ошибка: " + result.message;
+              button.disabled = false;
+            }
+          } catch (err) {
+            loader.innerHTML = "❌ Сеть недоступна";
+            button.disabled = false;
           }
+        });
+      });
+    }
+    renderUpdates();
 
-          document.querySelectorAll(".answer-form").forEach(form => {
-            form.addEventListener("submit", async (e) => {
-              e.preventDefault();
-              const candidate = form.getAttribute("data-candidate");
-              const answer = form.querySelector("input[name='answer']").value;
-              const button = form.querySelector("button");
+  } catch (err) {
+    console.error("Ошибка loadUpdates:", err);
+    document.getElementById("content").innerHTML = "<p>Не удалось загрузить обновления</p>";
+  }
+}
 
-              const loader = document.createElement("div");
-              loader.className = "spinner-wrap";
-              loader.innerHTML = `<div class="spinner"></div> <span>Отправка...</span>`;
-              form.appendChild(loader);
-              button.disabled = true;
-
-              const payload = { action: "answer", recruiter: currentUser.name, candidate, answer };
-
-              try {
-                const res = await fetch("https://script.google.com/macros/s/AKfycbztPneKvfBlRSwOmUiYEysa2CnycHhU9b5R25-7ai5UyaytxJLs7yduH4XDAgqOPIu_/exec", {
-                  method: "POST",
-                  body: JSON.stringify(payload)
-                });
-
-                const result = await res.json();
-                if (result.status === "ok") {
-                  form.outerHTML = `<div class="answer">Ваш ответ: ${answer}</div>`;
-                } else {
-                  loader.innerHTML = "❌ Ошибка: " + result.message;
-                  button.disabled = false;
-                }
-              } catch (err) {
-                loader.innerHTML = "❌ Сеть недоступна";
-                button.disabled = false;
-              }
-            });
-          });
-        }
         renderUpdates();
       } catch (err) {
         console.error("Ошибка loadUpdates:", err);
