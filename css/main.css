@@ -74,7 +74,6 @@ h1 {
   font-size: 48px !important;
   margin-bottom: 30px;
 }
-#content { margin-bottom: 20px; }
 
 /* --- FOOTER --- */
 footer {
@@ -251,51 +250,4 @@ footer a:hover { text-decoration: underline; }
 /* 📱 2 карточки в ряд */
 @media (max-width: 600px) {
   .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
-}
-
-/* --- UPDATES FEED (в стиле мессенджера) --- */
-.updates-feed {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-}
-
-.update-item {
-  display: flex;
-  align-items: flex-start;
-  gap: 10px;
-}
-
-.update-item .avatar {
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  object-fit: cover;
-  flex-shrink: 0;
-}
-
-.update-bubble {
-  background: #fff;
-  padding: 10px 14px;
-  border-radius: 12px;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.08);
-  max-width: 80%;
-  font-size: 14px;
-  line-height: 1.4;
-}
-.avatar {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  object-fit: cover;
-  margin-right: 10px;
-}
-
-/* Ответы */
-.answer {
-  font-size: 13px;
-  color: #444;
-  margin-top: 6px;
-  padding-left: 10px;
-  border-left: 2px solid #ddd;
 }
