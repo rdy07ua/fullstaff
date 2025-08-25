@@ -81,18 +81,26 @@ footer {
   color: #fff;
   font-size: 0.85rem;
   text-align: center;
-  padding: 4px 0;
+  padding: 8px 0;
   border-top: 1px solid #333;
   font-family: 'Oswald', sans-serif;
   font-weight: 300;
 }
-footer p { margin: 0; }
+footer p {
+  margin: 0;
+  font-weight: 300;
+  letter-spacing: 0.5px;
+}
 footer a {
   color: #fff;
   text-decoration: none;
   transition: 0.3s;
 }
-footer a:hover { text-decoration: underline; }
+footer a:hover {
+  text-decoration: underline;
+  color: #fff;
+}
+footer.container { padding: 8px; }
 .footer-gap { height: 40px; }
 @media (max-width: 600px) { footer { display: none; } }
 
