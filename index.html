@@ -133,9 +133,10 @@
     document.querySelector(".main-nav").style.display = "flex";
     document.getElementById("user-name").style.display = "block";
     document.getElementById("user-name").innerText = currentUser.name || savedUser;
-    loadUpdates?.(); // если осталась функция
+    loadUpdates?.();
   } else {
     document.getElementById("login").style.display = "block";
+    document.getElementById("app").style.display = "none";
   }
 };
 
